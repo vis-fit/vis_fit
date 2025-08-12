@@ -2,17 +2,37 @@
 require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
+const path = require('path'); // Adicionado para manipulação de caminhos
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Usa a porta do Render ou 3000 local
 
-// Configuração à prova de falhas
+// Configuração do banco de dados
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-// Rota de teste
+// Middleware para servir arquivos estáticos (frontend)
+app.use(express.static(path.join(__dirname, 'frontend')));
+
+// Rota principal - serve o index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
+// Rotas para as páginas de módulos
+app.get('/mod_projetos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'mod_projetos.html'));
+});
+
+app.get('/mod_food', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'mod_food.html'));
+});
+
+// Adicione rotas para todas as outras páginas seguindo o mesmo padrão...
+
+// Rota de teste do banco de dados (mantida)
 app.get('/test-db', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW()');
@@ -22,12 +42,16 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
+// Rota fallback para Single Page Applications (SPA)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
 // Inicia o servidor com tratamento de erro
 const server = app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
-// Captura erros de porta
 server.on('error', (err) => {
   if (err.code === 'EADDRINUSE') {
     console.error(`ERRO: A porta ${PORT} já está em uso!`);
