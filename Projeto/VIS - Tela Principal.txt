@@ -1,0 +1,77 @@
+VIS - Tela Principal
+
+Funcionalidades Principais:
+1 - Cards de acesso aos módulos
+
+Elementos:
+1 - Card "Meus Projetos"
+2 - Card "Alimentos"
+3 - Card "Receitas"
+4 - Card "Refeições"
+5 - Card "Suplementação"
+6 - Card "Dietas"
+7 - Card "Atividade Física"
+8 - Card "Treinos"
+9 - Card "Saúde"
+
+==============================================
+
+- A tela principal é uma tela onde terão os cards para acessar as páginas de cada modulo
+- Os cards devem ter o efeito de botão, de clique
+- Os cards devem ser no formato de quadradado, com os cantos arredondados
+- Os cards não devem ser muito grandes e nem muito pequenos
+- Os cards devem ter um tamanho que permita 2 cards um ao lado do outro na tela
+- Todos os cards terão label e um ícone do tipo faz (font awesome)
+- Os cards devem ser azul não muito claro e nem muito escuro
+- Ao passar sobre deve ter um destaque
+- Deve ser criado uma página para cada card
+- Todas as páginas criadas devem ter o mesmo estilo, do tipo "estilo página"
+
+==============================================
+
+Card: Meus Projeto
+Label: Projetos
+Ícone: Algo relacionado a projeto, gráfico
+Página: mod_projetos
+
+Card: Alimentos
+Label: Alimentos
+Ícone: Maça
+Página: mod_food
+
+Card: Receitas
+Label: Receitas
+Ícone: receita comida, algo relacionado
+Página: mod_receita
+
+Card: Refeições
+Label: Refeições
+Ícone: Prato, talheres
+Página: mod_meals
+
+Card: Suplementação
+Label: Suplementos
+Ícone: pílulas, vitaminas, algo relacionado
+Página: mod_sup
+
+Card: Dietas
+Label: Dietas
+Ícone: Balança, dieta, emagrecimentos, algo relacionado
+Página: mod_diet
+
+Card: Atividades Fisicas
+Label: Atividades Físicas
+Ícone: Bicicleta, atividade, esporte, algo relacionado
+Página: mod_atividades
+
+Card: Treinos
+Label: Treinos
+Ícone: Academia, peso, algo relacionado
+Página: mod_treinos
+
+Card: Saúde
+Label: Saúde Complementar
+Ícone: Coração, saúde, algo relacionado
+Página: mod_health
+
+

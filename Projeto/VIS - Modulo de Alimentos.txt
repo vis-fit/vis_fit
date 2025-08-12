@@ -1,0 +1,304 @@
+VIS - Modulo de Alimentos
+
+Funcionalidades:
+1 - Pesquisa de alimentos
+2 - Detalhes de alimentos
+3 - Cadastro de alimentos
+
+Elementos:
+1 - Barra de pesquisa
+2 - Botão "Pesquisar"
+3 - Tabela de Alimentos
+4 - Modal de Detalhes de Alimentos
+4.1 - Botão de "Fechar"
+5 - Botão "Novo Alimento"
+6 - Modal de Cadastro de Alimentos
+6.1 - Botão "Salvar"
+6.2 - Botão "Cancelar"
+
+==============================================
+
+Botão "Novo Alimento" (identificador interno: "botão novo"
+
+- O botão novo deve ter a aparência/estilo padrão dos botões do tipo "cadastro"
+- O label do botão novo deve ser = "Novo Alimento"
+- Ao clicar no botão novo deve abrir o Modal de Cadastro de Alimentos
+
+==============================================
+
+Modal de Cadastro de Alimentos (identificador interno: "modal de cadastro")
+
+- O modal de cadastro deve ter a aparência/estilo padrão dos "modais"
+- Os elementos do modal de cadastro são: Titulo, Botão "Salvar", Botão "Cancelar", Bloco 1, Bloco 2 e Bloco 3
+- O titulo e os dois botões devem ficar no cabeçalho. O cabeçalho deve seguir o estilo/aparecia padrão do tipo "Cabeçalho Modais"
+- Os blocos 1, 2 e 3 ficarão no corpo do modal de cadastro
+- Os blocos 1, 2 e 3 deverão ter o estilo/aparência padrão do tipo "Blocos"
+
+Cabeçalho:
+- O botão "Salvar" deve ter a aparência/estilo padrão dos botões do tipo "Salvar"
+- O botão "Cancelar" deve ter a aparência/estilo padrão dos botões do tipo "Cancelar"
+- Ao clicar no botão "Salvar" deverá executar a funcionalidade = "Cadastro de Novo Alimento"
+- Ao clicar no botão "Cancelar" deverá executar a funcionalidade = "Cancelamento de Evento"
+
+Bloco 1:
+- Todos os campos do bloco 1 são de inserção (o usuário pode digitar valores)
+- Todos os campos devem ter label
+- A ordem dos campos deve ser conforme ordem abaixo.
+
+CAMPO / LABEL              | CAMPO NA TABELA       | OBSERVAÇÃO                                                       | FUNCIONALIDADE
+---------------------------|-----------------------|------------------------------------------------------------------|-------------------------------------------------------
+Nome Do Alimento           | item_name             | Obrigatório                                                      | Registro Simples no BD
+Marca                      | id_item_brand         | Opcional                                                         | Registro de marca do alimento (tabela auxiliar: marca)
+Modo De Preparo            | id_preparo            | Obrigatório                                                      | Registro em listas, (tabela auxiliar: preparação)
+Grupo Alimentar            | id_grupo              | Obrigatório                                                      | Registro em listas,  (tabela auxiliar: grupo)
+Porção Base ()             | porcao_base           | Obrigatório, Default = 100, Não aceita valor <= 0 (zero)         | Registro de porção, Definição de Medida
+Calorias (Kcal)            | caloria_kcal          | Obrigatório, Valor mínimo = 0 (zero)                             | Registro de cálculo da porção base
+Proteínas (g)              | proteinas_g           | Obrigatório, Valor mínimo = 0 (zero)                             | Registro de cálculo da porção base
+Carboidratos (g)           | carboidratos_g        | Obrigatório, Valor mínimo = 0 (zero)                             | Registro de cálculo da porção base
+Gorduras Totais (g)        | gorduras_totais_g     | Obrigatório, Valor mínimo = 0 (zero)                             | Registro de cálculo da porção base
+Imagem                     | img_registro          | Opcional                                                         | Registro de imagem
+
+___________________
+
+Bloco 2:
+- Todos os campos do bloco 2 são de inserção (o usuário pode digitar valores)
+- Todos os campos devem ter label
+- Todos os campos do bloco 2 são opcionais
+- A ordem dos campos deve ser conforme ordem abaixo.
+
+CAMPO / LABEL              	              | CAMPO NA TABELA                              | OBSERVAÇÃO | FUNCIONALIDADE
+----------------------------------------------|----------------------------------------------|------------|------------------------------------
+Gordura Monoinsaturada (g)                    | gorduras_monoinsaturadas_g                   | Opcional   | Registro Calculo Porção Base
+Gordura Poli-insaturada (g)                   | gorduras_poliinsaturadas_g                   | Opcional   | Registro Calculo Porção Base
+Gordura Saturada (g)                          | gorduras_saturadas_g                         | Opcional   | Registro Calculo Porção Base
+Gordura Trans (g)                             | gorduras_trans_g                             | Opcional   | Registro Calculo Porção Base
+Fibra (g)                                     | fibras_g                                     | Opcional   | Registro Calculo Porção Base
+Sódio (mg)                                    | sodio_mg                                     | Opcional   | Registro Calculo Porção Base
+Teor de Água (g)                              | teor_agua_g                                  | Opcional   | Registro Calculo Porção Base
+Açúcar Total (g)                              | acucares_totais_g                            | Opcional   | Registro Calculo Porção Base
+Açúcar Natural (g)                            | acucares_naturais_g                          | Opcional   | Registro Calculo Porção Base
+Açúcar Adicionado (g)                         | acucares_adicionados_g                       | Opcional   | Registro Calculo Porção Base
+Índice Glicêmico                              | indice_glicemico                             | Opcional   | Registro Calculo Porção Base
+Carga Glicêmica (g)                           | carga_glicemica_g                            | Opcional   | Registro Calculo Porção Base
+Colesterol (mg)                               | colesterol_mg                                | Opcional   | Registro Calculo Porção Base
+Ferro Total (mg)                              | ferro_total_mg                               | Opcional   | Registro Calculo Porção Base
+Ferro Tipo Heme (mg)                          | ferro_heme_mg                                | Opcional   | Registro Calculo Porção Base
+Ferro Tipo Não Heme (mg)                      | ferro_n_heme_mg                              | Opcional   | Registro Calculo Porção Base
+Ômega 3 (g)                                   | omega_3_g                                    | Opcional   | Registro Calculo Porção Base
+Cálcio (mg)                                   | calcio_mg                                    | Opcional   | Registro Calculo Porção Base
+Magnésio (mg)                                 | magnesio_mg                                  | Opcional   | Registro Calculo Porção Base
+Zinco (mg)                                    | zinco_mg                                     | Opcional   | Registro Calculo Porção Base
+Potássio (mg)                                 | potassio_mg                                  | Opcional   | Registro Calculo Porção Base
+Vitamina A (mcg)                              | vitamina_a_mcg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B12 (mcg)                            | vitamina_b12_mcg                             | Opcional   | Registro Calculo Porção Base
+Vitamina C (mg)                               | vitamina_c_mg                                | Opcional   | Registro Calculo Porção Base
+Vitamina D (mcg)                              | vitamina_d_mcg                               | Opcional   | Registro Calculo Porção Base
+Vitamina E (mg)                               | vitamina_e_mg                                | Opcional   | Registro Calculo Porção Base
+Vitamina K (mcg)                              | vitamina_k_mcg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B1 (mg)                              | vitamina_b1_mg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B2 (mg)                              | vitamina_b2_mg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B3 (mg)                              | vitamina_b3_mg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B5 (mg)                              | vitamina_b5_mg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B6 (mg)                              | vitamina_b6_mg                               | Opcional   | Registro Calculo Porção Base
+Vitamina B7 (mcg)                             | vitamina_b7_mcg                              | Opcional   | Registro Calculo Porção Base
+Ômega 6 (g)                                   | omega_6_g                                    | Opcional   | Registro Calculo Porção Base
+Fitosterol (mg)                               | fitosterol_mg                                | Opcional   | Registro Calculo Porção Base
+Cloro (mg)                                    | cloro_mg                                     | Opcional   | Registro Calculo Porção Base
+PRAL (mEq)                                    | pral_mEq                                     | Opcional   | Registro Calculo Porção Base
+Polióis (g)                                   | poliois_g                                    | Opcional   | Registro Calculo Porção Base
+Carboidrato Líquido (g)                       | carboidratos_liquidos_g                      | Opcional   | Registro Calculo Porção Base
+Índice PDCAAS                                 | indice_quality_proteinas_pdcaas              | Opcional   | Registro Calculo Porção Base
+Perfil de Aminoácidos Essenciais (mg)         | perfil_aminoacidos_ess_mg                    | Opcional   | Registro Calculo Porção Base
+Cobre (mg)                                    | cobre_mg                                     | Opcional   | Registro Calculo Porção Base
+Manganês (mg)                                 | manganes_mg                                  | Opcional   | Registro Calculo Porção Base
+Selênio (mcg)                                 | selenio_mcg                                  | Opcional   | Registro Calculo Porção Base
+Iodo (mcg)                                    | iodo_mcg                                     | Opcional   | Registro Calculo Porção Base
+Betacaroteno (mcg)                            | betacaroteno_mcg                             | Opcional   | Registro Calculo Porção Base
+Licopeno (mcg)                                | licopeno_mcg                                 | Opcional   | Registro Calculo Porção Base
+Luteína Zeaxantina (mcg)                      | luteina_zeaxantina_mcg                       | Opcional   | Registro Calculo Porção Base
+Ácido Fólico (mcg)                            | acido_folico_mcg                             | Opcional   | Registro Calculo Porção Base
+Polifenol Total (mg)                          | polifenol_total_mg                           | Opcional   | Registro Calculo Porção Base
+Carga Antioxidante (ORAC)                     | carga_antioxidante_orac                      | Opcional   | Registro Calculo Porção Base
+Teor de Álcool (%)                            | teor_alcool_prcent                           | Opcional   | Registro Calculo Porção Base
+
+___________________
+
+Bloco 3
+- Todos os campos do bloco 3 são de inserção (o usuário pode digitar valores)
+- Todos os campos devem ter label
+- Todos os campos do bloco 3 são opcionais
+- A ordem dos campos deve ser conforme ordem abaixo.
+
+
+CAMPO / LABEL                | CAMPO NA TABELA        | OBSERVAÇÃO                           | FUNCIONALIDADE
+---------------------------- |----------------------- |------------------------------------- |------------------------------------------------------
+Contém Glúten?               | gluten_sim             | Opcional, Sim/Não                    | Registro Simples no BD
+Alérgenos Comuns             | id_alergenos           | Opcional, Seleção múltipla           | Registro em lista múltipla, (tabela auxiliar: alérgenos)
+Intolerâncias Comuns         | id_intolerancias       | Opcional, Seleção múltipla           | Registro em lista múltipla, (tabela auxiliar: intolerâncias)
+Categoria Alimentar          | id_categoria           | Opcional, Seleção múltipla           | Registro em lista múltipla, (tabela auxiliar: categoria)
+Origem Alimentar             | id_origem              | Opcional                             | Registro em listas, (tabela auxiliar: origem)
+Nível De Processamento       | id_processamento       | Opcional                             | Registro em listas (tabela auxiliar: processamento)
+Observações                  | obs_alimento           | Opcional                             | Registro simples no BD
+
+___________________
+
+Funcionalidades dos Campos
+
+1 - Registro Simples no BD
+- Essa funcionalidade garante o registro simples na tabela do banco de dados na tabela principal
+- O valor digitado pelo usuário no campo deve ser registrado no campo correspondente da tabela no banco de dados exatamente como está
+
+2 - Registro de porção
+- Essa funcionalidade garante o registro na tabela do banco de dados na tabela principal
+- O usuário pode digitar qualquer valor no campo "Porção Base", porém, no banco de dados o registro sempre será salvo com o valor = 100
+- Todos os outros campos serão proporcionalizados ao valor 100. 
+- Campo impactado = "Porção Base ()"
+
+3 - Registro Calculo Porção Base
+- Essa funcionalidade garante o registro na tabela do banco de dados na tabela principal
+- O usuário digita um valor no campo "Porção Base ()". Todos os valores nutricionais que o usuário digitar após isso serão proporcionais a esse valor digitado.
+- Porem, o banco de dados sempre irá registrar o valor = 100 no campo "Porção Base ()". Isso quer dizer que é necessário calcular qualquer valor nutricional que tenha essa funcionalidade
+- Exemplo: O usuário registrou o valor 50,00 no campo "Porção Base ()" e o valor = 20,00 no campo "Proteinas (g)". No registro no banco de dados o campo "Porção Base ()" será registrado com valor = 100, então, o campo "Proteinas (g)" deve ser registrado com o valor proporcional = 10. 
+- Ou seja, todos os campos com essa funcionalidade devem ser registrados seguindo esse calculo de regra de 3 para encontrar o valor proporcional. 
+
+4 - Registro em listas
+- Essa funcionalidade garante o registro no banco de dados na tabela principal e a visualização da lista de acordo com a tabela auxiliar correspondente ao campo. 
+- O tipo do campo deve ser uma caixa de seleção simples, podendo escolher apenas uma opção
+- Os valores da lista serão trazidos da coluna 3 (nome) da tabela auxiliar correspondente
+- O valor escolhido pelo usuário será registrado na tabela do banco de dados correspondente ao valor da coluna 1 (id) da tabela auxiliar. 
+Exemplo: 
+A) - O campo "Modo de Preparo" tem a tabela auxiliar "tbl_aux_prep". 
+B) - A tabela "tbl_aux_prep" tem os seguintes valores:
+
+id | dt_registro | nome    | detalhes
+---|-------------|---------|----------------
+1  | 2025-08-10  | Cru     | Sem cozimento
+2  | 2025-08-10  | Cozido  | Cozido em água
+
+C) - No campo "Modo de Preparo" a caixa de seleção exibe os valores: "Cru" e "Cozido"
+D) - O usuário seleciona o valor = "Cozido"
+E) - No banco de dados no campo "id_prepado" será registrado o valor = 2, que é o id referente ao valor selecionado.
+
+
+5 - Registro de marca do alimento
+- Essa funcionalidade garante o registro no banco de dados na tabela principal a visualização de acordo com a tabela auxiliar correspondente ao campo.
+- Essa funcionalidade está restrita ao campo "Marca"
+- O tipo de campo deve ser uma caixa de seleção, mas com opção de inserir novos itens caso não exista na lista. 
+- Ou seja, o usuário irá digitar um valor, se existir correspondência ao valor digitado, o usuário irá selecionar esse valor. Caso não exista, será registrado o novo valor inserido pelo usuário. 
+- O tipo do campo deve ser uma caixa de seleção simples, podendo escolher apenas uma opção
+- Os valores da lista serão trazidos da coluna 3 (nome) da tabela auxiliar correspondente
+- Não deve ser permitido duplicidades de nenhuma forma nessa lista
+- Para facilitar a experiencia do usuário, ao digitar 3 letras já deve iniciar a busca por correspondências
+- Deve ser desconsiderado acentuação e pontuação. Se o usuário digita "Coracao" é o mesmo que "Coração" e vise versa.
+Exemplo 1:
+A) - O campo "Marca" tem a tabela auxiliar "tbl_brands". 
+B) - A tabela "tbl_brands" tem os seguintes valores:
+
+id | dt_registro | nome      | detalhes
+---|-------------|---------  |----------------
+1  | 2025-08-10  | CAMIL     | NULL
+2  | 2025-08-10  | NAMORADO  | NULL
+3  | 2025-08-10  | TIO JOÃO  | NULL
+
+C) - O usuário digita no campo "Marca" o valor = "camil"
+D) - Na lista aparece a opção "CAMIL" e o usuário seleciona a opção
+E) - No banco de dados no campo "id_item_brand" será registrado o valor = 1, que é o valor correspondente da opção selecionada pelo usuário.
+
+Exemplo 2:
+A) - O campo "Marca" tem a tabela auxiliar "tbl_brands". 
+B) - A tabela "tbl_brands" tem os seguintes valores:
+
+id | dt_registro | nome      | detalhes
+---|-------------|---------  |----------------
+1  | 2025-08-10  | CAMIL     | NULL
+2  | 2025-08-10  | NAMORADO  | NULL
+3  | 2025-08-10  | TIO JOÃO  | NULL
+
+C) - O usuário digita no campo "Marca" o valor = "carioca"
+D) - Como não existe esse valor registrado na tabela auxiliar, será criado um novo registro para esse valor e a tabela auxiliar passar a ficar assim:
+
+id | dt_registro | nome      | detalhes
+---|-------------|---------  |----------------
+1  | 2025-08-10  | CAMIL     | NULL
+2  | 2025-08-10  | NAMORADO  | NULL
+3  | 2025-08-10  | TIO JOÃO  | NULL
+4  | 2025-08-11  | CARIOCA   | NULL
+
+E) - No banco de dados no campo "id_item_brand" será registrado o valor = 4, que o valor do id correspondente ao registro que acabou de ser criado.
+
+6 - Registro em lista múltipla
+- Essa funcionalidade garante o registro no banco de dados na tabela principal
+- O campo com essa funcionalidade deve ser um campo do tipo caixa de seleção múltipla, onde várias opções poderão ser selecionadas. 
+- Será possível selecionar no máximo 6 opções
+- Todos os valores selecionados deverão ter uma tag com um botão para 'descelecionar' se o usuário quiser
+- Os valores da lista serão trazidos da coluna 3 (nome) da tabela auxiliar correspondente
+- O valor escolhido pelo usuário será registrado na tabela do banco de dados correspondente ao valor da coluna 1 (id) da tabela auxiliar. 
+- No banco de dados, todas as opções selecionadas serão registradas em apenas uma linha, no mesmo campo, separadas por ponto e virgula (;) e sem espaço
+Exemplo:
+A) - Na tabela "tbl_aux_alergenos" tem os seguintes valores:
+
+id | dt_registro | nome      | detalhes
+---|-------------|---------  |----------------
+1  | 2025-08-10  | Amendoim  | NULL
+2  | 2025-08-10  | Leite     | NULL
+3  | 2025-08-10  | Camarão   | NULL
+
+B) No campo "Alérgenos Comuns" a lista terá as opções com os seguintes valores: Amendoim, Leite e Camarão
+C) O usuário irá selecionar os valores "Amendoim" e "Camarão"
+D) No banco de dados no campo "id_alergenos" será registrado o valor = "1;3", que são os id's referentes aos valores selecionados na tabela auxiliar
+
+
+7 - Registro de Imagem
+- Essa funcionalidade garante o registro no banco de dados na tabela principal
+- Essa funcionalidade é exclusiva do campo "Imagem"
+- Esse campo deve ser do tipo botão para selecionar e carregar uma imagem
+- Ao clicar no botão, deverá abrir uma caixa de opção com 2 opções:
+Opção 1 - Imagem do dispositivo
+Opção 2 - Imagem da WEB
+- Ao clicar na Opção 1, deverá abrir o seletor de imagem do dispositivo do usuário para ele selecionar a imagem da sua galeria
+- Ao clicar na Opção 2, deverá abrir um campo para o usuário inserir o link da imagem na WEB
+- Após carregar a imagem, seja na opção 1 ou 2, deverá aparecer um botão "Carregar Imagem" e um quadro abaixo deverá exibir a imagem que foi carregada
+- O quadro da imagem será pequeno, apenas para garantir que a imagem carregada foi a que o usuário escolheu
+- Se o usuário carregou a imagem pela Opção 1, a imagem carregada será salva no banco de dados no campo "img_registro_dp" e o campo "img_registro_tipo" deve receber o valor = 1
+- Se o usuário carregou a imagem pela Opção 2, o link será registrado no banco de dados no campo "img_registro_web" e o campo "img_registro_tipo" deve receber o valor = 2
+ 
+8 - Definição de Medida
+- Essa funcionalidade garante o registro no banco de dados na tabela principal
+- Essa funcionalidade funcionara como uma condicional, que irá definir o tipo de medida do alimento que está sendo cadastrado de acordo com o Grupo Alimentar selecionado pelo usuário.
+- Essa funcionalidade deve ocorrer após o usuário selecionar um valor no campo "Grupo Alimentar"
+- Conforme a funcionalidade "Registro em lista" o campo "Grupo Alimentar" trás uma lista de valores onde cada uma tem um id correspondente
+- Se o usuário selecionar no campo "Grupo Alimentar" em que o id é igual a 10 ou 11, o campo "id_tipo_medida" deve receber o valor = 5
+- Se o usuário selecionar no campo "Grupo Alimentar" em que o id é diferente de 10 e de 11, o campo "id_tipo_medida" deve receber o valor = 1
+- Essa funcionalidade também altera o label do campo "Porção Base ()". 
+- Se o usuário selecionar no campo "Grupo Alimentar" em que o id é igual a 10 ou 11, dentro do parênteses do label do campo "Porção Base ()" deve ser incluído o valor = "ml", ficando o label do campo = "Porção Base (ml)"
+- Se o usuário selecionar no campo "Grupo Alimentar" em que o id é diferente de de 10 ou de 11, dentro do parênteses do label do campo "Porção Base ()" deve ser incluído o valor = "g", ficando o label do campo = "Porção Base (g)"
+
+9 - Cadastro de Novo Alimento
+- Essa funcionalidade deverá ocorrer ao clicar no botão "Salvar"
+- Será criado o registro na tabela do banco de dados na tabela principal
+- Antes de criar o registro deverá se certificar de que não é um registro duplicado. 
+- Um registro duplicado deve ter os campos "Nome do Alimento", "Marca", "Modo de Preparo" e "Grupo Alimentar" iguais. Se qualquer um desses campos não for igual, o registro não é considerado duplicidade. 
+
+10 - Cancelamento de Evento
+- Essa funcionalidade deverá ocorrer ao clicar no botão "Cancelar"
+- Ao clicar no botão, aparecerá uma caixa de alertar perguntando se o usuário deseja cancelar o cadastro. Com duas opções, "sim" e "não"
+- Se o usuário clicar em "não", o alerta desaparece e nada acontece. A tela permanece como está.
+- Se o usuário clicar em "sim", o modal de cadastro de é fechado.
+
+--------------------------------------------------------------
+
+Tabelas do Banco de Dados:
+
+Tabela Principal: tbl_foods
+Tabela Auxiliar (Marca): tbl_brands
+Tabela Auxiliar (Preparação): tbl_aux_prep
+Tabela Auxiliar (Grupo): tbl_aux_grupo_alimentar
+Tabela Auxiliar (Alérgenos): tbl_aux_alergenos
+Tabela Auxiliar (Intolerâncias): tbl_aux_intolerancias
+Tabela Auxiliar (Categoria): tbl_aux_categoria_alimentar
+Tabela Auxiliar (Origem): tbl_aux_origem_alimentar
+Tabela Auxiliar (Processamento): tbl_aux_nvl_processamento
+Tabela Auxiliar (Tipo Medida): tbl_aux_tp_medida
+
+==============================================
+
