@@ -14,39 +14,11 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+app.use(express.json());  // Para parsear application/json
+app.use(express.urlencoded({ extended: true }));  // Para parsear application/x-www-form-urlencoded
+
 // Middleware para servir arquivos estáticos (frontend)
 app.use(express.static(path.join(__dirname, 'frontend')));
-
-// Rota principal - serve o index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
-});
-
-// Rotas para as páginas de módulos
-app.get('/mod_projetos', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'mod_projetos.html'));
-});
-
-app.get('/mod_food', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'mod_food.html'));
-});
-
-// Adicione rotas para todas as outras páginas seguindo o mesmo padrão...
-
-// Rota de teste do banco de dados (mantida)
-app.get('/test-db', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ status: 'OK', time: result.rows[0].now });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Rota fallback para Single Page Applications (SPA)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
-});
 
 //ROTAS
 // Rotas para o módulo de alimentos
@@ -504,6 +476,40 @@ app.get('/api/processing-levels', async (req, res) => {
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 });
+//FIM ROTAS
+
+// Rota principal - serve o index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
+// Rotas para as páginas de módulos
+app.get('/mod_projetos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'mod_projetos.html'));
+});
+
+app.get('/mod_food', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'pages', 'mod_food.html'));
+});
+
+// Adicione rotas para todas as outras páginas seguindo o mesmo padrão...
+
+// Rota de teste do banco de dados (mantida)
+app.get('/test-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ status: 'OK', time: result.rows[0].now });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Rota fallback para Single Page Applications (SPA)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
+
 
 // Inicia o servidor
 const server = app.listen(PORT, () => {

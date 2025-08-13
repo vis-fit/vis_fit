@@ -45,26 +45,37 @@ document.addEventListener('DOMContentLoaded', function() {
   async function searchFoods() {
     const searchTerm = searchBar.value.trim();
     if (!searchTerm) return;
-    
+
     try {
-      // Mostrar loader
       loader.classList.remove('hidden');
       resultsBody.innerHTML = '';
-      
-      // Fazer a requisição para o backend
+
       const response = await fetch(`/api/foods/search?term=${encodeURIComponent(searchTerm)}`);
+      
+      // Verificar se a resposta é JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Resposta do servidor não é JSON');
+      }
+
       const data = await response.json();
       
-      if (response.ok) {
-        searchResults = data;
-        currentPage = 1;
-        displayResults();
-      } else {
-        alert('Erro na pesquisa: ' + (data.message || 'Erro desconhecido'));
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro na pesquisa');
       }
+
+      searchResults = data;
+      currentPage = 1;
+      displayResults();
     } catch (error) {
       console.error('Erro na pesquisa:', error);
-      alert('Erro ao conectar com o servidor');
+      resultsBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="error-message">
+            Erro na pesquisa: ${error.message}
+          </td>
+        </tr>
+      `;
     } finally {
       loader.classList.add('hidden');
     }
@@ -313,21 +324,30 @@ document.addEventListener('DOMContentLoaded', function() {
   // Renderizar conteúdo do modal de cadastro
   async function renderCreateModal() {
     const modalBody = createModal.querySelector('.modal-body');
-    modalBody.innerHTML = '';
-    
+    modalBody.innerHTML = '<div class="loader"></div>'; // Mostrar loader
+
     try {
-      // Carregar dados auxiliares
-      const [brands, preparations, groups, allergens, intolerances, categories, origins, processingLevels] = await Promise.all([
-        fetch('/api/brands').then(res => res.json()),
-        fetch('/api/preparations').then(res => res.json()),
-        fetch('/api/food-groups').then(res => res.json()),
-        fetch('/api/allergens').then(res => res.json()),
-        fetch('/api/intolerances').then(res => res.json()),
-        fetch('/api/food-categories').then(res => res.json()),
-        fetch('/api/food-origins').then(res => res.json()),
-        fetch('/api/processing-levels').then(res => res.json())
-      ]);
-      
+      // Adicionar tratamento de resposta para cada requisição
+      const fetchWithCheck = async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      };
+
+      const [brands, preparations, groups, allergens, intolerances, categories, origins, processingLevels] = 
+        await Promise.all([
+          fetchWithCheck('/api/brands'),
+          fetchWithCheck('/api/preparations'),
+          fetchWithCheck('/api/food-groups'),
+          fetchWithCheck('/api/allergens'),
+          fetchWithCheck('/api/intolerances'),
+          fetchWithCheck('/api/food-categories'),
+          fetchWithCheck('/api/food-origins'),
+          fetchWithCheck('/api/processing-levels')
+        ]);
+
       // Bloco 1 - Informações básicas
       const section1 = document.createElement('div');
       section1.className = 'food-create-section';
