@@ -49,16 +49,6 @@
   display: none !important;
 }
 
-.modal-container {
-  position: fixed;
-  /* outros estilos */
-  display: none; /* Garante que comece oculto */
-}
-
-.modal-container.show {
-  display: block;
-}
-
 /* Tabela de resultados */
 .food-table-container {
   overflow-x: auto;
@@ -238,6 +228,36 @@
   color: white;
   margin-left: 5px;
   cursor: pointer;
+}
+
+/* Adicionar estas regras */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal-container.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 /* Responsividade */

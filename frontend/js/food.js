@@ -52,24 +52,28 @@ document.addEventListener('DOMContentLoaded', function() {
   // Função para pesquisar alimentos
   async function searchFoods() {
     const searchTerm = searchBar.value.trim();
-    if (!searchTerm) return;
+    if (!searchTerm) {
+      alert('Por favor, digite um termo para pesquisa');
+      return;
+    }
 
     try {
       loader.classList.remove('hidden');
       resultsBody.innerHTML = '';
 
+      console.log(`Enviando requisição para: /api/foods/search?term=${encodeURIComponent(searchTerm)}`);
+      
       const response = await fetch(`/api/foods/search?term=${encodeURIComponent(searchTerm)}`);
       
-      // Verificar se a resposta é JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Resposta do servidor não é JSON');
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('Dados recebidos:', data);
       
-      if (!response.ok) {
-        throw new Error(data.message || 'Erro na pesquisa');
+      if (!Array.isArray(data)) {
+        throw new Error('Resposta da API não é um array');
       }
 
       searchResults = data;
@@ -77,11 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
       displayResults();
     } catch (error) {
       console.error('Erro na pesquisa:', error);
-      // Mostra mais detalhes do erro no console
-      if (error.response) {
-        console.error("Dados da resposta:", error.response.data);
-        console.error("Status:", error.response.status);
-      }
       resultsBody.innerHTML = `
         <tr>
           <td colspan="5" class="error-message">
@@ -89,6 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
           </td>
         </tr>
       `;
+      
+      // Adicionar log detalhado do erro
+      if (error.response) {
+        console.error("Dados da resposta:", error.response.data);
+        console.error("Status:", error.response.status);
+      }
     } finally {
       loader.classList.add('hidden');
     }
@@ -327,21 +332,12 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
   }
-
-  document.getElementById('new-food-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    console.log("Botão clicado - debug"); // Para verificar se o evento está sendo capturado
-    openCreateModal();
-  });
   
   // Abrir modal de cadastro
   function openCreateModal() {
-    console.log("Abrindo modal - debug"); // Verifique se esta mensagem aparece
+    console.log("Abrindo modal de cadastro");
     createModal.classList.remove('hidden');
-    
-    // Adicione esta linha para garantir que o modal fique visível
-    createModal.style.display = 'block';
-    
+    document.body.style.overflow = 'hidden'; // Impede scroll da página
     renderCreateModal();
   }
   

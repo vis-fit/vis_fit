@@ -23,10 +23,12 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 //ROTAS
 // Rotas para o módulo de alimentos
 app.get('/api/foods/search', async (req, res) => {
+  console.log('Recebida requisição de pesquisa:', req.query.term);
   try {
     const { term } = req.query;
     
     if (!term) {
+      console.log('Termo de pesquisa vazio');
       return res.status(400).json({ error: 'Termo de pesquisa não fornecido' });
     }
     
@@ -92,9 +94,10 @@ app.get('/api/foods/search', async (req, res) => {
       calories_kcal: row.caloria_kcal
     }));
     
+    console.log(`Retornando ${foods.length} resultados para "${term}"`);
     res.json(foods);
   } catch (error) {
-    console.error('Erro na pesquisa de alimentos:', error);
+    console.error('Erro completo na pesquisa:', error);
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 });
