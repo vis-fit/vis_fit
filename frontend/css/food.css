@@ -46,7 +46,17 @@
 }
 
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+.modal-container {
+  position: fixed;
+  /* outros estilos */
+  display: none; /* Garante que comece oculto */
+}
+
+.modal-container.show {
+  display: block;
 }
 
 /* Tabela de resultados */

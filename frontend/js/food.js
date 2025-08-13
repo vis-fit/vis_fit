@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const itemsPerPage = 20;
   let searchResults = [];
   
+  console.log("Script food.js carregado");
+  console.log("Elementos encontrados:", {
+    searchBar: !!searchBar,
+    searchBtn: !!searchBtn,
+    newFoodBtn: !!newFoodBtn,
+    createModal: !!createModal
+  });
+
   // Elementos DOM
   const searchBar = document.getElementById('food-search-bar');
   const searchBtn = document.getElementById('food-search-btn');
@@ -69,6 +77,11 @@ document.addEventListener('DOMContentLoaded', function() {
       displayResults();
     } catch (error) {
       console.error('Erro na pesquisa:', error);
+      // Mostra mais detalhes do erro no console
+      if (error.response) {
+        console.error("Dados da resposta:", error.response.data);
+        console.error("Status:", error.response.status);
+      }
       resultsBody.innerHTML = `
         <tr>
           <td colspan="5" class="error-message">
@@ -314,10 +327,21 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     `;
   }
+
+  document.getElementById('new-food-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log("Botão clicado - debug"); // Para verificar se o evento está sendo capturado
+    openCreateModal();
+  });
   
   // Abrir modal de cadastro
   function openCreateModal() {
+    console.log("Abrindo modal - debug"); // Verifique se esta mensagem aparece
     createModal.classList.remove('hidden');
+    
+    // Adicione esta linha para garantir que o modal fique visível
+    createModal.style.display = 'block';
+    
     renderCreateModal();
   }
   
