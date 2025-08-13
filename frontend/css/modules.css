@@ -1,3 +1,4 @@
+/*INICIO DO ARQUIVO: modules.css*/
 /* Cards da página principal */
 .cards-container {
   display: grid;
@@ -117,3 +118,5 @@
 .collapsible.active .collapsible-arrow {
   transform: rotate(180deg);
 }
+/*FIM DO ARQUIVO: modules.css*/
+/*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/

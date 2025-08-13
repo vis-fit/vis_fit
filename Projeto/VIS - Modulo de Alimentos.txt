@@ -1,6 +1,6 @@
 VIS - Modulo de Alimentos
 
-Funcionalidades:
+Funcionalidades Principais:
 1 - Pesquisa de alimentos
 2 - Detalhes de alimentos
 3 - Cadastro de alimentos
@@ -10,15 +10,287 @@ Elementos:
 2 - Botão "Pesquisar"
 3 - Tabela de Alimentos
 4 - Modal de Detalhes de Alimentos
-4.1 - Botão de "Fechar"
 5 - Botão "Novo Alimento"
 6 - Modal de Cadastro de Alimentos
-6.1 - Botão "Salvar"
-6.2 - Botão "Cancelar"
 
 ==============================================
 
-Botão "Novo Alimento" (identificador interno: "botão novo"
+1 - Barra de pesquisa (identificador = "barra")
+
+- A Barra de pesquisa deve ter uma largura boa
+- A altura da barra deve ser condizendo com o modelo padrão de barra de pesquisa
+- Deve ter os cantos arredondados
+- Não deve ter label
+- Deve ter um placeholder = "Digite o nome do alimento desejado:"
+
+==============================================
+
+2 - Botão "Pesquisar"
+
+- O botão pesquisar deve ser um quadradinho com um ícone de lupa
+- Deve ficar ao lado da barra de pesquisa
+- Ao clicar no botão deve executar a funcionalidade "Pesquisa de Alimentos"
+- Enquanto a pesquisa é executada, antes de retornar os valores na tabela de consulta, deve ter uma espécie de loader que indica que a consulta está sendo executada
+- O loader deve desaparecer quando retornar a consulta
+- A funcionalidade "Pesquisa de Alimentos" deve ocorrer ao clicar no botão pesquisar ou dar "enter"
+
+Funcionalidade: Pesquisa de Alimentos
+
+- O usuário digita um valor na barra de pesquisas
+- Esse valor é buscado no campo "key_words" da tabela "tbl_foods" no banco de dados para encontrar correspondências
+- A pesquisa irá retornar os itens encontrados que tiverem maior número de correspondências encontradas
+- Se houver empate no número de correspondências, todos os registros empatados devem ser retornados pela consulta
+- Palavras do tipo preposição não devem ser consideradas para pesquisa. "Arroz de Forno" será considerado somente "Arroz" e "Forno"
+- A acentuação de palavras deve ser desconsiderada. Se o usuário escrever "Feijao" a consulta deve considerar a palavra "feijão" e "feijao". Ou seja, com acento ou sem, é a mesma palavra. 
+- Não deve considerar maiúsculas ou minúsculas
+
+Exemplo:
+
+1 - Na tabela "tbl_foods" existem os registros:
+
+id                         | item_name             | Outros campos             | key_words
+---------------------------|-----------------------|---------------------------|-------------------------------------------------------
+1                          | ARROZ BRANCO TIPO 1   | NULL                      | arroz;branco;tipo;1;camil
+2                          | ARROZ BRANCO TIPO 1   | NULL                      | arroz;branco;tipo;1;tio;joão
+3                          | ARROZ BRANCO TIPO 1   | NULL                      | arroz;branco;tipo;1
+4                          | FEIJÃO CARIOCA        | NULL                      | feijão;carioca;camil
+5                          | FEIJÃO CARIOCA        | NULL                      | feijão;carioca;kikaldo
+
+2 - O usuário digita na barra de pesquisa o valor = "arroz branco camil"
+3 - Ao clicar no botão de pesquisa a funcionalidade irá separar todas as palavras digitadas pelo usuário: "arro", "branco" e "camil"
+4 - A funcionalidade irá buscar na base de dados na tabela "tbl_foods" no campo "key_words" quantas correspondências existem
+5 - Nesse caso, o registro de id = 1 tem 3 correspondências, o registro id = 2 e id = 3 tem 2 correspondências e o registro de id = 4 tem 1 correspondência. Veja abaixo:
+ID 1 = correspondências: arroz, branco e camil
+ID 2 = correspondências: arroz, branco
+ID 3 = correspondências: arroz, branco
+ID 4 = correspondências: camil
+6 - Nesse cenário a pesquisa deve retornar na tabela de consulta somente o registro de ID = 1, porque é o que tem mais correspondências. 
+7 - Se houver empate em correspondências, a consulta deve retornar todos os registros que empataram, ordenados em ordem alfabética. 
+
+==============================================
+
+3 - Tabela de Alimentos
+
+- A tabela de alimentos deverá ficar abaixo da barra de pesquisa
+- A tabela de alimentos deverá ter 5 campos
+- A tabela de alimentos só deve mostrar 20 registros de uma vez. Se houver mais, deve ter um botão próximo.
+- Cada linha de registro da tabela deverá ter a função clicavel, que irá abrir o Modal de Detalhes ao clicar
+
+Campos:
+
+1 - Item
+2 - Marca
+3 - Modo de Preparo
+4 - Porção Base ()
+5 - Calorias
+
+- Os registros que vão aparecer em cada campo são de acordo com o resultado da busca realizada na pesquisa feita pelo usuário
+- Os registros serão trazidos da tabela "tbl_foods" e das tabelas auxiliares
+
+Campo 1 - Item
+- Label: Item
+- Tabela: tbl_foods
+- Campo Tabela: item_name
+
+Campo 2 - Marca
+- Label: Marca
+- Tabela: tbl_foods + tbl_brands
+- Campo da Tabela: Tabela "tbl_brands" campo "nome" sendo join da tabela "tbl_foods" com a tabela "tbl_brands" onde o campo "id_item_brands" da tabela "tbl_foods" for = o campo "id" da tabela "tbl_brands" 
+
+Campo 3 - Modo de Preparo
+- Label: Modo de Preparo
+- Tabela: tbl_foods + tbl_aux_prep
+- Campo da Tabela: Tabela "tbl_aux_prep" campo "nome" sendo join da tabela "tbl_foods" com a tabela "tbl_aux_prep" onde o campo "id_preparo" da tabela "tbl_foods" for = o campo "id" da tabela "tbl_aux_prep" 
+
+Campo 4 - Porção Base
+- Label: Porção Base
+- Tabela: tbl_foods + tbl_aux_tp_medida
+- Campo da Tabela: Concatenado da Tabela "tbl_foods" campo "porcao_base" + tabela "tbl_aux_tp_medida" campo "nome" sendo join da tabela "tbl_foods" com a tabela "tbl_aux_tp_medida" onde o campo "id_tipo_medida" da tabela "tbl_foods" for = o campo "id" da tabela "tbl_aux_tp_medida"
+- Observação: O valor trazido da tabela "tbl_aux_tp_medida" deve ficar entre parênteses. Então, seria assim: [tbl_foods.porcao_base]&"("&[tbl_aux_tp_medida]&")". Exemplo: "400(ml)"
+
+Campo 5 - Calorias
+- Label: Kcal.
+- Tabela: tbl_foods
+- Campo da Tabela: caloria kcal
+
+==============================================
+
+4 - Modal de Detalhes de Alimentos
+
+- O modal de detalhes deve ter a aparência/estilo padrão dos "modais"
+- Os elementos do modal de detalhes são: Titulo, Botão "Fechar", Bloco 1, Bloco 2 e Bloco 3
+- O titulo e o botão fechar devem ficar no cabeçalho. O cabeçalho deve seguir o estilo/aparecia padrão do tipo "Cabeçalho Modais"
+- Os blocos 1, 2 e 3 ficarão no corpo do modal de detalhes
+- Os blocos 1, 2 e 3 deverão ter o estilo/aparência padrão do tipo "Blocos"
+
+Cabeçalho:
+- O botão "Fechar" deve ter a aparência/estilo padrão dos botões do tipo "Cancelar"
+- Ao clicar no botão "Fechar" deverá executar a funcionalidade = "Cancelamento de Evento"
+
+Bloco 1
+- A ordem dos campos deve ser conforme ordem abaixo.
+
+1 - Imagem
+- Deve ser a imagem do alimento registrada na tabela "tbl_foods"
+- Se o campo "img_registro_tipo" da tabela "tbl_foods" for = 1, deverá aparecer a imagem registrada no campo "img_registro_dp" da tabela "tbl_foods"
+- Se o campo "img_registro_tipo" da tabela "tbl_foods" for = 2, deverá aparecer a imagem registrada no campo "img_registro_web" da tabela "tbl_foods" (esse é um link de uma imagem web e não salva diretamente no banco)
+- Deve ficar centralizada no Modal
+- Não deve ser muito grande. Deve ser como um ícone médio, que de para visualizar bem
+- Deve ser quadrada, com borda suave e cantos arredondados
+
+2 - Nome do Item
+- Não deve ter label
+- Deve ser apenas o valor registrado no banco de dados e ficar abaixo da imagem, em negrito, como se fosse um titulo. Sem bordas
+- Deve ser o valor registrado no campo "item_name" da tabela "tbl_foods"
+- Campo não editável.
+
+- A partir dos próximos campos, vou enviar em tabela:
+
+Ainda no Bloco 1:
+
+CAMPO                  | LABEL              | TABELA(S)                                    | CAMPO DA TABELA                                          | FUNCIONALIDADE                         | OBS
+-----------------------|--------------------|----------------------------------------------|----------------------------------------------------------|----------------------------------------|----------------------------
+Marca                  | Marca              | tbl_foods + tbl_brands                       | tbl_brands campo: "nome" da tabela auxiliar              | Join Tabela Auxiliar                   | Não Editavel
+Modo de Preparo        | Modo de Preparo    | tbl_foods + tbl_aux_prep                     | tbl_aux_prep campo: "nome" da tabela auxiliar            | Join Tabela Auxiliar                   | Não Editavel
+Grupo Alimentar        | Grupo Alimentar    | tbl_foods + tbl_aux_grupo_alimentar          | tbl_aux_grupo_alimentar campo: "nome" da tabela auxiliar | Join Tabela Auxiliar                   | Não Editavel
+Porção Base            | Porção Base ()     | tbl_foods                                    | porcao_base                                              | Label Tipo Medida                      | Editavel (só inteiro ou decimal)
+Calorias               | Kcal.              | tbl_foods                                    | caloria_kcal                                             | Calculo Detalhes Proporção Base        | Não Editavel
+Proteinas              | Proteínas          | tbl_foods                                    | proteinas_g                                              | Calculo Detalhes Proporção Base        | Não Editavel
+Carboidratos           | Carboidratos       | tbl_foods                                    | carboidratos_g                                           | Calculo Detalhes Proporção Base        | Não Editavel
+Gorduras Totais        | Gorduras Totais    | tbl_foods                                    | gorduras_totais_g                                        | Calculo Detalhes Proporção Base        | Não Editavel
+
+
+Bloco 2:
+
+CAMPO                                  | LABEL                                          | TABELA(S)   | CAMPO DA TABELA                                   | FUNCIONALIDADE                         | OBS
+---------------------------------------|------------------------------------------------|-------------|---------------------------------------------------|----------------------------------------|----------------------------
+Fibras                                 | Fibras (g)                                     | tbl_foods   | fibras_g                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Gorduras Saturadas                     | Gorduras Saturadas (g)                         | tbl_foods   | gorduras_saturadas_g                              | Calculo Detalhes Proporção Base        | Não Editavel
+Gorduras Monoinsaturadas               | Gorduras Monoinsaturadas (g)                   | tbl_foods   | gorduras_monoinsaturadas_g                        | Calculo Detalhes Proporção Base        | Não Editavel
+Gorduras Poliinsaturadas               | Gorduras Poliinsaturadas (g)                   | tbl_foods   | gorduras_poliinsaturadas_g                        | Calculo Detalhes Proporção Base        | Não Editavel
+Gorduras Trans                         | Gorduras Trans (g)                             | tbl_foods   | gorduras_trans_g                                  | Calculo Detalhes Proporção Base        | Não Editavel
+Omega 3                                | Omega 3 (g)                                    | tbl_foods   | omega_3_g                                         | Calculo Detalhes Proporção Base        | Não Editavel
+Açucares Totais                        | Açucares Totais (g)                            | tbl_foods   | acucares_totais_g                                 | Calculo Detalhes Proporção Base        | Não Editavel
+Açucares Naturais                      | Açucares Naturais (g)                          | tbl_foods   | acucares_naturais_g                               | Calculo Detalhes Proporção Base        | Não Editavel
+Açucares Adicionados                   | Açucares Adicionados (g)                       | tbl_foods   | acucares_adicionados_g                            | Calculo Detalhes Proporção Base        | Não Editavel
+Indice Glicemico                       | Indice Glicemico                               | tbl_foods   | indice_glicemico                                  | Calculo Detalhes Proporção Base        | Não Editavel
+Carga Glicemica                        | Carga Glicemica (g)                            | tbl_foods   | carga_glicemica_g                                 | Calculo Detalhes Proporção Base        | Não Editavel
+Sódio                                  | Sódio (mg)                                     | tbl_foods   | sodio_mg                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Potassio                               | Potassio (mg)                                  | tbl_foods   | potassio_mg                                       | Calculo Detalhes Proporção Base        | Não Editavel
+Colesterol                             | Colesterol (mg)                                | tbl_foods   | colesterol_mg                                     | Calculo Detalhes Proporção Base        | Não Editavel
+Calcio                                 | Calcio (mg)                                    | tbl_foods   | calcio_mg                                         | Calculo Detalhes Proporção Base        | Não Editavel
+Ferro Total                            | Ferro Total (mg)                               | tbl_foods   | ferro_total_mg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Ferro Tipo Heme                        | Ferro Tipo Heme (mg)                           | tbl_foods   | ferro_heme_mg                                     | Calculo Detalhes Proporção Base        | Não Editavel
+Ferro Não Heme                         | Ferro Não Heme (mg)                            | tbl_foods   | ferro_n_heme_mg                                   | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina A                             | Vitamina A (mcg)                               | tbl_foods   | vitamina_a_mcg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina C                             | Vitamina C (mg)                                | tbl_foods   | vitamina_c_mg                                     | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina D                             | Vitamina D (mcg)                               | tbl_foods   | vitamina_d_mcg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B12                           | Vitamina B12 (mcg)                             | tbl_foods   | vitamina_b12_mcg                                  | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina E                             | Vitamina E (mg)                                | tbl_foods   | vitamina_e_mg                                     | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B1                            | Vitamina B1 (mg)                               | tbl_foods   | vitamina_b1_mg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B2                            | Vitamina B2 (mg)                               | tbl_foods   | vitamina_b2_mg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B3                            | Vitamina B3 (mg)                               | tbl_foods   | vitamina_b3_mg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B5                            | Vitamina B5 (mg)                               | tbl_foods   | vitamina_b5_mg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B6                            | Vitamina B6 (mg)                               | tbl_foods   | vitamina_b6_mg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina B7                            | Vitamina B7 (mcg)                              | tbl_foods   | vitamina_b7_mcg                                   | Calculo Detalhes Proporção Base        | Não Editavel
+Vitamina K                             | Vitamina K (mcg)                               | tbl_foods   | vitamina_k_mcg                                    | Calculo Detalhes Proporção Base        | Não Editavel
+Cloro                                  | Cloro (mg)                                     | tbl_foods   | cloro_mg                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Magnesio                               | Magnesio (mg)                                  | tbl_foods   | magnesio_mg                                       | Calculo Detalhes Proporção Base        | Não Editavel
+Zinco                                  | Zinco (mg)                                     | tbl_foods   | zinco_mg                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Cobre                                  | Cobre (mg)                                     | tbl_foods   | cobre_mg                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Manganes                               | Manganes (mg)                                  | tbl_foods   | manganes_mg                                       | Calculo Detalhes Proporção Base        | Não Editavel
+Selenio                                | Selenio (mcg)                                  | tbl_foods   | selenio_mcg                                       | Calculo Detalhes Proporção Base        | Não Editavel
+Iodo                                   | Iodo (mcg)                                     | tbl_foods   | iodo_mcg                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Betacaroteno                           | Betacaroteno (mcg)                             | tbl_foods   | betacaroteno_mcg                                  | Calculo Detalhes Proporção Base        | Não Editavel
+Licopeno                               | Licopeno (mcg)                                 | tbl_foods   | licopeno_mcg                                      | Calculo Detalhes Proporção Base        | Não Editavel
+Luteina Zeaxantina                     | Luteina Zeaxantina (mcg)                       | tbl_foods   | luteina_zeaxantina_mcg                            | Calculo Detalhes Proporção Base        | Não Editavel
+Omega 6                                | Omega 6 (g)                                    | tbl_foods   | omega_6_g                                         | Calculo Detalhes Proporção Base        | Não Editavel
+Omega 6 x Omega 3                      | Omega 6 x Omega 3                              | tbl_foods   | om6_x_om3                                         | Calculo Detalhes Proporção Base        | Não Editavel
+Fitosterol                             | Fitosterol (mg)                                | tbl_foods   | fitosterol_mg                                     | Calculo Detalhes Proporção Base        | Não Editavel
+Carboidratos Liquidos                  | Carboidratos Liquidos (g)                      | tbl_foods   | carboidratos_liquidos_g                           | Calculo Detalhes Proporção Base        | Não Editavel
+Poliois                                | Poliois (g)                                    | tbl_foods   | poliois_g                                         | Calculo Detalhes Proporção Base        | Não Editavel
+Perfil Aminoacidos Essenciais          | Perfil Aminoacidos Essenciais (mg)             | tbl_foods   | perfil_aminoacidos_ess_mg                         | Calculo Detalhes Proporção Base        | Não Editavel
+Indice PDCAAS                          | Indice PDCAAS                                  | tbl_foods   | indice_quality_proteinas_pdcaas                   | Calculo Detalhes Proporção Base        | Não Editavel
+PRAL                                   | PRAL (mEq)                                     | tbl_foods   | pral_mEq                                          | Calculo Detalhes Proporção Base        | Não Editavel
+Acido Folico                           | Acido Folico (mcg)                             | tbl_foods   | acido_folico_mcg                                  | Calculo Detalhes Proporção Base        | Não Editavel
+Polifenol Total                        | Polifenol Total (mg)                           | tbl_foods   | polifenol_total_mg                                | Calculo Detalhes Proporção Base        | Não Editavel
+Carga Antioxidantes                    | Carga Antioxidantes (ORAC)                     | tbl_foods   | carga_antioxidante_orac                           | Calculo Detalhes Proporção Base        | Não Editavel
+Teor Alcoolico                         | Teor Alcoolico (%)                             | tbl_foods   | teor_alcool_prcent                                | Calculo Detalhes Proporção Base        | Não Editavel
+Teor Água                              | Teor de Água (g)                               | tbl_foods   | teor_agua_g                                       | Calculo Detalhes Proporção Base        | Não Editavel
+
+Bloco 3:
+
+CAMPO           | LABEL                  | TABELA(S)                                     | CAMPO DA TABELA                                                     | FUNCIONALIDADE                   | OBS
+----------------|------------------------|-----------------------------------------------|---------------------------------------------------------------------|----------------------------------|----------------------------
+Glutem          | Contém Glúten?         | tbl_foods                                     | gluten_sim - se falso "Não", se true "Sim"                          | Sem Funcionalidade               | Não Editavel
+Intolerancias   | Intolerancias Comuns   | tbl_foods + tbl_aux_intolerancias             | tbl_aux_intolerancias campo: "nome" da tabela auxiliar              | Join Tabela Auxiliar Multiplo    | Não Editavel
+Alergenos       | Alergenos Comuns       | tbl_foods + tbl_aux_alergenos                 | tbl_aux_alergenos campo: "nome" da tabela auxiliar                  | Join Tabela Auxiliar Multiplo    | Não Editavel
+Categoria       | Categoria Alimentar    | tbl_foods + tbl_aux_categoria_alimentar       | tbl_aux_categoria_alimentar campo: "nome" da tabela auxiliar        | Join Tabela Auxiliar Multiplo    | Não Editavel
+Origem          | Origem do Alimento     | tbl_foods + tbl_aux_origem_alimentar          | tbl_aux_origem_alimentar campo: "nome" da tabela auxiliar           | Join Tabela Auxiliar             | Não Editavel
+Processamento   | Nível de Processamento | tbl_foods + tbl_aux_nvl_processamento         | tbl_aux_nvl_processamento campo: "nome" da tabela auxiliar          | Join Tabela Auxiliar             | Não Editavel
+Densidade       | Densidade Calorica     | tbl_foods                                     | densidade_calorica                                                  | Sem Funcionalidade               | Não Editavel
+Observações     | Observações            | tbl_foods                                     | obs_alimento                                                        | Sem Funcionalidade               | Não Editável
+
+
+_____________________________--
+
+Funcionalidades
+
+1 - Join Tabela Auxiliar
+- Essa funcionalidade garante a visualização do valor de acordo com a tabela auxiliar correspondente ao campo. 
+- É um join entre a tabela "tbl_foods" e a tabela auxiliar
+- Onde o id registrado na tabela "tbl_foods" é igual ao id da tabela auxiliar
+- Deve trazer o valor da coluna 3 (nome) da tabela auxiliar
+- Joins:
+Tabela Auxiliar                  | Campo "tbl_foods"     | Campo "tbl_aux"
+---------------------------------|-----------------------|-----------------
+tbl_brands                       | id_item_brand         | id
+tbl_aux_prep                     | id_preparo            | id
+tbl_aux_grupo_alimentar          | id_grupo              | id
+tbl_aux_categoria_alimentar      | id_categoria          | id
+tbl_aux_origem_alimentar         | id_origem             | id
+tbl_aux_nvl_processamento        | id_processamento      | id
+tbl_aux_intolerancias            | id_intolerancias      | id
+tbl_aux_alergenos                | id_alergenos          | id
+tbl_aux_tp_medida                | id_tipo_medida        | id
+
+2 - Join Tabela Auxiliar Multiplo
+- Esse funcionalidade é parecida com a primeira, mas os campos registrados na tabela "tbl_foods" podem ter mais de um id, separado por ponto e virgula (;)
+- Deve trazer o valor da coluna 3 (nome) da tabela auxiliar para cada id registrado.
+- Se atentar ao fato que a coluna 1 (id) da tabela auxiliar é do tipo chave primaria e contém números e o campo do id correspondente da tabela "tbl_foods" é do tipo texto porque tem a separação em ponto e virgula (;)
+- Exemplo: No campo "id_alergenos" na tabela tbl_foods está registrado "1;3;4;5", então, no site no campo deve trazer todos os nomes da tabela auxliar e separar por virgula e espaço.
+- Joins:
+Tabela Auxiliar                  | Campo "tbl_foods"     | Campo "tbl_aux"
+---------------------------------|-----------------------|-----------------
+tbl_brands                       | id_item_brand         | id
+tbl_aux_prep                     | id_preparo            | id
+tbl_aux_grupo_alimentar          | id_grupo              | id
+tbl_aux_categoria_alimentar      | id_categoria          | id
+tbl_aux_origem_alimentar         | id_origem             | id
+tbl_aux_nvl_processamento        | id_processamento      | id
+tbl_aux_intolerancias            | id_intolerancias      | id
+tbl_aux_alergenos                | id_alergenos          | id
+tbl_aux_tp_medida                | id_tipo_medida        | id
+
+3 - Label Tipo Medida
+- Essa é uma funcionalidade que altera o label do campo Porção Base
+- Se o valor registrado no campo "id_tipo_medida" for = 1 então o label passa a ser = Porção Base (g)
+- Se o valor registrado no campo "id_tipo_medida" for = 5 então o label passa a ser = Porção Base (ml)
+
+4 - Calculo Detalhes Proporção Base
+- Essa funcionalidade garante o recalculo para visualização dos valores
+- O usuário digita um valor no campo "Porção Base ()". Todos os valores nutricionais que o usuário digitar após isso serão proporcionais a esse valor digitado.
+- Não deverá alterar nada no banco de dados, somente na visualização no modal de detalhes
+- Exemplo: O usuário digitou o valor 50,00 no campo "Porção Base ()" e antes estava 100. O valor que estava mostrando para o campo Proteinas era de 20, mas com o valor digitado de 50, o valor de proteínas será proporcionalizado e passara a mostrar o valor 10. 
+- Ou seja, todos os campos com essa funcionalidade devem ser exibidos seguindo esse calculo de regra de 3 para encontrar o valor proporcional. 
+
+5 - Cancelamento de Evento
+- Essa funcionalidade deverá ocorrer ao clicar no botão "Fechar"
+- O modal de detalhes é fechado
+
+==============================================
+
+5 - Botão "Novo Alimento" (identificador interno: "botão novo"
 
 - O botão novo deve ter a aparência/estilo padrão dos botões do tipo "cadastro"
 - O label do botão novo deve ser = "Novo Alimento"
@@ -26,7 +298,7 @@ Botão "Novo Alimento" (identificador interno: "botão novo"
 
 ==============================================
 
-Modal de Cadastro de Alimentos (identificador interno: "modal de cadastro")
+6 - Modal de Cadastro de Alimentos (identificador interno: "modal de cadastro")
 
 - O modal de cadastro deve ter a aparência/estilo padrão dos "modais"
 - Os elementos do modal de cadastro são: Titulo, Botão "Salvar", Botão "Cancelar", Bloco 1, Bloco 2 e Bloco 3
@@ -58,6 +330,8 @@ Carboidratos (g)           | carboidratos_g        | Obrigatório, Valor mínimo
 Gorduras Totais (g)        | gorduras_totais_g     | Obrigatório, Valor mínimo = 0 (zero)                             | Registro de cálculo da porção base
 Imagem                     | img_registro          | Opcional                                                         | Registro de imagem
 
+
+- Os campos "Nome do Alimento" e "Marca" devem ser registrados com todas as letras maiúsculas, mesmo que o usuário escreve em minúsculas.
 ___________________
 
 Bloco 2:
@@ -300,5 +574,51 @@ Tabela Auxiliar (Origem): tbl_aux_origem_alimentar
 Tabela Auxiliar (Processamento): tbl_aux_nvl_processamento
 Tabela Auxiliar (Tipo Medida): tbl_aux_tp_medida
 
-==============================================
+--------------------------------------------------------------
+VIS - Estilos e Aparências Padrão
+
+TODOS OS ESTILOS DEVEM SER RESPONSIVOS E FUNCIONAR BEM EM DESKTOP E SMARTPHONES
+
+Botão Tipo Cadastro
+- Aparência de botão, nem tão grande e nem tão pequeno. 
+- Cor azul clara
+- Destaque ao passar o mouse por cima
+
+Botão Tipo Salvar
+- Aparência de botão, nem tão grande e nem tão pequeno. 
+- Cor azul clara, mas um pouco escuro
+- Destaque ao passar o mouse por cima
+
+Botão Tipo Cancelar
+- Aparência de botão, nem tão grande e nem tão pequeno. 
+- Cor vermelho/vinho, meio escuro
+- Destaque ao passar o mouse por cima
+
+Botão Tipo Fechar
+- Aparência de botão, nem tão grande e nem tão pequeno. 
+- Cor vermelho/vinho, meio escuro
+- Destaque ao passar o mouse por cima
+
+Tipo Modais
+- Caixa retangular de cantos arredondados
+- O cabeçalho e o footer são fixos e não devem ter scroll/rolagem
+- Sempre que um Modal é fechado, qualquer evento que esteja ocorrendo com ele deve ser resetado. Isso significa:
+1 - O scroll sempre vai voltar ao topo (ao abrir um modal o scroll sempre deve começar no topo)
+2 - Qualquer valor inserido pelo usuário deve ser apagado
+3 - Se o modal tiver blocos, todos os blocos são abertos e quando o modal for reaberto todos os blocos iniciam na posição abertos/exibidos
+3 - O modal sempre reseta para começar do zero ao ser aberto novamente
+
+Tipo Blocos
+- São caixas ou sub-modais dentro dos modais.
+- Os blocos tem uma "seta abre/fecha"
+- Ao clicar na seta ela muda de posição e exibe ou oculta o bloco inteiro
+
+--------------------------------------------------------------
+COMANDOS:
+- Me de em detalhes passo a passo para o que foi pedido acima
+- Se atenha ao que foi pedido, nada mais.
+- Todas as etapas devem ser bem exemplificadas e com detalhes, dizendo exatamente onde é pra fazer, qual sistema, qual arquivo
+- ME DE OS CÓDIGOS 100% COMPLETOS. NÃO QUERO TER QUE ESCREVER NADA EU MESMO. VOCÊ FAZ TUDO
+
+
 

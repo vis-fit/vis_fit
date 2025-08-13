@@ -1,3 +1,4 @@
+//INICIO DO ARQUIVO: main.js
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializa todos os elementos colapsáveis
   document.querySelectorAll('.collapsible-header').forEach(header => {
@@ -24,3 +25,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+//FIM DO ARQUIVO: main.js
+//COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR

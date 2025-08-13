@@ -1,0 +1,53 @@
+- Iniciamos a construção de um site.
+- O nome do site é "VIS" e para referencia o nome do projeto é "vis_fit"
+- Estamos usando o VSCode
+- O backend é em node.js e está hospedado no Render conectado ao front que está no GitHub
+- O banco de dados está no Neon.tech
+- Já conectamos o banco ao site
+- Já criamos a tela principal e as páginas dos módulos
+- As páginas dos módulos contam apenas com o header e o footer
+- Tudo que vamos desenvolver nas páginas será no corpo
+- Vamos iniciar o desenvolvimento do modulo de alimentos
+- O modulo de alimentos será na página mod_food.html
+- Para essa página, quero um arquivo CSS separado
+- Para essa página, quero um arquivo js separado (as partes que forem exclusivas)
+- A estrutura atual do site é: 
+C:\USERS\SLIMA\DESKTOP\VIS_FIT_V1\
+│
+├── backend\
+│   ├── controllers\
+│   ├── models\
+│   └── routes\
+│
+├── frontend\
+│   ├── assets\
+│   │   └── images\
+│   │       └── logo vis.png
+│   │
+│   ├── css\
+│   │   ├── base.css
+│   │   └── modules.css
+│   │
+│   ├── js\
+│   │   └── main.js
+│   │
+│   └── pages\
+│       ├── mod_atividades.html
+│       ├── mod_diet.html
+│       ├── mod_food.html
+│       ├── mod_health.html
+│       ├── mod_projetos.html
+│       ├── mod_receita.html
+│       ├── mod_sup.html
+│       └── mod_treinos.html
+│
+├── node_modules\ (oculto nas visualizações)
+│
+├── server.js
+├── index.html
+├── package.json
+└── Projeto (arquivo/pasta)
+
+COMANDOS:
+- Vou te enviar os arquivos base.css, modules.css, index.html, mod_food.html, server.js e main.js e você deve revisar para ter uma noção de como está a estrutura, ok?
+- Vou enviar um arquivo por vez. Você diz se entendeu e não faça nada. Aguarde orientações para prosseguir. 

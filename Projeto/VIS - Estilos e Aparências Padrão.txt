@@ -1,5 +1,7 @@
 VIS - Estilos e Aparências Padrão
 
+TODOS OS ESTILOS DEVEM SER RESPONSIVOS E FUNCIONAR BEM EM DESKTOP E SMARTPHONES
+
 Botão Tipo Cadastro
 - Aparência de botão, nem tão grande e nem tão pequeno. 
 - Cor azul clara
@@ -33,3 +35,13 @@ Tipo Blocos
 - São caixas ou sub-modais dentro dos modais.
 - Os blocos tem uma "seta abre/fecha"
 - Ao clicar na seta ela muda de posição e exibe ou oculta o bloco inteiro
+
+Tipo Estilo Páginas
+- Todas as páginas do app devem ter 3 elementos: Cabeçalho, Corpo, Footer
+- O cabeçalho é fixo e deve conter o titulo da página, centralizado. Não deve ser muito grande
+- O logo deve ser alinhado a esquerda do cabeçalho, em formato circular, com altura centralizada.
+- O cabeçalho não deve se mover com scroll/rolagem
+- Todo cabeçalho com exceção da página principal deverá conter um ícone do tipo "voltar" que deve voltar a página anterior
+- O corpo é onde todo o conteúdo de cada página será incluído
+- O footer deve ser pequeno, não ocupar muito espaço da página
+- Logo: "C:\Users\slima\Desktop\vis_fit_v1\assets\images\logo_vis.png"

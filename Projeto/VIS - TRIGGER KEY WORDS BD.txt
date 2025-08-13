@@ -1,0 +1,56 @@
+-- First, create a function that will process the words
+CREATE OR REPLACE FUNCTION generate_key_words()
+RETURNS TRIGGER AS $$
+DECLARE
+    brand_name TEXT;
+    words_array TEXT[];
+    filtered_words TEXT[];
+    word TEXT;
+    stop_words TEXT[] := ARRAY['de', 'a', 'o', 'da', 'do', 'das', 'dos', 'e', 'em', 'na', 'no', 'nas', 'nos'];
+    result_text TEXT := '';
+BEGIN
+    -- Process item_name: split into words, filter stop words, and add to result
+    words_array := regexp_split_to_array(lower(NEW.item_name), '[^a-z0-9àáâãäåèéêëìíîïòóôõöùúûüýÿç]+');
+    
+    FOREACH word IN ARRAY words_array LOOP
+        IF word != '' AND NOT (word = ANY(stop_words)) THEN
+            filtered_words := array_append(filtered_words, word);
+        END IF;
+    END LOOP;
+    
+    result_text := array_to_string(filtered_words, ';');
+    
+    -- Process brand name if id_item_brand is not null
+    IF NEW.id_item_brand IS NOT NULL THEN
+        SELECT nome INTO brand_name FROM tbl_brands WHERE id = NEW.id_item_brand;
+        
+        IF brand_name IS NOT NULL THEN
+            -- Reset words array for brand processing
+            words_array := regexp_split_to_array(lower(brand_name), '[^a-z0-9àáâãäåèéêëìíîïòóôõöùúûüýÿç]+');
+            filtered_words := ARRAY[]::TEXT[];
+            
+            FOREACH word IN ARRAY words_array LOOP
+                IF word != '' AND NOT (word = ANY(stop_words)) THEN
+                    filtered_words := array_append(filtered_words, word);
+                END IF;
+            END LOOP;
+            
+            -- Append brand words to result
+            IF array_length(filtered_words, 1) > 0 THEN
+                result_text := result_text || ';' || array_to_string(filtered_words, ';');
+            END IF;
+        END IF;
+    END IF;
+    
+    -- Update the key_words field
+    NEW.key_words := result_text;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Then create the trigger that calls this function
+CREATE OR REPLACE TRIGGER trg_generate_key_words
+BEFORE INSERT OR UPDATE OF item_name, id_item_brand ON tbl_foods
+FOR EACH ROW
+EXECUTE FUNCTION generate_key_words();

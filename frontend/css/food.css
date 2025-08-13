@@ -1,0 +1,243 @@
+/* Estilos específicos para o módulo de alimentos */
+
+/* Barra de pesquisa */
+.food-search-container {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+#food-search-bar {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+}
+
+#food-search-btn {
+  width: 50px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#food-search-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Loader */
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hidden {
+  display: none;
+}
+
+/* Tabela de resultados */
+.food-table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+#food-results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#food-results-table th, 
+#food-results-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#food-results-table tr:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* Paginação */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.pagination-controls button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Botão Novo Alimento */
+#new-food-btn {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Modal de Detalhes */
+#food-detail-modal .modal-body {
+  padding: 20px;
+}
+
+.food-detail-section {
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.food-detail-section h4 {
+  margin-bottom: 15px;
+  color: var(--primary-dark);
+}
+
+.food-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.food-detail-item {
+  margin-bottom: 10px;
+}
+
+.food-detail-item label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.food-detail-item span {
+  display: block;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border-radius: 3px;
+}
+
+.food-image-container {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.food-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* Modal de Cadastro */
+#food-create-modal .modal-body {
+  padding: 20px;
+}
+
+.food-create-section {
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.food-create-section h4 {
+  margin-bottom: 15px;
+  color: var(--primary-dark);
+}
+
+.food-create-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group input[type="number"] {
+  min-width: 80px;
+}
+
+/* Tags para seleção múltipla */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.tag {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .food-detail-grid,
+  .food-create-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  #food-search-bar {
+    padding: 8px 12px;
+  }
+}

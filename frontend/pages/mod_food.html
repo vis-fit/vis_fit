@@ -1,0 +1,95 @@
+<!--INICIO DO ARQUIVO: mod_food.html-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIS Fit - Alimentos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/modules.css">
+  <link rel="stylesheet" href="../css/food.css"> <!-- Novo CSS específico -->
+</head>
+<body>
+  <header class="page-header">
+    <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+    <h1>Alimentos</h1>
+    <img src="../assets/images/logo_vis.png" alt="VIS Fit" class="logo">
+  </header>
+
+  <main class="page-main">
+    <!-- Barra de pesquisa e botão -->
+    <div class="food-search-container">
+      <input type="text" id="food-search-bar" placeholder="Digite o nome do alimento desejado:">
+      <button id="food-search-btn"><i class="fas fa-search"></i></button>
+      <div id="search-loader" class="loader hidden"></div>
+    </div>
+
+    <!-- Tabela de resultados -->
+    <div class="food-table-container">
+      <table id="food-results-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Marca</th>
+            <th>Modo de Preparo</th>
+            <th>Porção Base</th>
+            <th>Kcal.</th>
+          </tr>
+        </thead>
+        <tbody id="food-results-body">
+          <!-- Resultados serão inseridos aqui via JS -->
+        </tbody>
+      </table>
+      <div class="pagination-controls">
+        <button id="prev-page" disabled>Anterior</button>
+        <span id="page-info">Página 1</span>
+        <button id="next-page" disabled>Próxima</button>
+      </div>
+    </div>
+
+    <!-- Botão Novo Alimento -->
+    <button id="new-food-btn" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Novo Alimento
+    </button>
+
+    <!-- Modal de Detalhes -->
+    <div id="food-detail-modal" class="modal-container hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="detail-modal-title">Detalhes do Alimento</h3>
+          <button class="btn btn-close"><i class="fas fa-times"></i> Fechar</button>
+        </div>
+        <div class="modal-body">
+          <!-- Conteúdo será preenchido via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div id="food-create-modal" class="modal-container hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Cadastrar Novo Alimento</h3>
+          <div>
+            <button id="save-food-btn" class="btn btn-save"><i class="fas fa-save"></i> Salvar</button>
+            <button id="cancel-food-btn" class="btn btn-cancel"><i class="fas fa-times"></i> Cancelar</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <!-- Conteúdo será preenchido via JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <span>VIS Fit © 2023</span>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/food.js"></script> <!-- Novo JS específico -->
+</body>
+</html>
+<!--FIM DO ARQUIVO: mod_food.html-->
+<!--COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR-->
