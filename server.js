@@ -1,12 +1,10 @@
-//INICIO DO ARQUIVO: server.js
-//CONEXÃO COM O BANCO DE DADOS NEON.TECH
 require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
-const path = require('path'); // Adicionado para manipulação de caminhos
+const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Usa a porta do Render ou 3000 local
+const PORT = process.env.PORT || 3000;
 
 // Configuração do banco de dados
 const pool = new Pool({
@@ -14,76 +12,42 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-app.use(express.json());  // Para parsear application/json
-app.use(express.urlencoded({ extended: true }));  // Para parsear application/x-www-form-urlencoded
-
-// Middleware para servir arquivos estáticos (frontend)
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-//ROTAS
-// Rotas para o módulo de alimentos
+// Rota de pesquisa melhorada
 app.get('/api/foods/search', async (req, res) => {
-  console.log('Recebida requisição de pesquisa:', req.query.term);
   try {
     const { term } = req.query;
     
-    if (!term) {
-      console.log('Termo de pesquisa vazio');
-      return res.status(400).json({ error: 'Termo de pesquisa não fornecido' });
+    if (!term || term.trim().length < 2) {
+      return res.status(400).json({ error: 'Termo de pesquisa inválido' });
     }
     
-    // Processar termos de pesquisa
     const searchTerms = term.toLowerCase()
       .split(' ')
-      .filter(word => word.length > 2 && !['de', 'do', 'da', 'dos', 'das'].includes(word))
+      .filter(word => word.length > 2)
       .map(word => word.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
     
     if (searchTerms.length === 0) {
       return res.json([]);
     }
     
-    // Construir query para contar correspondências
-    let query = `
-      SELECT f.*, 
-             b.nome as brand_name,
-             p.nome as preparation_name,
-             COUNT(*) OVER() as total_count,
-             (
-               SELECT COUNT(*) 
-               FROM (
-                 SELECT unnest(string_to_array(f.key_words, ';')) as word
-               ) words
-               WHERE `;
-    
-    const conditions = searchTerms.map((_, i) => 
-      `words.word ILIKE $${i + 1}`
-    ).join(' OR ');
-    
-    query += conditions + `
-             ) as match_count
+    const query = `
+      SELECT f.*, b.nome as brand_name, p.nome as preparation_name
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
-      WHERE `;
-    
-    // Adicionar condições para cada termo de pesquisa
-    const searchPatterns = searchTerms.map(term => `%${term}%`);
-    const params = [...searchPatterns];
-    
-    query += conditions.replace(/\$\d+/g, (match) => {
-      const index = parseInt(match.substring(1));
-      return `$${index + searchTerms.length}`;
-    });
-    
-    query += `
-      GROUP BY f.id, b.nome, p.nome
-      ORDER BY match_count DESC, f.item_name ASC
+      WHERE f.item_name ILIKE ANY($1::text[])
+      OR b.nome ILIKE ANY($1::text[])
+      ORDER BY f.item_name ASC
       LIMIT 100`;
     
-    // Executar query
-    const result = await pool.query(query, [...searchPatterns, ...searchPatterns]);
+    const searchPatterns = searchTerms.map(term => `%${term}%`);
+    const result = await pool.query(query, [searchPatterns]);
     
-    // Formatar resultados
     const foods = result.rows.map(row => ({
       id: row.id,
       item_name: row.item_name,
@@ -94,10 +58,9 @@ app.get('/api/foods/search', async (req, res) => {
       calories_kcal: row.caloria_kcal
     }));
     
-    console.log(`Retornando ${foods.length} resultados para "${term}"`);
     res.json(foods);
   } catch (error) {
-    console.error('Erro completo na pesquisa:', error);
+    console.error('Erro na pesquisa:', error);
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 });
@@ -531,8 +494,3 @@ server.on('error', (err) => {
     console.error('Erro no servidor:', err);
   }
 });
-//FIM ROTAS
-
-//FIM DA CONEXÃO COM BANCO DE DADOS
-//FIM DO ARQUIVO: server.js
-//COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR

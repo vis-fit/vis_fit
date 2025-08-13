@@ -4,53 +4,68 @@ document.addEventListener('DOMContentLoaded', function() {
   const itemsPerPage = 20;
   let searchResults = [];
   
-  console.log("Script food.js carregado");
-  console.log("Elementos encontrados:", {
-    searchBar: !!searchBar,
-    searchBtn: !!searchBtn,
-    newFoodBtn: !!newFoodBtn,
-    createModal: !!createModal
-  });
+  // Elementos DOM - com verificações
+  const getElement = (id) => {
+    const el = document.getElementById(id);
+    if (!el) console.error(`Elemento não encontrado: ${id}`);
+    return el;
+  };
 
-  // Elementos DOM
-  const searchBar = document.getElementById('food-search-bar');
-  const searchBtn = document.getElementById('food-search-btn');
-  const loader = document.getElementById('search-loader');
-  const resultsBody = document.getElementById('food-results-body');
-  const prevPageBtn = document.getElementById('prev-page');
-  const nextPageBtn = document.getElementById('next-page');
-  const pageInfo = document.getElementById('page-info');
-  const newFoodBtn = document.getElementById('new-food-btn');
-  const detailModal = document.getElementById('food-detail-modal');
-  const createModal = document.getElementById('food-create-modal');
-  const saveFoodBtn = document.getElementById('save-food-btn');
-  const cancelFoodBtn = document.getElementById('cancel-food-btn');
-  
-  // Event Listeners
-  searchBtn.addEventListener('click', searchFoods);
-  searchBar.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') searchFoods();
-  });
-  
-  prevPageBtn.addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      displayResults();
-    }
-  });
-  
-  nextPageBtn.addEventListener('click', () => {
-    const totalPages = Math.ceil(searchResults.length / itemsPerPage);
-    if (currentPage < totalPages) {
-      currentPage++;
-      displayResults();
-    }
-  });
-  
-  newFoodBtn.addEventListener('click', openCreateModal);
-  
-  // Função para pesquisar alimentos
-  async function searchFoods() {
+  const searchBar = getElement('food-search-bar');
+  const searchBtn = getElement('food-search-btn');
+  const loader = getElement('search-loader');
+  const resultsBody = getElement('food-results-body');
+  const prevPageBtn = getElement('prev-page');
+  const nextPageBtn = getElement('next-page');
+  const pageInfo = getElement('page-info');
+  const newFoodBtn = getElement('new-food-btn');
+  const detailModal = getElement('food-detail-modal');
+  const createModal = getElement('food-create-modal');
+  const saveFoodBtn = getElement('save-food-btn');
+  const cancelFoodBtn = getElement('cancel-food-btn');
+
+  // Verificar se elementos essenciais existem
+  if (!searchBar || !searchBtn || !newFoodBtn || !createModal) {
+    console.error('Elementos essenciais não encontrados no DOM');
+    return;
+  }
+
+  // Event Listeners - com verificações
+  if (searchBtn) {
+    searchBtn.addEventListener('click', handleSearch);
+  }
+
+  if (searchBar) {
+    searchBar.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') handleSearch();
+    });
+  }
+
+  if (prevPageBtn) {
+    prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        displayResults();
+      }
+    });
+  }
+
+  if (nextPageBtn) {
+    nextPageBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(searchResults.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        displayResults();
+      }
+    });
+  }
+
+  if (newFoodBtn) {
+    newFoodBtn.addEventListener('click', openCreateModal);
+  }
+
+  // Função unificada para pesquisa
+  async function handleSearch() {
     const searchTerm = searchBar.value.trim();
     if (!searchTerm) {
       alert('Por favor, digite um termo para pesquisa');
@@ -58,11 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     try {
-      loader.classList.remove('hidden');
-      resultsBody.innerHTML = '';
+      if (loader) loader.classList.remove('hidden');
+      if (resultsBody) resultsBody.innerHTML = '';
 
-      console.log(`Enviando requisição para: /api/foods/search?term=${encodeURIComponent(searchTerm)}`);
-      
       const response = await fetch(`/api/foods/search?term=${encodeURIComponent(searchTerm)}`);
       
       if (!response.ok) {
@@ -70,36 +83,26 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       const data = await response.json();
-      console.log('Dados recebidos:', data);
-      
-      if (!Array.isArray(data)) {
-        throw new Error('Resposta da API não é um array');
-      }
-
-      searchResults = data;
+      searchResults = Array.isArray(data) ? data : [];
       currentPage = 1;
       displayResults();
     } catch (error) {
       console.error('Erro na pesquisa:', error);
-      resultsBody.innerHTML = `
-        <tr>
-          <td colspan="5" class="error-message">
-            Erro na pesquisa: ${error.message}
-          </td>
-        </tr>
-      `;
-      
-      // Adicionar log detalhado do erro
-      if (error.response) {
-        console.error("Dados da resposta:", error.response.data);
-        console.error("Status:", error.response.status);
+      if (resultsBody) {
+        resultsBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="error-message">
+              Erro na pesquisa: ${error.message}
+            </td>
+          </tr>
+        `;
       }
     } finally {
-      loader.classList.add('hidden');
+      if (loader) loader.classList.add('hidden');
     }
   }
-  
-  // Exibir resultados na tabela
+
+// Exibir resultados na tabela
   function displayResults() {
     resultsBody.innerHTML = '';
     
@@ -983,4 +986,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+
+  // Inicialização - Verificar se está na página de alimentos
+  if (window.location.pathname.includes('mod_food')) {
+    console.log('Módulo de alimentos inicializado');
+  }
 });
