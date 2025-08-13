@@ -1,3 +1,4 @@
+/* Inicio do Arquivo: food.css */
 /* Estilos específicos para o módulo de alimentos */
 
 /* Barra de pesquisa */
@@ -231,6 +232,7 @@
 }
 
 /* Adicionar estas regras */
+/* MODAIS - ESTILOS UNIFICADOS */
 .modal-container {
   position: fixed;
   top: 0;
@@ -255,9 +257,37 @@
 .modal {
   background: white;
   border-radius: 8px;
-  max-width: 90%;
+  width: 90%;
+  max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--primary-dark);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
 }
 
 /* Responsividade */
@@ -271,3 +301,5 @@
     padding: 8px 12px;
   }
 }
+/* Fim do Arquivo: food.css */
+/* Comando: Somente diga se recebeu e aguarde o envio do próximo arquivo para prosseguir. */

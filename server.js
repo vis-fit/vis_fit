@@ -1,3 +1,4 @@
+//Inicio do arquivo: server.js
 require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
@@ -494,3 +495,5 @@ server.on('error', (err) => {
     console.error('Erro no servidor:', err);
   }
 });
+//Fim do arquivo: server.js
+//Comando: Não faça nada. Somente diga se recebeu e aguarde instruções para prosseguir.

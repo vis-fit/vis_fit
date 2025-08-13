@@ -1,3 +1,4 @@
+//Inicio do arquivo: food.js
 document.addEventListener('DOMContentLoaded', function() {
   // Variáveis globais
   let currentPage = 1;
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-// Exibir resultados na tabela
+  // Exibir resultados na tabela
   function displayResults() {
     resultsBody.innerHTML = '';
     
@@ -143,8 +144,21 @@ document.addEventListener('DOMContentLoaded', function() {
     prevPageBtn.disabled = currentPage <= 1;
     nextPageBtn.disabled = currentPage >= totalPages;
   }
+
+  // Nova função para abrir modais
+  function openModal(modalElement) {
+    modalElement.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Nova função para fechar modais
+  function closeModal(modalElement) {
+    modalElement.classList.remove('show');
+    document.body.style.overflow = 'auto';
+  }
   
   // Abrir modal de detalhes
+  // Atualizar openDetailModal
   async function openDetailModal(foodId) {
     try {
       const response = await fetch(`/api/foods/${foodId}`);
@@ -152,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (response.ok) {
         renderDetailModal(food);
-        detailModal.classList.remove('hidden');
+        openModal(detailModal);
       } else {
         alert('Erro ao carregar detalhes: ' + (food.message || 'Erro desconhecido'));
       }
@@ -319,10 +333,42 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     modalBody.appendChild(section3);
     
-    // Configurar botão de fechar
-    detailModal.querySelector('.btn-close').addEventListener('click', () => {
-      detailModal.classList.add('hidden');
+    // ===== NOVO CÓDIGO PARA ADICIONAR/SUBSTITUIR =====
+    // Configurar botões de fechar
+    function setupModalCloseButtons() {
+      // Fechar com botão X
+      if (detailModal) {
+        detailModal.querySelector('.btn-close')?.addEventListener('click', () => {
+          closeModal(detailModal);
+        });
+      }
+
+      // Fechar com botão Cancelar
+      if (createModal) {
+        document.getElementById('cancel-food-btn')?.addEventListener('click', () => {
+          closeModal(createModal);
+        });
+      }
+
+      // Fechar clicando fora
+      window.addEventListener('click', (event) => {
+        if (event.target === detailModal) {
+          closeModal(detailModal);
+        }
+        if (event.target === createModal) {
+          closeModal(createModal);
+        }
+      });
+    }
+
+    // Inicializar os listeners quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+      // ... (mantenha todo o código existente)
+      
+      // Adicione esta linha no FINAL da função DOMContentLoaded
+      setupModalCloseButtons();
     });
+
   }
   
   // Função auxiliar para renderizar campos nutricionais
@@ -337,10 +383,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Abrir modal de cadastro
+  // Atualizar openCreateModal
   function openCreateModal() {
-    console.log("Abrindo modal de cadastro");
-    createModal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // Impede scroll da página
+    openModal(createModal);
     renderCreateModal();
   }
   
@@ -991,4 +1036,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (window.location.pathname.includes('mod_food')) {
     console.log('Módulo de alimentos inicializado');
   }
+
+  setupModalCloseButtons();
+
 });
+//Fim do arquivo food.js
+//Comando: Não faça nada, somente diga se recebeu e aguarde o envio do próximo arquivo para prosseguir.
