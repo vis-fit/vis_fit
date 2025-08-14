@@ -126,6 +126,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Atualizar controles de paginação
     updatePaginationControls();
   }
+
+  // Conectar linhas da tabela ao modal de detalhes
+  //Abrir modal de detalhes ao clicar no registro
+  if (resultsBody) {
+    resultsBody.addEventListener('click', function(e) {
+      const row = e.target.closest('tr');
+      if (row && row.dataset.id) {
+        const detalhesModal = document.getElementById('food-detalhes-modal');
+        if (detalhesModal) {
+          detalhesModal.style.display = 'block';
+          
+          // Aqui no futuro pegaremos o row.dataset.id para carregar os detalhes específicos
+        }
+      }
+    });
+  }
   
   // Atualizar controles de paginação
   function updatePaginationControls() {
@@ -140,6 +156,19 @@ document.addEventListener('DOMContentLoaded', function() {
   if (window.location.pathname.includes('mod_food')) {
     console.log('Módulo de alimentos inicializado');
   }
+
+  // Conectar botão "Novo Alimento" ao modal de cadastro
+  if (newFoodBtn) {
+    newFoodBtn.addEventListener('click', function() {
+      const cadastroModal = document.getElementById('food-cadastro-modal');
+      if (cadastroModal) {
+        cadastroModal.style.display = 'block';
+      } else {
+        console.error('Modal de cadastro não encontrado');
+      }
+    });
+  }
+
 
 });
 //Fim do arquivo food.js

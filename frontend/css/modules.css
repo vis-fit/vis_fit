@@ -75,5 +75,47 @@
 .collapsible.active .collapsible-arrow {
   transform: rotate(180deg);
 }
+
+/*ESTILOS DOS MODAIS*/
+/* Adicionar ao final do modules.css */
+
+/* Estilos base para todos os modais */
+.modal {
+  display: none; /* Oculta os modais inicialmente */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+  overflow: auto;
+}
+
+/* Conteúdo do modal */
+.modal-content {
+  background-color: white;
+  margin: 5% auto; /* Centraliza verticalmente com margem */
+  padding: 20px;
+  width: 70%; /* Largura do modal */
+  max-width: 800px; /* Largura máxima */
+  border-radius: 12px; /* Cantos arredondados */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Botão de fechar */
+.close-modal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #333;
+}
+
 /*FIM DO ARQUIVO: modules.css*/
 /*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/
