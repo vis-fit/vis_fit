@@ -18,6 +18,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
+//======ROTAS======//
+
 // Rota de pesquisa melhorada
 app.get('/api/foods/search', async (req, res) => {
   try {
@@ -66,8 +68,6 @@ app.get('/api/foods/search', async (req, res) => {
   }
 });
 
-//FIM ROTAS
-
 // Rota principal - serve o index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
@@ -92,12 +92,121 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
+//Rota Criação do Campo Marca
+app.get('/api/brands', async (req, res) => {
+  try {
+    const { search } = req.query;
+    
+    if (!search || search.length < 3) {
+      return res.json([]);
+    }
+
+    const searchTerm = search.toUpperCase(); // Busca exata em maiúsculas
+    
+    const query = `
+      SELECT nome 
+      FROM tbl_brands 
+      WHERE nome LIKE $1
+      ORDER BY nome
+      LIMIT 10`;
+    
+    const result = await pool.query(query, [`%${searchTerm}%`]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar marcas:', error);
+    res.status(500).json({ error: 'Erro ao carregar marcas' });
+  }
+});
+
+// Rota para processar marca (verificar existência ou criar nova)
+app.post('/api/brands/process', async (req, res) => {
+  try {
+    const { nome } = req.body;
+    
+    if (!nome) {
+      return res.status(400).json({ error: 'Nome da marca é obrigatório' });
+    }
+
+    const upperNome = nome.toUpperCase();
+    
+    // 1. Verifica se a marca já existe
+    const checkQuery = 'SELECT id FROM tbl_brands WHERE UPPER(nome) = $1';
+    const checkResult = await pool.query(checkQuery, [upperNome]);
+    
+    if (checkResult.rows.length > 0) {
+      return res.json(checkResult.rows[0]);
+    }
+
+    // 2. Cria nova marca
+    const insertQuery = `
+      INSERT INTO tbl_brands (nome)
+      VALUES ($1)
+      RETURNING id`;
+    
+    const insertResult = await pool.query(insertQuery, [upperNome]);
+    return res.json(insertResult.rows[0]);
+
+  } catch (error) {
+    console.error('Erro detalhado:', error);
+    return res.status(500).json({ 
+      error: 'Erro ao processar marca',
+      details: error.message 
+    });
+  }
+});
+
+// Rota para opções de Modo de Preparo
+app.get('/api/preparation-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_prep ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar modos de preparo:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para opções de Grupo Alimentar
+app.get('/api/foodgroup-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_grupo_alimentar ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar grupos alimentares:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para salvar novo alimento
+app.post('/api/foods', async (req, res) => {
+  try {
+    const { item_name, id_item_brand } = req.body;
+    
+    if (!item_name) {
+      return res.status(400).json({ error: 'Nome do alimento é obrigatório' });
+    }
+
+    const query = `
+      INSERT INTO tbl_foods (item_name, id_item_brand)
+      VALUES ($1, $2)
+      RETURNING *`;
+    
+    const result = await pool.query(query, [item_name, id_item_brand || null]);
+    res.json(result.rows[0]);
+
+  } catch (error) {
+    console.error('Erro ao salvar alimento:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+});
+
+
 // Rota fallback para Single Page Applications (SPA)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
-
+//======FIM ROTAS======//
 
 // Inicia o servidor
 const server = app.listen(PORT, () => {
