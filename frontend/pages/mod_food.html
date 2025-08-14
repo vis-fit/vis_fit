@@ -56,10 +56,46 @@
     <!-- Modal de Cadastro -->
     <div id="food-cadastro-modal" class="modal">
       <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2>Cadastrar Novo Alimento</h2>
+        <header class="modal-header">
+          <h2>Cadastrar Novo Alimento</h2>
+          <div class="modal-buttons">
+            <button class="modal-btn save-btn" id="food-save-btn">
+              <i class="fas fa-save"></i> Salvar
+            </button>
+            <button class="modal-btn cancel-btn" id="food-cancel-btn">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+          </div>
+        </header>
         <form id="food-cadastro-form">
-          <!-- Campos do formulário serão adicionados depois -->
+          <div class="blocks-container">
+            <!-- Bloco 1 -->
+            <div class="form-block" id="cadastro-block1" data-block="1">
+              <div class="block-header">
+                <h3>Informações Básicas</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+
+            <!-- Bloco 2 -->
+            <div class="form-block" id="cadastro-block2" data-block="2">
+              <div class="block-header">
+                <h3>Detalhes Nutricionais</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+
+            <!-- Bloco 3 -->
+            <div class="form-block" id="cadastro-block3" data-block="3">
+              <div class="block-header">
+                <h3>Demais Informações</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+          </div>
         </form>
       </div>
     </div>
@@ -67,10 +103,43 @@
     <!-- Modal de Detalhes -->
     <div id="food-detalhes-modal" class="modal">
       <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2 id="food-detalhes-title">Detalhes do Alimento</h2>
+        <header class="modal-header">
+          <h2>Detalhes do Alimento</h2>
+          <div class="modal-buttons">
+            <button class="modal-btn cancel-btn" id="food-close-btn">
+              <i class="fas fa-times"></i> Fechar
+            </button>
+          </div>
+        </header>
         <div id="food-detalhes-content">
-          <!-- Conteúdo será preenchido dinamicamente -->
+          <div class="blocks-container">
+            <!-- Bloco 1 -->
+            <div class="form-block" id="detalhes-block1" data-block="1">
+              <div class="block-header">
+                <h3>Informações Principais</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+
+            <!-- Bloco 2 -->
+            <div class="form-block" id="detalhes-block2" data-block="2">
+              <div class="block-header">
+                <h3>Detalhes Nutricionais</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+
+            <!-- Bloco 3 -->
+            <div class="form-block" id="detalhes-block3" data-block="3">
+              <div class="block-header">
+                <h3>Demais Informações</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -169,6 +169,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // Função para os blocos colapsáveis
+  document.querySelectorAll('.block-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const block = header.parentElement;
+      block.classList.toggle('collapsed');
+      
+      // Atualiza o ícone
+      const icon = header.querySelector('.block-toggle');
+      if (block.classList.contains('collapsed')) {
+        icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
+      } else {
+        icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+      }
+    });
+  });
+
 
 });
 //Fim do arquivo food.js
