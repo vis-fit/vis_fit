@@ -180,18 +180,24 @@ app.get('/api/foodgroup-options', async (req, res) => {
 // Rota para salvar novo alimento
 app.post('/api/foods', async (req, res) => {
   try {
-    const { item_name, id_item_brand } = req.body;
+    const { item_name, id_item_brand, id_preparo, id_grupo } = req.body;
     
-    if (!item_name) {
+    if (!item_name || !id_preparo || !id_grupo) {
       return res.status(400).json({ error: 'Nome do alimento é obrigatório' });
     }
 
     const query = `
-      INSERT INTO tbl_foods (item_name, id_item_brand)
-      VALUES ($1, $2)
+      INSERT INTO tbl_foods (item_name, id_item_brand, id_preparo, id_grupo)
+      VALUES ($1, $2, $3, $4)
       RETURNING *`;
     
-    const result = await pool.query(query, [item_name, id_item_brand || null]);
+    const result = await pool.query(query, [
+      item_name,
+      id_item_brand || null,
+      id_preparo,
+      id_grupo
+    ]);
+    
     res.json(result.rows[0]);
 
   } catch (error) {

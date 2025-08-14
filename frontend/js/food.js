@@ -447,9 +447,21 @@ document.addEventListener('DOMContentLoaded', function() {
   const saveFoodItem = async () => {
     const foodName = document.getElementById('food-name')?.value.trim().toUpperCase();
     const brandName = document.getElementById('food-brand')?.value.trim().toUpperCase();
+    const preparationSelect = document.getElementById('food-preparation');
+    const groupSelect = document.getElementById('food-group');
     
     if (!foodName) {
       alert('Por favor, preencha o nome do alimento');
+      return;
+    }
+
+    if (!preparationSelect?.value) {
+     alert('Por favor, selecione o modo de preparo');
+    return;
+    }
+    
+    if (!groupSelect?.value) {
+      alert('Por favor, selecione o grupo alimentar');
       return;
     }
 
@@ -482,7 +494,9 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         body: JSON.stringify({
           item_name: foodName,
-          id_item_brand: brandId // Pode ser null
+          id_item_brand: brandId, // Pode ser null
+          id_preparo: preparationSelect.value,
+          id_grupo: groupSelect.value
         })
       });
 

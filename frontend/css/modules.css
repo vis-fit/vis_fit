@@ -616,6 +616,23 @@ select.form-field-input:invalid:focus {
   }
 }
 
+/* CORREÇÃO DO ESPAÇAMENTO DO BLOCO 1 - ADICIONE ISSO NO FINAL */
+#cadastro-block1 {
+  margin-top: 20px !important; /* Espaço entre cabeçalho e primeiro bloco */
+}
+
+@media (max-width: 768px) {
+  #cadastro-block1 {
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #cadastro-block1 {
+    margin-top: 12px;
+  }
+}
+
 
 
 /*FIM DO ARQUIVO: modules.css*/
