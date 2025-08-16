@@ -13,6 +13,8 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+const fileUpload = require('express-fileupload');
+
 app.use(express.json({ limit: '10mb' })); // Aumenta limite para imagens base64
 app.use(express.static(path.join(__dirname, 'frontend')));
 
@@ -20,6 +22,9 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'frontend')));
+
+app.use(fileUpload());
+app.use(express.urlencoded({ extended: true }));
 
 //======ROTAS======//
 
@@ -188,11 +193,6 @@ app.get('/api/foodgroup-options', async (req, res) => {
 // Rota para opções de Grupo Alimentar
 app.post('/api/foods', async (req, res) => {
   try {
-    // Verifica se é FormData (multipart)
-    if (!req.is('multipart/form-data')) {
-      return res.status(400).json({ error: 'Content-Type deve ser multipart/form-data' });
-    }
-
     // Extrai os campos do FormData
     const {
       item_name,
@@ -220,7 +220,7 @@ app.post('/api/foods', async (req, res) => {
       imgBuffer = req.files.img_registro_dp.data;
     }
 
-    // Query SQL
+    // Query SQL atualizada
     const query = `
       INSERT INTO tbl_foods (
         item_name,
