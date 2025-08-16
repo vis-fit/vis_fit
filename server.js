@@ -175,6 +175,17 @@ app.get('/api/preparation-options', async (req, res) => {
 });
 
 // Rota para opções de Grupo Alimentar
+app.get('/api/foodgroup-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_grupo_alimentar ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar grupos alimentares:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para opções de Grupo Alimentar
 app.post('/api/foods', async (req, res) => {
   try {
     const {
@@ -182,32 +193,40 @@ app.post('/api/foods', async (req, res) => {
       id_item_brand,
       id_preparo,
       id_grupo,
+      id_tipo_medida,  // Adicionado
       caloria_kcal,
       proteinas_g,
+      carboidratos_g,  // Adicionado
+      gorduras_totais_g,  // Adicionado
       img_registro_tipo,
       img_registro_web,
       img_registro_dp
     } = req.body;
 
     // Validações básicas
-    if (!item_name || !id_preparo || !id_grupo) {
+    if (!item_name || !id_preparo || !id_grupo || !id_tipo_medida ||
+        caloria_kcal === undefined || proteinas_g === undefined ||
+        carboidratos_g === undefined || gorduras_totais_g === undefined) {
       return res.status(400).json({ error: 'Campos obrigatórios faltando' });
     }
 
-    // Query SQL
+    // Query SQL atualizada
     const query = `
       INSERT INTO tbl_foods (
         item_name,
         id_item_brand,
         id_preparo,
         id_grupo,
+        id_tipo_medida,
         caloria_kcal,
         proteinas_g,
+        carboidratos_g,
+        gorduras_totais_g,
         img_registro_tipo,
         img_registro_web,
         img_registro_dp,
         porcao_base
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 100)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 100)
       RETURNING id`;
 
     const result = await pool.query(query, [
@@ -215,8 +234,11 @@ app.post('/api/foods', async (req, res) => {
       id_item_brand || null,
       id_preparo,
       id_grupo,
+      id_tipo_medida,
       caloria_kcal,
       proteinas_g,
+      carboidratos_g,
+      gorduras_totais_g,
       img_registro_tipo || null,
       img_registro_web || null,
       img_registro_dp ? Buffer.from(img_registro_dp, 'base64') : null
