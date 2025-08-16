@@ -21,10 +21,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-const fileUpload = require('express-fileupload');
-app.use(fileUpload());
-app.use(express.urlencoded({ extended: true }));
-
 //======ROTAS======//
 
 // Rota principal (mantida igual)
