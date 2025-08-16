@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
       createBrandField();
       createPreparationField();
       createFoodGroupField();
+      createPortionField();
+      createNutritionFields();
+      createImageField();
       const cadastroModal = document.getElementById('food-cadastro-modal');
       if (cadastroModal) {
         cadastroModal.style.display = 'block';
@@ -378,7 +381,18 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
       
       blockContent.appendChild(fieldContainer);
-      loadFoodGroupOptions();
+      
+      // Carrega as opções e depois configura o listener
+      loadFoodGroupOptions().then(() => {
+        const groupSelect = document.getElementById('food-group');
+        if (groupSelect) {
+          // Atualiza a unidade inicial
+          updatePortionUnit();
+          
+          // Adiciona o listener para mudanças
+          groupSelect.addEventListener('change', updatePortionUnit);
+        }
+      });
     }
   };
 
@@ -412,12 +426,230 @@ document.addEventListener('DOMContentLoaded', function() {
           <option value="">Selecione...</option>
           ${options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('')}
         `;
+        return true;
       }
     } catch (error) {
       console.error('Erro ao carregar grupos alimentares:', error);
+      return false;
     }
   };
   //Fim Criação dos Campos "Modo de Preparo" e "Grupo Alimentar"
+
+  //Inicio Criação do Campo "Porção Base"
+  // Função para criar o campo Porção Base
+  const createPortionField = () => {
+    if (document.getElementById('food-portion')) return;
+    
+    const blockContent = document.querySelector('#cadastro-block1 .block-content');
+    
+    if (blockContent) {
+      const fieldContainer = document.createElement('div');
+      fieldContainer.className = 'form-field-container';
+      
+      fieldContainer.innerHTML = `
+        <label for="food-portion" class="form-field-label" id="portion-label">
+          Porção Base (g)
+        </label>
+        <input type="text" 
+              id="food-portion" 
+              class="form-field-input" 
+              placeholder="Digite a porção base"
+              value="100"
+              pattern="[0-9]+([\.,][0-9]+)?">
+        <div class="form-field-error"></div>
+      `;
+      
+      blockContent.appendChild(fieldContainer);
+      
+      // Configura validação para aceitar apenas números
+      const portionInput = document.getElementById('food-portion');
+      portionInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9.,]/g, '');
+      });
+    }
+  };
+
+  // Função para atualizar a unidade de medida
+  const updatePortionUnit = () => {
+    const mlGroups = ['Bebidas', 'Bebidas Alcoólicas'];
+    const groupSelect = document.getElementById('food-group');
+    const label = document.getElementById('portion-label');
+    
+    if (!groupSelect || !label) return;
+    
+    const selectedText = groupSelect.options[groupSelect.selectedIndex].text;
+    const unit = mlGroups.includes(selectedText) ? 'ml' : 'g';
+    label.textContent = `Porção Base (${unit})`;
+  };
+  //Fim Criação do Campo "Porção Base"
+
+  //Inicio Criação dos Campos "Calorias", "Proteinas", "Carboidratos" e "Gorduras Totais"
+  // Função para criar os campos nutricionais
+  const createNutritionFields = () => {
+    // Verifica se os campos já existem
+    if (document.getElementById('food-calories')) return;
+    
+    const blockContent = document.querySelector('#cadastro-block1 .block-content');
+    if (!blockContent) return;
+
+    // Array com a configuração dos campos
+    const fieldsConfig = [
+      { id: 'food-calories', label: 'Calorias (Kcal.)', placeholder: 'Digite as calorias' },
+      { id: 'food-protein', label: 'Proteínas (g)', placeholder: 'Digite as proteínas' },
+      { id: 'food-carbs', label: 'Carboidratos (g)', placeholder: 'Digite os carboidratos' },
+      { id: 'food-fat', label: 'Gorduras Totais (g)', placeholder: 'Digite as gorduras' }
+    ];
+
+    // Cria cada campo
+    fieldsConfig.forEach(field => {
+      const fieldContainer = document.createElement('div');
+      fieldContainer.className = 'form-field-container';
+      
+      fieldContainer.innerHTML = `
+        <label for="${field.id}" class="form-field-label">
+          ${field.label} <span class="required-asterisk">*</span>
+        </label>
+        <input type="text" 
+              id="${field.id}" 
+              class="form-field-input" 
+              placeholder="${field.placeholder}"
+              required
+              min="0">
+        <div class="form-field-error"></div>
+      `;
+      
+      blockContent.appendChild(fieldContainer);
+
+      // Configura validação para aceitar apenas números e decimais
+      const input = document.getElementById(field.id);
+      input.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9.,]/g, '');
+      });
+    });
+  };
+  //Inicio Criação dos Campos "Calorias", "Proteinas", "Carboidratos" e "Gorduras Totais"
+
+  //Inicio Criação do Campo Imagem
+  // Função para criar o campo de imagem
+  const createImageField = () => {
+    if (document.getElementById('image-options-modal')) return;
+    
+    const blockContent = document.querySelector('#cadastro-block1 .block-content');
+    if (!blockContent) return;
+
+    // Container principal do campo
+    const fieldContainer = document.createElement('div');
+    fieldContainer.className = 'form-field-container';
+    
+    fieldContainer.innerHTML = `
+      <label class="form-field-label">Imagem</label>
+      <button type="button" id="select-image-btn" class="form-field-input" style="text-align: left; cursor: pointer;">
+        Selecionar imagem...
+      </button>
+      <div id="image-preview-container" style="margin-top: 10px; display: none;">
+        <div id="image-filename" style="font-size: 0.8rem; margin-bottom: 5px;"></div>
+        <img id="image-preview" style="max-width: 100px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">
+      </div>
+    `;
+    
+    blockContent.appendChild(fieldContainer);
+
+    // Modal de opções
+    const modalHTML = `
+      <div id="image-options-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px;">
+          <h3 style="margin-bottom: 20px;">Selecionar imagem</h3>
+          <button id="upload-local-btn" class="modal-btn" style="margin-bottom: 10px; width: 100%;">
+            <i class="fas fa-upload"></i> Selecionar do dispositivo
+          </button>
+          <button id="web-url-btn" class="modal-btn" style="width: 100%;">
+            <i class="fas fa-link"></i> Imagem Web
+          </button>
+        </div>
+      </div>
+
+      <div id="web-url-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px;">
+          <h3 style="margin-bottom: 15px;">Inserir URL da imagem</h3>
+          <input type="text" id="image-url-input" class="form-field-input" placeholder="https://exemplo.com/imagem.jpg" style="width: 100%; margin-bottom: 15px;">
+          <div style="display: flex; gap: 10px;">
+            <button id="cancel-url-btn" class="modal-btn cancel-btn" style="flex: 1;">Cancelar</button>
+            <button id="confirm-url-btn" class="modal-btn save-btn" style="flex: 1;">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Elementos DOM
+    const selectImageBtn = document.getElementById('select-image-btn');
+    const imageOptionsModal = document.getElementById('image-options-modal');
+    const uploadLocalBtn = document.getElementById('upload-local-btn');
+    const webUrlBtn = document.getElementById('web-url-btn');
+    const webUrlModal = document.getElementById('web-url-modal');
+    const cancelUrlBtn = document.getElementById('cancel-url-btn');
+    const confirmUrlBtn = document.getElementById('confirm-url-btn');
+    const imageUrlInput = document.getElementById('image-url-input');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const imagePreview = document.getElementById('image-preview');
+    const imageFilename = document.getElementById('image-filename');
+
+    // Event Listeners
+    selectImageBtn.addEventListener('click', () => {
+      imageOptionsModal.style.display = 'block';
+    });
+
+    uploadLocalBtn.addEventListener('click', () => {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            imagePreview.src = event.target.result;
+            imageFilename.textContent = file.name;
+            imagePreviewContainer.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+        imageOptionsModal.style.display = 'none';
+      };
+      fileInput.click();
+    });
+
+    webUrlBtn.addEventListener('click', () => {
+      imageOptionsModal.style.display = 'none';
+      webUrlModal.style.display = 'block';
+      imageUrlInput.value = '';
+    });
+
+    cancelUrlBtn.addEventListener('click', () => {
+      webUrlModal.style.display = 'none';
+    });
+
+    confirmUrlBtn.addEventListener('click', () => {
+      const url = imageUrlInput.value.trim();
+      if (url) {
+        imagePreview.src = url;
+        imageFilename.textContent = 'Imagem da web';
+        imagePreviewContainer.style.display = 'block';
+      }
+      webUrlModal.style.display = 'none';
+    });
+
+    // Fechar modais ao clicar fora
+    [imageOptionsModal, webUrlModal].forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+  };
+  //Fim Criação do Campo Imagem
 
 
   //FUNÇÕES DO SALVAMENTO DO ALIMENTO NO BANCO
@@ -444,90 +676,231 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   
   // Função para salvar no banco de dados
+  // Função para salvar no banco de dados (VERSÃO CORRIGIDA)
   const saveFoodItem = async () => {
+    // 1. Obtenção e validação dos campos básicos
     const foodName = document.getElementById('food-name')?.value.trim().toUpperCase();
     const brandName = document.getElementById('food-brand')?.value.trim().toUpperCase();
     const preparationSelect = document.getElementById('food-preparation');
     const groupSelect = document.getElementById('food-group');
-    
+    const portionInput = document.getElementById('food-portion')?.value.replace(',', '.');
+
+    // Validações básicas
     if (!foodName) {
       alert('Por favor, preencha o nome do alimento');
       return;
     }
-
     if (!preparationSelect?.value) {
-     alert('Por favor, selecione o modo de preparo');
-    return;
+      alert('Por favor, selecione o modo de preparo');
+      return;
     }
-    
     if (!groupSelect?.value) {
       alert('Por favor, selecione o grupo alimentar');
       return;
     }
 
+    // 2. Validação da Porção Base
+    const portionValue = parseFloat(portionInput);
+    if (!portionInput || isNaN(portionValue) || portionValue <= 0) {
+      alert('Por favor, insira uma porção base válida (maior que 0)');
+      return;
+    }
+
+    // 3. Validação dos campos nutricionais
+    const getNutritionValue = (id) => {
+      const input = document.getElementById(id);
+      if (!input || input.value.trim() === '') return null;
+      const value = parseFloat(input.value.replace(',', '.'));
+      return isNaN(value) ? null : value;
+    };
+
+    const nutritionValues = {
+      calories: getNutritionValue('food-calories'),
+      protein: getNutritionValue('food-protein'),
+      carbs: getNutritionValue('food-carbs'),
+      fat: getNutritionValue('food-fat')
+    };
+
+    // Verifica campos vazios
+    const requiredNutritionFields = [
+      { value: nutritionValues.calories, name: 'Calorias' },
+      { value: nutritionValues.protein, name: 'Proteínas' },
+      { value: nutritionValues.carbs, name: 'Carboidratos' },
+      { value: nutritionValues.fat, name: 'Gorduras Totais' }
+    ];
+
+    for (const field of requiredNutritionFields) {
+      if (field.value === null) {
+        alert(`Por favor, preencha o campo ${field.name}`);
+        return;
+      }
+      if (field.value < 0) {
+        alert(`O valor de ${field.name} não pode ser negativo`);
+        return;
+      }
+    }
+
+    // 4. Processamento da imagem (opcional)
+    let imageData = { img_registro_tipo: null, img_registro_dp: null, img_registro_web: null };
+    const imagePreview = document.getElementById('image-preview');
+    
+    if (imagePreview?.src && imagePreview.style.display !== 'none') {
+      try {
+        const isWebImage = document.getElementById('image-filename').textContent === 'Imagem da web';
+        
+        if (isWebImage) {
+          // Valida URL da imagem web
+          if (!isValidUrl(imagePreview.src)) {
+            alert('Por favor, insira uma URL de imagem válida');
+            return;
+          }
+          imageData = {
+            img_registro_tipo: 2,
+            img_registro_web: imagePreview.src
+          };
+        } else {
+          // Processa imagem local
+          const response = await fetch(imagePreview.src);
+          if (!response.ok) throw new Error('Falha ao carregar imagem');
+          
+          const blob = await response.blob();
+          if (blob.size > 2 * 1024 * 1024) { // 2MB max
+            alert('A imagem deve ter no máximo 2MB');
+            return;
+          }
+          
+          imageData = {
+            img_registro_tipo: 1,
+            img_registro_dp: blob
+          };
+        }
+      } catch (error) {
+        console.error('Erro ao processar imagem:', error);
+        alert('Erro ao processar a imagem selecionada');
+        return;
+      }
+    }
+
     try {
       toggleSaveLoader(true);
       
-      // 1. Processar a marca (se existir)
+      // 5. Processamento da marca (se existir)
       let brandId = null;
       if (brandName) {
-        // Verifica se a marca já existe ou cria nova
         const brandResponse = await fetch('/api/brands/process', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nome: brandName })
         });
         
-        if (!brandResponse.ok) throw new Error('Erro ao processar marca');
-        
-        const brandData = await brandResponse.json();
-        brandId = brandData.id;
+        if (!brandResponse.ok) {
+          throw new Error(await brandResponse.text() || 'Erro ao processar marca');
+        }
+        brandId = (await brandResponse.json()).id;
       }
 
-      // 2. Salvar o alimento
+      // 6. Cálculo proporcional para 100g/ml
+      const proportionFactor = 100 / portionValue;
+      const calculatedValues = {
+        calories: (nutritionValues.calories * proportionFactor).toFixed(2),
+        protein: (nutritionValues.protein * proportionFactor).toFixed(2),
+        carbs: (nutritionValues.carbs * proportionFactor).toFixed(2),
+        fat: (nutritionValues.fat * proportionFactor).toFixed(2)
+      };
+
+      // 7. Preparação dos dados para envio
+      const formData = new FormData();
+      formData.append('item_name', foodName);
+      formData.append('id_item_brand', brandId || '');
+      formData.append('id_preparo', preparationSelect.value);
+      formData.append('id_grupo', groupSelect.value);
+      formData.append('id_tipo_medida', (groupSelect.value === '10' || groupSelect.value === '11') ? '5' : '1');
+      formData.append('caloria_kcal', calculatedValues.calories);
+      formData.append('proteinas_g', calculatedValues.protein);
+      formData.append('carboidratos_g', calculatedValues.carbs);
+      formData.append('gorduras_totais_g', calculatedValues.fat);
+      
+      // Adiciona dados da imagem se existir
+      if (imageData.img_registro_tipo) {
+        formData.append('img_registro_tipo', imageData.img_registro_tipo.toString());
+        if (imageData.img_registro_tipo === 1) {
+          formData.append('img_registro_dp', imageData.img_registro_dp);
+        } else {
+          formData.append('img_registro_web', imageData.img_registro_web);
+        }
+      }
+
+      // 8. Envio para o servidor
       const response = await fetch('/api/foods', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          item_name: foodName,
-          id_item_brand: brandId, // Pode ser null
-          id_preparo: preparationSelect.value,
-          id_grupo: groupSelect.value
-        })
+        body: formData
       });
 
-      if (!response.ok) throw new Error('Erro ao salvar alimento');
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erro ao salvar alimento');
+      }
 
-      const result = await response.json();
-      console.log('Alimento salvo:', result);
       alert('Alimento salvo com sucesso!');
-      
-      // Fecha o modal após sucesso
       resetModal();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('Erro ao salvar alimento: ' + error.message);
+      alert(error.message.includes('Erro') ? error.message : 'Erro ao salvar alimento: ' + error.message);
     } finally {
       toggleSaveLoader(false);
     }
   };
 
+  // Função auxiliar para validar URLs
+  function isValidUrl(string) {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   //Função para resetar o Modal de Cadastro
+
+  const resetImageField = () => {
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const imagePreview = document.getElementById('image-preview');
+    const imageFilename = document.getElementById('image-filename');
+    
+    if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
+    if (imagePreview) imagePreview.src = '';
+    if (imageFilename) imageFilename.textContent = '';
+    
+    // Fechar modais se estiverem abertos
+    document.getElementById('image-options-modal').style.display = 'none';
+    document.getElementById('web-url-modal').style.display = 'none';
+  };
+
   const resetModal = () => {
-    // 1. Limpa todos os campos
-    const foodNameInput = document.getElementById('food-name');
-    const foodBrandInput = document.getElementById('food-brand');
-    const foodPreparationInput = document.getElementById('food-preparation');
-    const foodGroupInput = document.getElementById('food-group');
-    if (foodNameInput) foodNameInput.value = '';
-    if (foodBrandInput) foodBrandInput.value = '';
-    if (foodPreparationInput) foodPreparationInput.value = '';
-    if (foodGroupInput) foodGroupInput.value = '';
+    // Limpa todos os campos
+    const fieldsToClear = [
+      'food-name', 'food-brand', 'food-preparation', 'food-group',
+      'food-calories', 'food-protein', 'food-carbs', 'food-fat'
+    ];
+
+    fieldsToClear.forEach(id => {
+      const field = document.getElementById(id);
+      if (field) field.value = '';
+    });
+
+    const portionInput = document.getElementById('food-portion');
+    if (portionInput) portionInput.value = '100';
+
+    //RESETA O CAMPO DE IMAGEM (NOVO)
+    resetImageField();
+
+    // Reseta o label da porção para "g"
+    const portionLabel = document.getElementById('portion-label');
+    if (portionLabel) {
+      portionLabel.textContent = 'Porção Base (g)';
+    }
 
     // 2. Esconde sugestões de marca
     document.querySelector('.brand-suggestions').classList.remove('visible');

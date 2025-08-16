@@ -633,7 +633,140 @@ select.form-field-input:invalid:focus {
   }
 }
 
+/* FOOD IMAGE FIELD STYLES - SCOPED */
+#food-cadastro-modal .form-field-container.image-field-container {
+  margin-top: 15px;
+}
 
+#food-cadastro-modal #select-image-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+#food-cadastro-modal #select-image-btn:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+#food-cadastro-modal #image-preview-container {
+  margin-top: 12px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#food-cadastro-modal #image-filename {
+  font-size: 0.8rem;
+  color: #555;
+  word-break: break-all;
+}
+
+#food-cadastro-modal #image-preview {
+  max-width: 120px;
+  max-height: 120px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  object-fit: contain;
+  background: #f9f9f9;
+}
+
+/* MODAL STYLES - SCOPED */
+#image-options-modal,
+#web-url-modal {
+  z-index: 1001; /* Acima do modal principal */
+}
+
+#image-options-modal .image-modal-content,
+#web-url-modal .image-modal-content {
+  padding: 20px;
+  max-width: min(400px, 90vw);
+  margin: 20px auto;
+  background: white;
+  border-radius: 8px;
+}
+
+#image-options-modal .image-modal-btn,
+#web-url-modal .image-modal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#image-options-modal .image-modal-btn:last-child,
+#web-url-modal .image-modal-btn:last-child {
+  margin-bottom: 0;
+}
+
+#image-options-modal .image-modal-btn:hover,
+#web-url-modal .image-modal-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+#web-url-modal .image-modal-btn.cancel-btn {
+  background-color: #8e0000;
+}
+
+#web-url-modal .image-modal-btn.cancel-btn:hover {
+  background-color: #6a0000;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 768px) {
+  #food-cadastro-modal #select-image-btn {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  #image-options-modal .image-modal-btn,
+  #web-url-modal .image-modal-btn {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  #food-cadastro-modal #image-preview {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  #food-cadastro-modal .form-field-container.image-field-container {
+    margin-top: 12px;
+  }
+
+  #image-options-modal .image-modal-content,
+  #web-url-modal .image-modal-content {
+    padding: 15px;
+  }
+
+  #food-cadastro-modal #image-preview {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  #food-cadastro-modal #image-filename {
+    font-size: 0.75rem;
+  }
+}
 
 /*FIM DO ARQUIVO: modules.css*/
 /*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/

@@ -13,12 +13,20 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+app.use(express.json({ limit: '10mb' })); // Aumenta limite para imagens base64
+app.use(express.static(path.join(__dirname, 'frontend')));
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 //======ROTAS======//
+
+// Rota principal (mantida igual)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
 
 // Rota de pesquisa melhorada
 app.get('/api/foods/search', async (req, res) => {
@@ -167,38 +175,54 @@ app.get('/api/preparation-options', async (req, res) => {
 });
 
 // Rota para opções de Grupo Alimentar
-app.get('/api/foodgroup-options', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT id, nome FROM tbl_aux_grupo_alimentar ORDER BY nome');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Erro ao buscar grupos alimentares:', error);
-    res.status(500).json({ error: 'Erro ao carregar opções' });
-  }
-});
-
-// Rota para salvar novo alimento
 app.post('/api/foods', async (req, res) => {
   try {
-    const { item_name, id_item_brand, id_preparo, id_grupo } = req.body;
-    
+    const {
+      item_name,
+      id_item_brand,
+      id_preparo,
+      id_grupo,
+      caloria_kcal,
+      proteinas_g,
+      img_registro_tipo,
+      img_registro_web,
+      img_registro_dp
+    } = req.body;
+
+    // Validações básicas
     if (!item_name || !id_preparo || !id_grupo) {
-      return res.status(400).json({ error: 'Nome do alimento é obrigatório' });
+      return res.status(400).json({ error: 'Campos obrigatórios faltando' });
     }
 
+    // Query SQL
     const query = `
-      INSERT INTO tbl_foods (item_name, id_item_brand, id_preparo, id_grupo)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *`;
-    
+      INSERT INTO tbl_foods (
+        item_name,
+        id_item_brand,
+        id_preparo,
+        id_grupo,
+        caloria_kcal,
+        proteinas_g,
+        img_registro_tipo,
+        img_registro_web,
+        img_registro_dp,
+        porcao_base
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 100)
+      RETURNING id`;
+
     const result = await pool.query(query, [
       item_name,
       id_item_brand || null,
       id_preparo,
-      id_grupo
+      id_grupo,
+      caloria_kcal,
+      proteinas_g,
+      img_registro_tipo || null,
+      img_registro_web || null,
+      img_registro_dp ? Buffer.from(img_registro_dp, 'base64') : null
     ]);
-    
-    res.json(result.rows[0]);
+
+    res.json({ success: true, id: result.rows[0].id });
 
   } catch (error) {
     console.error('Erro ao salvar alimento:', error);
