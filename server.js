@@ -262,6 +262,45 @@ app.post('/api/foods', async (req, res) => {
   }
 });
 
+// Nova rota para buscar detalhes completos do alimento
+app.get('/api/foods/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const query = `
+      SELECT 
+        f.id,
+        f.item_name,
+        f.img_registro_tipo,
+        f.img_registro_web,
+        CASE WHEN f.img_registro_tipo = 1 THEN
+          'data:image/jpeg;base64,' || encode(f.img_registro_dp, 'base64')
+        ELSE NULL END as img_base64,
+        b.nome as brand_name,
+        p.nome as preparation_name,
+        g.nome as group_name,
+        f.porcao_base,
+        f.id_tipo_medida
+        /* Removi o m.nome pois não é mais necessário */
+      FROM tbl_foods f
+      LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
+      LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
+      LEFT JOIN tbl_aux_grupo_alimentar g ON f.id_grupo = g.id
+      /* Removi o JOIN desnecessário com tbl_aux_tipo_medida */
+      WHERE f.id = $1`;
+
+    const result = await pool.query(query, [id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Alimento não encontrado' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Erro ao buscar alimento:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+});
+
 
 // Rota fallback para Single Page Applications (SPA)
 app.get('*', (req, res) => {

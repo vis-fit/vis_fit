@@ -21,22 +21,38 @@ document.addEventListener('DOMContentLoaded', function() {
   const pageInfo = getElement('page-info');
   const newFoodBtn = getElement('new-food-btn');
 
+  // Função para converter array de bytes para base64
+  function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  }
+
   //Função para resetar o scroll dos modais
   const resetModalScroll = () => {
-    const blocksContainer = document.querySelector('.blocks-container');
-    if (blocksContainer) {
-      // Método 1 - Ideal para navegadores modernos
-      if (typeof blocksContainer.scrollTo === 'function') {
-        blocksContainer.scrollTo({ top: 0, behavior: 'instant' });
-      } 
-      // Método 2 - Fallback universal
-      else {
-        blocksContainer.scrollTop = 0;
-      }
-      
-      // Força repaint (para navegadores problemáticos)
-      void blocksContainer.offsetHeight;
+    // Para Modal de Cadastro
+    const cadastroBlocks = document.querySelector('#food-cadastro-modal .blocks-container');
+    if (cadastroBlocks) {
+      cadastroBlocks.scrollTo({ top: 0, behavior: 'instant' });
     }
+    
+    // Para Modal de Detalhes (NOVO)
+    const detalhesContent = document.querySelector('#food-detalhes-modal .blocks-container');
+    if (detalhesContent) {
+      detalhesContent.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    
+    // Fallback universal
+    [cadastroBlocks, detalhesContent].forEach(container => {
+      if (container && typeof container.scrollTo !== 'function') {
+        container.scrollTop = 0;
+      }
+      if (container) void container.offsetHeight; // Força repaint
+    });
   };
 
   // Conectar botão "Novo Alimento" ao modal de cadastro
@@ -168,15 +184,87 @@ document.addEventListener('DOMContentLoaded', function() {
   // Conectar linhas da tabela ao modal de detalhes
   //Abrir modal de detalhes ao clicar no registro
   if (resultsBody) {
-    resultsBody.addEventListener('click', function(e) {
+    resultsBody.addEventListener('click', async function(e) {
       const row = e.target.closest('tr');
       if (row && row.dataset.id) {
+        const foodId = row.dataset.id;
         const detalhesModal = document.getElementById('food-detalhes-modal');
-        if (detalhesModal) {
-          detalhesModal.style.display = 'block';
+        
+        try {
+          resetModalScroll();
+          const response = await fetch(`/api/foods/${foodId}`);
+          const foodData = await response.json();
           
-          // Aqui no futuro pegaremos o row.dataset.id para carregar os detalhes específicos
-        }
+          const imageContainer = document.querySelector('#food-details-image-container');
+          imageContainer.innerHTML = '';
+          
+          const img = document.createElement('img');
+          img.id = 'food-details-image';
+          
+          // Prioridade: Imagem local > Imagem web > Default
+          if (foodData.img_base64) {
+            img.src = foodData.img_base64;
+          } else if (foodData.img_registro_web) {
+            img.src = foodData.img_registro_web;
+          } else {
+            img.src = '../assets/images/default-food.png';
+          }
+
+          img.onerror = () => {
+            img.src = '../assets/images/default-food.png';
+          };
+          
+          imageContainer.appendChild(img);
+
+          //Nome do Item
+          const itemNameElement = document.getElementById('food-item-name');
+          if (itemNameElement) {
+            itemNameElement.textContent = foodData.item_name || '';
+          }
+
+          //Demais campos
+          const brandElement = document.getElementById('food-detail-brand');
+          const prepElement = document.getElementById('food-detail-preparation');
+          const groupElement = document.getElementById('food-detail-group');
+
+          if (brandElement) {
+            brandElement.textContent = foodData.brand_name || 'SEM MARCA';
+            if (!foodData.brand_name) brandElement.classList.add('empty');
+          }
+          if (prepElement) {
+            prepElement.textContent = foodData.preparation_name || '';
+          }
+          if (groupElement) {
+            groupElement.textContent = foodData.group_name || '';
+          }
+
+          //Porção Base
+          // NOVO CAMPO - Porção Base
+          const portionLabel = document.getElementById('detail-portion-label');
+          const portionInput = document.getElementById('food-detail-portion');
+
+          if (portionLabel && portionInput) {
+            // Lógica simplificada e segura:
+            const unit = foodData.id_tipo_medida === 5 ? 'ml' : 'g';
+            portionLabel.textContent = `Porção Base (${unit})`;
+            portionInput.value = foodData.porcao_base || '100';
+            
+            portionInput.addEventListener('input', function(e) {
+              this.value = this.value.replace(/[^0-9.,]/g, '');
+            });
+          }
+
+          detalhesModal.style.display = 'block';
+          setTimeout(resetModalScroll, 50);
+          
+        } catch (error) {
+            console.error('Erro:', error);
+            const imageContainer = document.querySelector('#food-details-image-container');
+            imageContainer.innerHTML = `
+              <img id="food-details-image" src="../assets/images/default-food.png">
+            `;
+            detalhesModal.style.display = 'block';
+          }
       }
     });
   }
@@ -878,6 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('web-url-modal').style.display = 'none';
   };
 
+  //FUNÇÃO PARA RESETAR MODAL DE CADASTRO
   const resetModal = () => {
     // Limpa todos os campos
     const fieldsToClear = [
@@ -922,12 +1011,42 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleSaveLoader(false);
   };
 
+  //FUNÇÃO PARA RESETAR MODAL DE DETALHES
+  const resetModalDetalhes = () => {
+    // 1. Limpa todos os campos (ainda sem campos)
+    const fieldsToClear = [];
+
+    fieldsToClear.forEach(id => {
+      const field = document.getElementById(id);
+      if (field) field.value = '';
+    });
+    
+    // 2. Reseta scroll para o topo (AGORA MAIS EFETIVO)
+    resetModalScroll();
+
+    // 3. Reabre todos os blocos
+    document.querySelectorAll('#detalhes-block1, #detalhes-block2, #detalhes-block3').forEach(block => {
+      block.classList.remove('collapsed');
+      const icon = block.querySelector('.block-toggle');
+      if (icon) icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+    });
+    
+    // 4. Fecha o modal
+    document.getElementById('food-detalhes-modal').style.display = 'none';
+  };
+
   //Função botão "Cancelar"
   document.getElementById('food-cancel-btn').addEventListener('click', () => {
     if (confirm('Deseja realmente cancelar o cadastro? Os dados não salvos serão perdidos.')) {
       resetModal();
     }
   });
+  
+  //Função botão "Fechar"
+  document.getElementById('food-close-btn').addEventListener('click', () => {
+    resetModalScroll();
+    resetModalDetalhes();
+  })
 
   // Vincular ao botão Salvar
   document.getElementById('food-save-btn')?.addEventListener('click', saveFoodItem);
