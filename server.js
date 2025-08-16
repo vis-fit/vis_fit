@@ -14,17 +14,15 @@ const pool = new Pool({
 });
 
 const fileUpload = require('express-fileupload');
-
-app.use(express.json({ limit: '10mb' })); // Aumenta limite para imagens base64
+app.use(fileUpload());
+app.use(express.json({ limit: '50mb' })); // Aumenta limite para imagens base64
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-app.use(fileUpload());
-app.use(express.urlencoded({ extended: true }));
+
 
 //======ROTAS======//
 
@@ -190,76 +188,129 @@ app.get('/api/foodgroup-options', async (req, res) => {
   }
 });
 
-// Rota para opções de Grupo Alimentar
+//Roda Salvar Alimentos Cadastro
 app.post('/api/foods', async (req, res) => {
-  try {
-    // Extrai os campos do FormData
-    const {
-      item_name,
-      id_item_brand,
-      id_preparo,
-      id_grupo,
-      id_tipo_medida,
-      caloria_kcal,
-      proteinas_g,
-      carboidratos_g,
-      gorduras_totais_g,
-      img_registro_tipo,
-      img_registro_web
-    } = req.body;
+    try {
+        // 1. Extrai dados do FormData
+        const payload = JSON.parse(req.body.data);
+        const imagem = req.files?.img_registro_dp;
 
-    // Validações básicas
-    if (!item_name || !id_preparo || !id_grupo || !id_tipo_medida ||
-        !caloria_kcal || !proteinas_g || !carboidratos_g || !gorduras_totais_g) {
-      return res.status(400).json({ error: 'Campos obrigatórios faltando' });
+        // 2. Validações básicas
+        if (!payload.item_name || !payload.id_preparo || !payload.id_grupo || !payload.id_tipo_medida) {
+            return res.status(400).json({ error: 'Campos obrigatórios faltando' });
+        }
+
+        // 3. Query SQL otimizada
+        const query = `
+            INSERT INTO tbl_foods (
+                item_name, id_item_brand, id_preparo, id_grupo, id_tipo_medida,
+                caloria_kcal, proteinas_g, carboidratos_g, gorduras_totais_g,
+                gorduras_monoinsaturadas_g, gorduras_poliinsaturadas_g, gorduras_saturadas_g,
+                gorduras_trans_g, fibras_g, sodio_mg, teor_agua_g, acucares_totais_g,
+                acucares_naturais_g, acucares_adicionados_g, indice_glicemico, carga_glicemica_g,
+                colesterol_mg, ferro_total_mg, ferro_heme_mg, ferro_n_heme_mg, omega_3_g,
+                calcio_mg, magnesio_mg, zinco_mg, potassio_mg, vitamina_a_mcg, vitamina_b12_mcg,
+                vitamina_c_mg, vitamina_d_mcg, vitamina_e_mg, vitamina_k_mcg, vitamina_b1_mg,
+                vitamina_b2_mg, vitamina_b3_mg, vitamina_b5_mg, vitamina_b6_mg, vitamina_b7_mcg,
+                omega_6_g, fitosterol_mg, cloro_mg, pral_mEq, poliois_g, carboidratos_liquidos_g,
+                indice_quality_proteinas_pdcaas, perfil_aminoacidos_ess_mg, cobre_mg, manganes_mg,
+                selenio_mcg, iodo_mcg, betacaroteno_mcg, licopeno_mcg, luteina_zeaxantina_mcg,
+                acido_folico_mcg, polifenol_total_mg, carga_antioxidante_orac, teor_alcool_prcent,
+                img_registro_tipo, img_registro_web, porcao_base, img_registro_dp
+            ) VALUES (
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+                $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38,
+                $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56,
+                $57, $58, $59, $60, $61, $62, $63, $64, $65
+            ) RETURNING id`;
+        
+        // 4. Preparação dos valores
+        const values = [
+            // Campos básicos (1-5)
+            payload.item_name,
+            payload.id_item_brand || null,
+            payload.id_preparo,
+            payload.id_grupo,
+            payload.id_tipo_medida,
+            
+            // Macronutrientes (6-9)
+            parseFloat(payload.caloria_kcal || 0),
+            parseFloat(payload.proteinas_g || 0),
+            parseFloat(payload.carboidratos_g || 0),
+            parseFloat(payload.gorduras_totais_g || 0),
+            
+            // Demais campos nutricionais (10-61)
+            parseFloat(payload.gorduras_monoinsaturadas_g || 0),
+            parseFloat(payload.gorduras_poliinsaturadas_g || 0),
+            parseFloat(payload.gorduras_saturadas_g || 0),
+            parseFloat(payload.gorduras_trans_g || 0),
+            parseFloat(payload.fibras_g || 0),
+            parseFloat(payload.sodio_mg || 0),
+            parseFloat(payload.teor_agua_g || 0),
+            parseFloat(payload.acucares_totais_g || 0),
+            parseFloat(payload.acucares_naturais_g || 0),
+            parseFloat(payload.acucares_adicionados_g || 0),
+            parseFloat(payload.indice_glicemico || 0),
+            parseFloat(payload.carga_glicemica_g || 0),
+            parseFloat(payload.colesterol_mg || 0),
+            parseFloat(payload.ferro_total_mg || 0),
+            parseFloat(payload.ferro_heme_mg || 0),
+            parseFloat(payload.ferro_n_heme_mg || 0),
+            parseFloat(payload.omega_3_g || 0),
+            parseFloat(payload.calcio_mg || 0),
+            parseFloat(payload.magnesio_mg || 0),
+            parseFloat(payload.zinco_mg || 0),
+            parseFloat(payload.potassio_mg || 0),
+            parseFloat(payload.vitamina_a_mcg || 0),
+            parseFloat(payload.vitamina_b12_mcg || 0),
+            parseFloat(payload.vitamina_c_mg || 0),
+            parseFloat(payload.vitamina_d_mcg || 0),
+            parseFloat(payload.vitamina_e_mg || 0),
+            parseFloat(payload.vitamina_k_mcg || 0),
+            parseFloat(payload.vitamina_b1_mg || 0),
+            parseFloat(payload.vitamina_b2_mg || 0),
+            parseFloat(payload.vitamina_b3_mg || 0),
+            parseFloat(payload.vitamina_b5_mg || 0),
+            parseFloat(payload.vitamina_b6_mg || 0),
+            parseFloat(payload.vitamina_b7_mcg || 0),
+            parseFloat(payload.omega_6_g || 0),
+            parseFloat(payload.fitosterol_mg || 0),
+            parseFloat(payload.cloro_mg || 0),
+            parseFloat(payload.pral_mEq || 0),
+            parseFloat(payload.poliois_g || 0),
+            parseFloat(payload.carboidratos_liquidos_g || 0),
+            parseFloat(payload.indice_quality_proteinas_pdcaas || 0),
+            parseFloat(payload.perfil_aminoacidos_ess_mg || 0),
+            parseFloat(payload.cobre_mg || 0),
+            parseFloat(payload.manganes_mg || 0),
+            parseFloat(payload.selenio_mcg || 0),
+            parseFloat(payload.iodo_mcg || 0),
+            parseFloat(payload.betacaroteno_mcg || 0),
+            parseFloat(payload.licopeno_mcg || 0),
+            parseFloat(payload.luteina_zeaxantina_mcg || 0),
+            parseFloat(payload.acido_folico_mcg || 0),
+            parseFloat(payload.polifenol_total_mg || 0),
+            parseFloat(payload.carga_antioxidante_orac || 0),
+            parseFloat(payload.teor_alcool_prcent || 0),
+            
+            // Imagem e porção (62-65)
+            payload.img_registro_tipo || null,
+            payload.img_registro_web || null,
+            100, // porcao_base fixo em 100
+            imagem?.data || null
+        ];
+
+        // 5. Execução da query
+        const result = await pool.query(query, values);
+        res.json({ success: true, id: result.rows[0].id });
+
+    } catch (error) {
+        console.error('Erro detalhado:', error);
+        res.status(500).json({
+            error: 'Erro interno no servidor',
+            details: error.message
+        });
     }
-
-    // Processa a imagem se existir
-    let imgBuffer = null;
-    if (req.files && req.files.img_registro_dp) {
-      imgBuffer = req.files.img_registro_dp.data;
-    }
-
-    // Query SQL atualizada
-    const query = `
-      INSERT INTO tbl_foods (
-        item_name,
-        id_item_brand,
-        id_preparo,
-        id_grupo,
-        id_tipo_medida,
-        caloria_kcal,
-        proteinas_g,
-        carboidratos_g,
-        gorduras_totais_g,
-        img_registro_tipo,
-        img_registro_web,
-        img_registro_dp,
-        porcao_base
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 100)
-      RETURNING id`;
-
-    const result = await pool.query(query, [
-      item_name,
-      id_item_brand || null,
-      id_preparo,
-      id_grupo,
-      id_tipo_medida,
-      parseFloat(caloria_kcal),
-      parseFloat(proteinas_g),
-      parseFloat(carboidratos_g),
-      parseFloat(gorduras_totais_g),
-      img_registro_tipo || null,
-      img_registro_web || null,
-      imgBuffer
-    ]);
-
-    res.json({ success: true, id: result.rows[0].id });
-
-  } catch (error) {
-    console.error('Erro ao salvar alimento:', error);
-    res.status(500).json({ error: 'Erro interno no servidor' });
-  }
 });
 
 // Nova rota para buscar detalhes completos do alimento
@@ -270,6 +321,10 @@ app.get('/api/foods/:id', async (req, res) => {
       SELECT 
         f.id,
         f.item_name,
+        f.caloria_kcal,
+        f.proteinas_g,
+        f.carboidratos_g,
+        f.gorduras_totais_g,
         f.img_registro_tipo,
         f.img_registro_web,
         CASE WHEN f.img_registro_tipo = 1 THEN
@@ -280,12 +335,10 @@ app.get('/api/foods/:id', async (req, res) => {
         g.nome as group_name,
         f.porcao_base,
         f.id_tipo_medida
-        /* Removi o m.nome pois não é mais necessário */
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
       LEFT JOIN tbl_aux_grupo_alimentar g ON f.id_grupo = g.id
-      /* Removi o JOIN desnecessário com tbl_aux_tipo_medida */
       WHERE f.id = $1`;
 
     const result = await pool.query(query, [id]);

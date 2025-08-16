@@ -258,6 +258,68 @@
   }
 }
 
+/* CAMPOS NUTRICIONAIS - BLOCO 2 CADASTRO */
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.nutrition-field-cad {
+  margin-bottom: 0;
+}
+
+.nutrition-field-cad label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.nutrition-field-cad input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.nutrition-field-cad input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .nutrition-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .nutrition-field-cad input {
+    padding: 7px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nutrition-grid {
+    gap: 10px;
+  }
+  
+  .nutrition-field-cad label {
+    font-size: 0.8rem;
+  }
+  
+  .nutrition-field-cad input {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+}
+/*FIM BLOCO 2*/
+
 /* CONTAINER PRINCIPAL - BLOCOS */
 .blocks-container {
   max-height: 55vh;
