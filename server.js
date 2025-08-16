@@ -21,6 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
+app.use(express.urlencoded({ extended: true }));
+
 //======ROTAS======//
 
 // Rota principal (mantida igual)
@@ -188,29 +192,39 @@ app.get('/api/foodgroup-options', async (req, res) => {
 // Rota para opções de Grupo Alimentar
 app.post('/api/foods', async (req, res) => {
   try {
+    // Verifica se é FormData (multipart)
+    if (!req.is('multipart/form-data')) {
+      return res.status(400).json({ error: 'Content-Type deve ser multipart/form-data' });
+    }
+
+    // Extrai os campos do FormData
     const {
       item_name,
       id_item_brand,
       id_preparo,
       id_grupo,
-      id_tipo_medida,  // Adicionado
+      id_tipo_medida,
       caloria_kcal,
       proteinas_g,
-      carboidratos_g,  // Adicionado
-      gorduras_totais_g,  // Adicionado
+      carboidratos_g,
+      gorduras_totais_g,
       img_registro_tipo,
-      img_registro_web,
-      img_registro_dp
+      img_registro_web
     } = req.body;
 
     // Validações básicas
     if (!item_name || !id_preparo || !id_grupo || !id_tipo_medida ||
-        caloria_kcal === undefined || proteinas_g === undefined ||
-        carboidratos_g === undefined || gorduras_totais_g === undefined) {
+        !caloria_kcal || !proteinas_g || !carboidratos_g || !gorduras_totais_g) {
       return res.status(400).json({ error: 'Campos obrigatórios faltando' });
     }
 
-    // Query SQL atualizada
+    // Processa a imagem se existir
+    let imgBuffer = null;
+    if (req.files && req.files.img_registro_dp) {
+      imgBuffer = req.files.img_registro_dp.data;
+    }
+
+    // Query SQL
     const query = `
       INSERT INTO tbl_foods (
         item_name,
@@ -235,13 +249,13 @@ app.post('/api/foods', async (req, res) => {
       id_preparo,
       id_grupo,
       id_tipo_medida,
-      caloria_kcal,
-      proteinas_g,
-      carboidratos_g,
-      gorduras_totais_g,
+      parseFloat(caloria_kcal),
+      parseFloat(proteinas_g),
+      parseFloat(carboidratos_g),
+      parseFloat(gorduras_totais_g),
       img_registro_tipo || null,
       img_registro_web || null,
-      img_registro_dp ? Buffer.from(img_registro_dp, 'base64') : null
+      imgBuffer
     ]);
 
     res.json({ success: true, id: result.rows[0].id });
