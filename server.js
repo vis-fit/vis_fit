@@ -232,11 +232,15 @@ app.post('/api/foods', async (req, res) => {
         proteinas_g,
         carboidratos_g,
         gorduras_totais_g,
+        gorduras_monoinsaturadas_g,   
+        gorduras_poliinsaturadas_g,
+        gorduras_saturadas_g,
+        gorduras_trans_g,
         img_registro_tipo,
         img_registro_web,
         img_registro_dp,
         porcao_base
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 100)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 100)
       RETURNING id`;
 
     const result = await pool.query(query, [
@@ -249,6 +253,10 @@ app.post('/api/foods', async (req, res) => {
       parseFloat(proteinas_g),
       parseFloat(carboidratos_g),
       parseFloat(gorduras_totais_g),
+      parseFloat(req.body.gorduras_monoinsaturadas_g),  // NOVO CAMPO (default 0)
+      parseFloat(req.body.gorduras_poliinsaturadas_g),  // NOVO CAMPO (default 0)
+      parseFloat(req.body.gorduras_saturadas_g),  // NOVO CAMPO (default 0)
+      parseFloat(req.body.gorduras_trans_g),  // NOVO CAMPO (default 0)
       img_registro_tipo || null,
       img_registro_web || null,
       imgBuffer
@@ -277,7 +285,13 @@ app.get('/api/foods/:id', async (req, res) => {
         ELSE NULL END as img_base64,
         b.nome as brand_name,
         p.nome as preparation_name,
-        g.nome as group_name
+        g.nome as group_name,
+        f.id_tipo_medida,
+        f.caloria_kcal,
+        f.proteinas_g,
+        f.carboidratos_g,
+        f.gorduras_totais_g,
+        f.gorduras_saturadas_g
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id

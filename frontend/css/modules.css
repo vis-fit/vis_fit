@@ -768,5 +768,23 @@ select.form-field-input:invalid:focus {
   }
 }
 
+/* Container para campos lado a lado */
+.form-field-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+/* Responsividade: empilha em telas pequenas */
+@media (max-width: 768px) {
+    .form-field-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-field-container {
+        margin-right: 0 !important;
+    }
+}
+
 /*FIM DO ARQUIVO: modules.css*/
 /*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/

@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
       createPortionField();
       createNutritionFields();
       createImageField();
+      createFatFields();
       const cadastroModal = document.getElementById('food-cadastro-modal');
       if (cadastroModal) {
         cadastroModal.style.display = 'block';
@@ -237,6 +238,122 @@ document.addEventListener('DOMContentLoaded', function() {
           if (groupElement) {
             groupElement.textContent = foodData.group_name || '';
           }
+
+          
+          //Porção Base
+          // Função para formatar decimais com vírgula
+          function formatDecimal(input) {
+            input.value = input.value.replace('.', ',');
+          }
+          // Adicionar após carregar os dados do alimento
+          const portionInput = document.getElementById('food-detail-portion');
+          const portionLabel = document.getElementById('detalhes-portion-label');
+          // Verificar tipo de medida e atualizar label
+          if (foodData.id_tipo_medida === 5) {
+            portionLabel.textContent = 'Porção Base (ml)';
+          } else {
+            portionLabel.textContent = 'Porção Base (g)';
+          }
+          // Resetar para 100 quando o modal for aberto
+          portionInput.value = '100';
+
+          //Calorias
+          // Função para formatar número com 2 decimais e vírgula
+          function formatCalories(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          // Atualizar o campo calorias com os dados do banco
+          const caloriesElement = document.getElementById('food-detail-calories');
+          if (foodData.caloria_kcal) {
+            caloriesElement.textContent = formatCalories(foodData.caloria_kcal);
+          } else {
+            caloriesElement.textContent = '0,00';
+          }
+
+          //Proteinas
+          // Função para formatar número com 2 decimais e vírgula
+          function formatProteinas(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          // Atualizar o campo calorias com os dados do banco
+          const proteinasElement = document.getElementById('food-detail-proteinas');
+          if (foodData.proteinas_g) {
+            proteinasElement.textContent = formatProteinas(foodData.proteinas_g);
+          } else {
+            proteinasElement.textContent = '0,00';
+          }
+
+          //Caboidratos
+          // Função para formatar número com 2 decimais e vírgula
+          function formatCarboidratos(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          // Atualizar o campo carboidratos com os dados do banco
+          const carboidratosElement = document.getElementById('food-detail-carboidratos');
+          if (foodData.carboidratos_g) {
+            carboidratosElement.textContent = formatCarboidratos(foodData.carboidratos_g);
+          } else {
+            carboidratosElement.textContent = '0,00';
+          }
+
+          //Gorduras Totais
+          // Função para formatar número com 2 decimais e vírgula
+          function formatGordurasT(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          // Atualizar o campo gorduras totais com os dados do banco
+          const gordurasTElement = document.getElementById('food-detail-gordurasT');
+          if (foodData.gorduras_totais_g) {
+            gordurasTElement.textContent = formatGordurasT(foodData.gorduras_totais_g);
+          } else {
+            gordurasTElement.textContent = '0,00';
+          }
+
+          //Gorduras Saturadas
+          // Função para formatar número com 2 decimais e vírgula
+          function formatGordurasSat(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          // Atualizar o campo gorduras totais com os dados do banco
+          const gordurasSatElement = document.getElementById('food-detail-gSat');
+          if (foodData.gorduras_totais_g) {
+            gordurasSatElement.textContent = formatGordurasSat(foodData.gorduras_saturadas_g);
+          } else {
+            gordurasSatElement.textContent = '0,00';
+          }
+
+
+          //Recalculo Calorias
+          const baseCalories = parseFloat(foodData.caloria_kcal) || 0;
+          const baseProteinas = parseFloat(foodData.proteinas_g) || 0;
+          const baseCarboidratos = parseFloat(foodData.carboidratos_g) || 0;
+          const baseGordurasT = parseFloat(foodData.gorduras_totais_g) || 0;
+          const baseGordurasSat = parseFloat(foodData.gorduras_saturadas_g) || 0;
+
+          // Função para recalcular TUDO quando a porção mudar
+          function updateNutritionValues() {
+            const portion = parseFloat(document.getElementById('food-detail-portion').value.replace(',', '.')) || 100;
+            const factor = portion / 100;
+            document.getElementById('food-detail-calories').textContent = formatCalories(baseCalories * factor);
+            document.getElementById('food-detail-proteinas').textContent = formatProteinas(baseProteinas * factor);
+            document.getElementById('food-detail-carboidratos').textContent = formatCarboidratos(baseCarboidratos * factor);
+            document.getElementById('food-detail-gordurasT').textContent = formatGordurasT(baseGordurasT * factor);
+            document.getElementById('food-detail-gSat').textContent = formatGordurasT(baseGordurasSat * factor);
+          }
+          // Configura os eventos no campo de porção
+          portionInput.addEventListener('input', function() {
+            // Permite apenas números e no máximo uma vírgula
+            this.value = this.value.replace(/[^0-9,]/g, '')  // Remove tudo que não for número
+              .replace(/(,.*?),/g, '$1'); // Permite só uma vírgula
+              
+            updateNutritionValues(); // Mantém o cálculo
+          });
+          portionInput.addEventListener('change', updateNutritionValues);
 
           detalhesModal.style.display = 'block';
           setTimeout(resetModalScroll, 50);
@@ -599,7 +716,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   };
-  //Inicio Criação dos Campos "Calorias", "Proteinas", "Carboidratos" e "Gorduras Totais"
+  //Fim Criação dos Campos "Calorias", "Proteinas", "Carboidratos" e "Gorduras Totais"
 
   //Inicio Criação do Campo Imagem
   // Função para criar o campo de imagem
@@ -723,6 +840,23 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   //Fim Criação do Campo Imagem
 
+  //Criação Campos Bloco 2
+  function createFatFields() {
+    // Validação numérica (igual aos outros campos)
+    document.getElementById('food-mono-fat').addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
+    });
+    document.getElementById('food-poly-fat').addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
+    });
+    document.getElementById('food-sat-fat').addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
+    });
+    document.getElementById('food-trans-fat').addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
+    });
+  }
+  //Fim Criação Campos Bloco 2
 
   //FUNÇÕES DO SALVAMENTO DO ALIMENTO NO BANCO
   // Função para mostrar/ocultar o loader
@@ -790,7 +924,12 @@ document.addEventListener('DOMContentLoaded', function() {
       calories: getNutritionValue('food-calories'),
       protein: getNutritionValue('food-protein'),
       carbs: getNutritionValue('food-carbs'),
-      fat: getNutritionValue('food-fat')
+      fat: getNutritionValue('food-fat'),
+        // NOVOS CAMPOS (Bloco 2)
+      monoFat: getNutritionValue('food-mono-fat') || 0,  // Se não preenchido, assume 0
+      polyFat: getNutritionValue('food-poly-fat') || 0,   // Se não preenchido, assume 0
+      satFat: getNutritionValue('food-sat-fat') || 0,  // Se não preenchido, assume 0
+      transFat: getNutritionValue('food-trans-fat') || 0   // Se não preenchido, assume 0
     };
 
     // Verifica campos vazios
@@ -877,7 +1016,12 @@ document.addEventListener('DOMContentLoaded', function() {
         calories: (nutritionValues.calories * proportionFactor).toFixed(2),
         protein: (nutritionValues.protein * proportionFactor).toFixed(2),
         carbs: (nutritionValues.carbs * proportionFactor).toFixed(2),
-        fat: (nutritionValues.fat * proportionFactor).toFixed(2)
+        fat: (nutritionValues.fat * proportionFactor).toFixed(2),
+        // NOVOS CAMPOS (mesmo fator de proporção)
+        monoFat: (nutritionValues.monoFat * proportionFactor).toFixed(2),
+        polyFat: (nutritionValues.polyFat * proportionFactor).toFixed(2),
+        satFat: (nutritionValues.satFat * proportionFactor).toFixed(2),
+        transFat: (nutritionValues.transFat * proportionFactor).toFixed(2)
       };
 
       // 7. Preparação dos dados para envio
@@ -891,7 +1035,12 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('proteinas_g', calculatedValues.protein);
       formData.append('carboidratos_g', calculatedValues.carbs);
       formData.append('gorduras_totais_g', calculatedValues.fat);
-      
+      // Junto com os outros campos nutricionais (linha ~600)
+      formData.append('gorduras_monoinsaturadas_g', calculatedValues.monoFat);
+      formData.append('gorduras_poliinsaturadas_g', calculatedValues.polyFat);
+      formData.append('gorduras_saturadas_g', calculatedValues.satFat);
+      formData.append('gorduras_trans_g', calculatedValues.transFat);
+
       // Adiciona dados da imagem se existir
       if (imageData.img_registro_tipo) {
         formData.append('img_registro_tipo', imageData.img_registro_tipo.toString());
@@ -955,7 +1104,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Limpa todos os campos
     const fieldsToClear = [
       'food-name', 'food-brand', 'food-preparation', 'food-group',
-      'food-calories', 'food-protein', 'food-carbs', 'food-fat'
+      'food-calories', 'food-protein', 'food-carbs', 'food-fat',
+      'food-mono-fat', 'food-poly-fat', 'food-sat-fat', 'food-trans-fat'
     ];
 
     fieldsToClear.forEach(id => {

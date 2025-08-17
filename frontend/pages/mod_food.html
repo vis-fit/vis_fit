@@ -84,7 +84,56 @@
                 <h3>Detalhes Nutricionais</h3>
                 <i class="fas fa-chevron-down block-toggle"></i>
               </div>
-              <div class="block-content"></div>
+              <div class="block-content">
+                <div class="form-field-row">
+                  <!-- Campo Gorduras Monoaturadas -->
+                  <div class="form-field-container" style="flex: 1; margin-right: 10px;">
+                      <label for="food-mono-fat" class="form-field-label">
+                          Gorduras Monoinsaturadas (g)
+                      </label>
+                      <input type="text" 
+                            id="food-mono-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                  <!-- Campo Gorduras Poliinsaturadas -->
+                  <div class="form-field-container" style="flex: 1;">
+                      <label for="food-poly-fat" class="form-field-label">
+                          Gorduras Poli-insaturadas (g)
+                      </label>
+                      <input type="text" 
+                            id="food-poly-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Campo Gorduras Saturadas -->
+                  <div class="form-field-container" style="flex: 1; margin-right: 10px;">
+                      <label for="food-sat-fat" class="form-field-label">
+                          Gorduras Saturadas (g)
+                      </label>
+                      <input type="text" 
+                            id="food-sat-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                  <!-- Campo Gorduras Trans -->
+                  <div class="form-field-container" style="flex: 1;">
+                      <label for="food-trans-fat" class="form-field-label">
+                          Gorduras Trans (g)
+                      </label>
+                      <input type="text" 
+                            id="food-trans-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Bloco 3 -->
@@ -139,6 +188,36 @@
                   <span class="detail-label">Grupo Alimentar:</span>
                   <span id="food-detail-group" class="detail-value">Carregando...</span>
                 </div>
+                <!-- Porção Base -->
+                <div class="detail-field">
+                  <span class="detail-label" id="detalhes-portion-label">Porção Base (g)</span>
+                  <input type="text" 
+                    id="food-detail-portion" 
+                    class="detail-value" 
+                    value="100"
+                    style="border: 1px solid #ddd; padding: 4px; border-radius: 4px;"
+                    onchange="formatDecimal(this)">
+                </div>
+                <!-- Calorias -->
+                <div class="detail-field">
+                  <span class="detail-label">Calorias (Kcal)</span>
+                  <span id="food-detail-calories" class="detail-value">0,00</span>
+                </div>
+                <!-- Proteinas -->
+                <div class="detail-field">
+                  <span class="detail-label">Proteinas (g)</span>
+                  <span id="food-detail-proteinas" class="detail-value">0,00</span>
+                </div>
+                <!-- Carboidratos -->
+                <div class="detail-field">
+                  <span class="detail-label">Carboidratos (g)</span>
+                  <span id="food-detail-carboidratos" class="detail-value">0,00</span>
+                </div>
+                <!-- Gorduras Totais -->
+                <div class="detail-field">
+                  <span class="detail-label">Gorduras Totais (g)</span>
+                  <span id="food-detail-gordurasT" class="detail-value">0,00</span>
+                </div>
               </div>
             </div>
 
@@ -148,7 +227,13 @@
                 <h3>Detalhes Nutricionais</h3>
                 <i class="fas fa-chevron-down block-toggle"></i>
               </div>
-              <div class="block-content"></div>
+              <div class="block-content">
+                <!-- Gorduras Saturadas -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Gorduras Saturadas (g)</span>
+                  <span id="food-detail-gSat" class="detail-value">0,00</span>
+                </div>
+              </div>
             </div>
 
             <!-- Bloco 3 -->

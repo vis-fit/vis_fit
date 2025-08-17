@@ -239,15 +239,34 @@
 }
 
 .detail-label {
-  flex: 0 0 140px;
+  flex: 0 1 140px;
+  min-width: max-content;
   font-weight: 600;
   color: #4a5568;
   font-size: 0.85rem;
   padding: 8px 0;
   position: relative;
+  white-space: nowrap;
+}
+
+.detail-labelB2 {
+  flex: 0 1 170px;
+  min-width: max-content;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.85rem;
+  padding: 8px 0;
+  position: relative;
+  white-space: nowrap;
 }
 
 .detail-label::after {
+  content: ":";
+  position: absolute;
+  right: 5px;
+}
+
+.detail-labelB2::after {
   content: ":";
   position: absolute;
   right: 5px;
@@ -304,27 +323,67 @@
   }
 }
 
-/* Estilo para campos editáveis  PORÇÃO BASE*/
-.detail-value.editable {
-  background-color: #fff;
-  border: 1px solid #e2e8f0;
+/* Estilo para o campo de porção base no modal de detalhes */
+#food-detail-portion {
+  width: 100px;
+  padding: 8px;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 6px 8px;
-  margin-left: -3px; /* Compensa a borda */
-  min-width: 60px;
+  font-size: 0.95rem;
+  background-color: white;
 }
 
-.detail-value.editable:focus {
-  outline: none;
-  border-color: #4299e1;
-  box-shadow: 0 0 0 1px #4299e1;
+/* Estilo para os spinners (setinhas) */
+#food-detail-portion::-webkit-inner-spin-button,
+#food-detail-portion::-webkit-outer-spin-button {
+  opacity: 1;
+  height: auto;
 }
 
-/* Mantém alinhamento com outros campos */
-.detail-field:hover .detail-value.editable {
-  border-color: #cbd5e0;
+/* Responsividade */
+@media (max-width: 768px) {
+  #food-detail-portion {
+    width: 80px;
+    padding: 6px;
+    font-size: 0.9rem;
+  }
 }
 
+@media (max-width: 480px) {
+  #food-detail-portion {
+    width: 70px;
+    padding: 5px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Estilo para o campo de calorias no modal de detalhes */
+#food-detail-calories #food-detail-proteinas #food-detail-carboidratos #food-detail-gordurasT #food-detail-gSat {
+  display: inline-block;
+  min-width: 80px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #food-detail-calories #food-detail-proteinas #food-detail-carboidratos #food-detail-gordurasT #food-gSat {
+    min-width: 70px;
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #food-detail-calories #food-detail-proteinas #food-detail-carboidratos #food-detail-gordurasT #food-gSat {
+    min-width: 60px;
+    padding: 5px;
+    font-size: 0.85rem;
+  }
+}
 
 /* Fim do Arquivo: food.css */
 /* Comando: Somente diga se recebeu e aguarde o envio do próximo arquivo para prosseguir. */
