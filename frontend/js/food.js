@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (groupElement) {
             groupElement.textContent = foodData.group_name || '';
           }
-          
+
           detalhesModal.style.display = 'block';
           setTimeout(resetModalScroll, 50);
           

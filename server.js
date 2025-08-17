@@ -277,7 +277,7 @@ app.get('/api/foods/:id', async (req, res) => {
         ELSE NULL END as img_base64,
         b.nome as brand_name,
         p.nome as preparation_name,
-        g.nome as group_name,
+        g.nome as group_name
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
