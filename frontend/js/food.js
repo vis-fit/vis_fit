@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
       createPortionField();
       createNutritionFields();
       createImageField();
-      createNutritionFieldsBlock2();
       const cadastroModal = document.getElementById('food-cadastro-modal');
       if (cadastroModal) {
         cadastroModal.style.display = 'block';
@@ -238,87 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (groupElement) {
             groupElement.textContent = foodData.group_name || '';
           }
-
-          //Porção Base
-          const portionLabel = document.getElementById('detail-portion-label');
-          const portionInput = document.getElementById('food-detail-portion');
-
-          if (portionLabel && portionInput) {
-            // Define a unidade (g ou ml) - mantido do seu código original
-            const unit = foodData.id_tipo_medida === 5 ? 'ml' : 'g';
-            portionLabel.textContent = `Porção Base (${unit})`;
-            
-            // Formatação inicial do valor (100.00 → 100,00)
-            const basePortion = foodData.porcao_base || '100';
-            portionInput.value = parseFloat(basePortion).toFixed(2).replace('.', ',');
-            
-            // Validação durante a digitação (MANTIDO SEU PADRÃO)
-            portionInput.addEventListener('input', function(e) {
-                this.value = this.value.replace(/[^0-9,]/g, '');
-            });
-            
-            // Formatação ao sair do campo - CORREÇÃO DO ERRO DE SINTAXE
-            portionInput.addEventListener('blur', function(e) {
-              const numValue = parseFloat(this.value.replace(',', '.'));
-              if (!isNaN(numValue)) {
-                  this.value = numValue.toFixed(2).replace('.', ',');
-                  recalculateNutritionValues(this.value);
-              } else {
-                  this.value = '100,00';
-                  recalculateNutritionValues('100,00');
-              }
-            });
-
-            // Adicione também para o evento Enter (tecla pressionada)
-            portionInput.addEventListener('keypress', function(e) {
-              if (e.key === 'Enter') {
-                this.blur(); // Dispara o evento blur que já trata o recálculo
-              }
-            });
-          }
-
-          // Função para recalcular valores nutricionais
-          const recalculateNutritionValues = (newPortion) => {
-            const originalPortion = 100; // Valor base original
-            const ratio = parseFloat(newPortion.replace(',', '.')) / originalPortion;
-
-            // Campos nutricionais que devem ser recalculados
-            const nutritionFields = [
-                'food-detail-calories',
-                'food-detail-protein',
-                'food-detail-carbs',
-                'food-detail-fat'
-            ];
-
-            nutritionFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (field) {
-                    const originalValue = parseFloat(field.dataset.originalValue || '0');
-                    const newValue = (originalValue * ratio).toFixed(2).replace('.', ',');
-                    field.textContent = newValue;
-                }
-            });
-          };
-
-          //Campos Nutricionais (Calorias, Proteinas, Carboidratos e Gorduras Totais)
-          const formatNutritionValue = (value) => {
-            return parseFloat(value).toFixed(2).replace('.', ',');
-          };
-          document.getElementById('food-detail-calories').textContent = 
-            foodData.caloria_kcal ? formatNutritionValue(foodData.caloria_kcal) : '0,00';
-          document.getElementById('food-detail-protein').textContent = 
-            foodData.proteinas_g ? formatNutritionValue(foodData.proteinas_g) : '0,00';
-          document.getElementById('food-detail-carbs').textContent = 
-            foodData.carboidratos_g ? formatNutritionValue(foodData.carboidratos_g) : '0,00';
-          document.getElementById('food-detail-fat').textContent = 
-            foodData.gorduras_totais_g ? formatNutritionValue(foodData.gorduras_totais_g) : '0,00';
           
-          document.getElementById('food-detail-calories').dataset.originalValue = foodData.caloria_kcal || '0';
-          document.getElementById('food-detail-protein').dataset.originalValue = foodData.proteinas_g || '0';
-          document.getElementById('food-detail-carbs').dataset.originalValue = foodData.carboidratos_g || '0';
-          document.getElementById('food-detail-fat').dataset.originalValue = foodData.gorduras_totais_g || '0';
-          // Fim Campos Nutricionais
-
           detalhesModal.style.display = 'block';
           setTimeout(resetModalScroll, 50);
           
@@ -804,92 +723,6 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   //Fim Criação do Campo Imagem
 
-  //CRIAÇÃO CAMPOS BLOCO 2
-  const createNutritionFieldsBlock2 = () => {
-  const blockContent = document.querySelector('#cadastro-block2 .block-content');
-  if (!blockContent || blockContent.innerHTML.trim() !== '') return;
-
-    const fields = [
-      'Gordura Monoinsaturada (g)',
-      'Gordura Poli-insaturada (g)',
-      'Gordura Saturada (g)',
-      'Gordura Trans (g)',
-      'Fibra (g)',
-      'Sódio (mg)',
-      'Teor de Água (g)',
-      'Açúcar Total (g)',
-      'Açúcar Natural (g)',
-      'Açúcar Adicionado (g)',
-      'Índice Glicêmico',
-      'Carga Glicêmica (g)',
-      'Colesterol (mg)',
-      'Ferro Total (mg)',
-      'Ferro Tipo Heme (mg)',
-      'Ferro Tipo Não Heme (mg)',
-      'Ômega 3 (g)',
-      'Cálcio (mg)',
-      'Magnésio (mg)',
-      'Zinco (mg)',
-      'Potássio (mg)',
-      'Vitamina A (mcg)',
-      'Vitamina B12 (mcg)',
-      'Vitamina C (mg)',
-      'Vitamina D (mcg)',
-      'Vitamina E (mg)',
-      'Vitamina K (mcg)',
-      'Vitamina B1 (mg)',
-      'Vitamina B2 (mg)',
-      'Vitamina B3 (mg)',
-      'Vitamina B5 (mg)',
-      'Vitamina B6 (mg)',
-      'Vitamina B7 (mcg)',
-      'Ômega 6 (g)',
-      'Fitosterol (mg)',
-      'Cloro (mg)',
-      'PRAL (mEq)',
-      'Polióis (g)',
-      'Carboidrato Líquido (g)',
-      'Índice PDCAAS',
-      'Perfil de Aminoácidos Essenciais (mg)',
-      'Cobre (mg)',
-      'Manganês (mg)',
-      'Selênio (mcg)',
-      'Iodo (mcg)',
-      'Betacaroteno (mcg)',
-      'Licopeno (mcg)',
-      'Luteína Zeaxantina (mcg)',
-      'Ácido Fólico (mcg)',
-      'Polifenol Total (mg)',
-      'Carga Antioxidante (ORAC)',
-      'Teor de Álcool (%)'
-    ];
-
-    const gridContainer = document.createElement('div');
-    gridContainer.className = 'nutrition-grid';
-    
-    fields.forEach(field => {
-      const fieldId = field.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const fieldDiv = document.createElement('div');
-      fieldDiv.className = 'nutrition-field-cad';
-      fieldDiv.innerHTML = `
-        <label for="${fieldId}">${field}</label>
-        <input type="text" id="${fieldId}" class="form-field-input" 
-              placeholder="0,00" inputmode="decimal">
-      `;
-      gridContainer.appendChild(fieldDiv);
-    });
-
-    blockContent.appendChild(gridContainer);
-  };
-
-  document.querySelectorAll('.nutrition-grid input').forEach(input => {
-    input.addEventListener('input', function(e) {
-      this.value = this.value.replace(/[^0-9,]/g, '')
-                            .replace(/(,.*?),/g, '$1');
-    });
-  });
-  //FIM CRIAÇÃO CAMPOS BLOCO 2
-
 
   //FUNÇÕES DO SALVAMENTO DO ALIMENTO NO BANCO
   // Função para mostrar/ocultar o loader
@@ -915,236 +748,181 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   
   // Função para salvar no banco de dados
+  // Função para salvar no banco de dados (VERSÃO CORRIGIDA)
   const saveFoodItem = async () => {
-    // 1. Validação dos campos básicos (mantido igual)
+    // 1. Obtenção e validação dos campos básicos
     const foodName = document.getElementById('food-name')?.value.trim().toUpperCase();
     const brandName = document.getElementById('food-brand')?.value.trim().toUpperCase();
     const preparationSelect = document.getElementById('food-preparation');
     const groupSelect = document.getElementById('food-group');
     const portionInput = document.getElementById('food-portion')?.value.replace(',', '.');
 
+    // Validações básicas
     if (!foodName) {
-        alert('Por favor, preencha o nome do alimento');
-        return;
+      alert('Por favor, preencha o nome do alimento');
+      return;
     }
     if (!preparationSelect?.value) {
-        alert('Por favor, selecione o modo de preparo');
-        return;
+      alert('Por favor, selecione o modo de preparo');
+      return;
     }
     if (!groupSelect?.value) {
-        alert('Por favor, selecione o grupo alimentar');
-        return;
+      alert('Por favor, selecione o grupo alimentar');
+      return;
     }
 
-    // 2. Validação da Porção Base (mantido igual)
+    // 2. Validação da Porção Base
     const portionValue = parseFloat(portionInput);
     if (!portionInput || isNaN(portionValue) || portionValue <= 0) {
-        alert('Por favor, insira uma porção base válida (maior que 0)');
-        return;
+      alert('Por favor, insira uma porção base válida (maior que 0)');
+      return;
     }
 
-    // 3. Obtenção dos valores nutricionais (incluindo bloco 2)
+    // 3. Validação dos campos nutricionais
     const getNutritionValue = (id) => {
-        const input = document.getElementById(id);
-        if (!input || input.value.trim() === '') return null;
-        const value = parseFloat(input.value.replace(',', '.'));
-        return isNaN(value) ? null : value;
+      const input = document.getElementById(id);
+      if (!input || input.value.trim() === '') return null;
+      const value = parseFloat(input.value.replace(',', '.'));
+      return isNaN(value) ? null : value;
     };
 
-    // Campos obrigatórios do bloco 1
+    const nutritionValues = {
+      calories: getNutritionValue('food-calories'),
+      protein: getNutritionValue('food-protein'),
+      carbs: getNutritionValue('food-carbs'),
+      fat: getNutritionValue('food-fat')
+    };
+
+    // Verifica campos vazios
     const requiredNutritionFields = [
-        { id: 'food-calories', name: 'Calorias' },
-        { id: 'food-protein', name: 'Proteínas' },
-        { id: 'food-carbs', name: 'Carboidratos' },
-        { id: 'food-fat', name: 'Gorduras Totais' }
+      { value: nutritionValues.calories, name: 'Calorias' },
+      { value: nutritionValues.protein, name: 'Proteínas' },
+      { value: nutritionValues.carbs, name: 'Carboidratos' },
+      { value: nutritionValues.fat, name: 'Gorduras Totais' }
     ];
 
-    // Validação dos campos obrigatórios
     for (const field of requiredNutritionFields) {
-        const value = getNutritionValue(field.id);
-        if (value === null) {
-            alert(`Por favor, preencha o campo ${field.name}`);
-            return;
-        }
-        if (value < 0) {
-            alert(`O valor de ${field.name} não pode ser negativo`);
-            return;
-        }
+      if (field.value === null) {
+        alert(`Por favor, preencha o campo ${field.name}`);
+        return;
+      }
+      if (field.value < 0) {
+        alert(`O valor de ${field.name} não pode ser negativo`);
+        return;
+      }
     }
 
-    // 4. Processamento da imagem (mantido igual)
+    // 4. Processamento da imagem (opcional)
     let imageData = { img_registro_tipo: null, img_registro_dp: null, img_registro_web: null };
     const imagePreview = document.getElementById('image-preview');
     
     if (imagePreview?.src && imagePreview.style.display !== 'none') {
-        try {
-            const isWebImage = document.getElementById('image-filename').textContent === 'Imagem da web';
-            
-            if (isWebImage) {
-                if (!isValidUrl(imagePreview.src)) {
-                    alert('Por favor, insira uma URL de imagem válida');
-                    return;
-                }
-                imageData = {
-                    img_registro_tipo: 2,
-                    img_registro_web: imagePreview.src
-                };
-            } else {
-                const response = await fetch(imagePreview.src);
-                if (!response.ok) throw new Error('Falha ao carregar imagem');
-                
-                const blob = await response.blob();
-                if (blob.size > 2 * 1024 * 1024) {
-                    alert('A imagem deve ter no máximo 2MB');
-                    return;
-                }
-                
-                imageData = {
-                    img_registro_tipo: 1,
-                    img_registro_dp: blob
-                };
-            }
-        } catch (error) {
-            console.error('Erro ao processar imagem:', error);
-            alert('Erro ao processar a imagem selecionada');
+      try {
+        const isWebImage = document.getElementById('image-filename').textContent === 'Imagem da web';
+        
+        if (isWebImage) {
+          // Valida URL da imagem web
+          if (!isValidUrl(imagePreview.src)) {
+            alert('Por favor, insira uma URL de imagem válida');
             return;
+          }
+          imageData = {
+            img_registro_tipo: 2,
+            img_registro_web: imagePreview.src
+          };
+        } else {
+          // Processa imagem local
+          const response = await fetch(imagePreview.src);
+          if (!response.ok) throw new Error('Falha ao carregar imagem');
+          
+          const blob = await response.blob();
+          if (blob.size > 2 * 1024 * 1024) { // 2MB max
+            alert('A imagem deve ter no máximo 2MB');
+            return;
+          }
+          
+          imageData = {
+            img_registro_tipo: 1,
+            img_registro_dp: blob
+          };
         }
+      } catch (error) {
+        console.error('Erro ao processar imagem:', error);
+        alert('Erro ao processar a imagem selecionada');
+        return;
+      }
     }
 
     try {
-        toggleSaveLoader(true);
-        
-        // 5. Processamento da marca (mantido igual)
-        let brandId = null;
-        if (brandName) {
-            const brandResponse = await fetch('/api/brands/process', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome: brandName })
-            });
-            
-            if (!brandResponse.ok) {
-                throw new Error(await brandResponse.text() || 'Erro ao processar marca');
-            }
-            brandId = (await brandResponse.json()).id;
-        }
-
-        // 6. Cálculo proporcional para 100g/ml (agora para todos os campos)
-        const proportionFactor = 100 / portionValue;
-        
-        // Mapeamento completo dos campos nutricionais
-        const nutritionFields = {
-            // Bloco 1
-            'food-calories': 'caloria_kcal',
-            'food-protein': 'proteinas_g',
-            'food-carbs': 'carboidratos_g',
-            'food-fat': 'gorduras_totais_g',
-            
-            // Bloco 2
-            'gordura-monoinsaturada-g': 'gorduras_monoinsaturadas_g',
-            'gordura-poli-insaturada-g': 'gorduras_poliinsaturadas_g',
-            'gordura-saturada-g': 'gorduras_saturadas_g',
-            'gordura-trans-g': 'gorduras_trans_g',
-            'fibra-g': 'fibras_g',
-            'sodio-mg': 'sodio_mg',
-            'teor-de-agua-g': 'teor_agua_g',
-            'acucar-total-g': 'acucares_totais_g',
-            'acucar-natural-g': 'acucares_naturais_g',
-            'acucar-adicionado-g': 'acucares_adicionados_g',
-            'indice-glicemico': 'indice_glicemico',
-            'carga-glicemica-g': 'carga_glicemica_g',
-            'colesterol-mg': 'colesterol_mg',
-            'ferro-total-mg': 'ferro_total_mg',
-            'ferro-tipo-heme-mg': 'ferro_heme_mg',
-            'ferro-tipo-nao-heme-mg': 'ferro_n_heme_mg',
-            'omega-3-g': 'omega_3_g',
-            'calcio-mg': 'calcio_mg',
-            'magnesio-mg': 'magnesio_mg',
-            'zinco-mg': 'zinco_mg',
-            'potassio-mg': 'potassio_mg',
-            'vitamina-a-mcg': 'vitamina_a_mcg',
-            'vitamina-b12-mcg': 'vitamina_b12_mcg',
-            'vitamina-c-mg': 'vitamina_c_mg',
-            'vitamina-d-mcg': 'vitamina_d_mcg',
-            'vitamina-e-mg': 'vitamina_e_mg',
-            'vitamina-k-mcg': 'vitamina_k_mcg',
-            'vitamina-b1-mg': 'vitamina_b1_mg',
-            'vitamina-b2-mg': 'vitamina_b2_mg',
-            'vitamina-b3-mg': 'vitamina_b3_mg',
-            'vitamina-b5-mg': 'vitamina_b5_mg',
-            'vitamina-b6-mg': 'vitamina_b6_mg',
-            'vitamina-b7-mcg': 'vitamina_b7_mcg',
-            'omega-6-g': 'omega_6_g',
-            'fitosterol-mg': 'fitosterol_mg',
-            'cloro-mg': 'cloro_mg',
-            'pral-meq': 'pral_mEq',
-            'poliois-g': 'poliois_g',
-            'carboidrato-liquido-g': 'carboidratos_liquidos_g',
-            'indice-pdcaas': 'indice_quality_proteinas_pdcaas',
-            'perfil-de-aminoacidos-essenciais-mg': 'perfil_aminoacidos_ess_mg',
-            'cobre-mg': 'cobre_mg',
-            'manganes-mg': 'manganes_mg',
-            'selenio-mcg': 'selenio_mcg',
-            'iodo-mcg': 'iodo_mcg',
-            'betacaroteno-mcg': 'betacaroteno_mcg',
-            'licopeno-mcg': 'licopeno_mcg',
-            'luteina-zeaxantina-mcg': 'luteina_zeaxantina_mcg',
-            'acido-folico-mcg': 'acido_folico_mcg',
-            'polifenol-total-mg': 'polifenol_total_mg',
-            'carga-antioxidante-orac': 'carga_antioxidante_orac',
-            'teor-de-alcool': 'teor_alcool_prcent'
-        };
-
-        // Preparação do payload
-        const payload = {
-            item_name: foodName,
-            id_item_brand: brandId || null,
-            id_preparo: preparationSelect.value,
-            id_grupo: groupSelect.value,
-            id_tipo_medida: (groupSelect.value === '10' || groupSelect.value === '11') ? '5' : '1',
-            porcao_base: 100
-        };
-
-        // Processa todos os campos nutricionais
-        Object.entries(nutritionFields).forEach(([fieldId, dbField]) => {
-            const value = getNutritionValue(fieldId);
-            if (value !== null) {
-                payload[dbField] = (value * proportionFactor).toFixed(2);
-            }
+      toggleSaveLoader(true);
+      
+      // 5. Processamento da marca (se existir)
+      let brandId = null;
+      if (brandName) {
+        const brandResponse = await fetch('/api/brands/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome: brandName })
         });
-
-        // Criação do FormData
-        const formData = new FormData();
-        formData.append('data', JSON.stringify(payload));
         
-        // Adiciona imagem se existir
+        if (!brandResponse.ok) {
+          throw new Error(await brandResponse.text() || 'Erro ao processar marca');
+        }
+        brandId = (await brandResponse.json()).id;
+      }
+
+      // 6. Cálculo proporcional para 100g/ml
+      const proportionFactor = 100 / portionValue;
+      const calculatedValues = {
+        calories: (nutritionValues.calories * proportionFactor).toFixed(2),
+        protein: (nutritionValues.protein * proportionFactor).toFixed(2),
+        carbs: (nutritionValues.carbs * proportionFactor).toFixed(2),
+        fat: (nutritionValues.fat * proportionFactor).toFixed(2)
+      };
+
+      // 7. Preparação dos dados para envio
+      const formData = new FormData();
+      formData.append('item_name', foodName);
+      formData.append('id_item_brand', brandId || '');
+      formData.append('id_preparo', preparationSelect.value);
+      formData.append('id_grupo', groupSelect.value);
+      formData.append('id_tipo_medida', (groupSelect.value === '10' || groupSelect.value === '11') ? '5' : '1');
+      formData.append('caloria_kcal', calculatedValues.calories);
+      formData.append('proteinas_g', calculatedValues.protein);
+      formData.append('carboidratos_g', calculatedValues.carbs);
+      formData.append('gorduras_totais_g', calculatedValues.fat);
+      
+      // Adiciona dados da imagem se existir
+      if (imageData.img_registro_tipo) {
+        formData.append('img_registro_tipo', imageData.img_registro_tipo.toString());
         if (imageData.img_registro_tipo === 1) {
-            formData.append('img_registro_dp', imageData.img_registro_dp);
+          formData.append('img_registro_dp', imageData.img_registro_dp);
+        } else {
+          formData.append('img_registro_web', imageData.img_registro_web);
         }
+      }
 
-        // 7. Envio para o servidor
-        const response = await fetch('/api/foods', {
-            method: 'POST',
-            body: formData
-        });
+      // 8. Envio para o servidor
+      const response = await fetch('/api/foods', {
+        method: 'POST',
+        body: formData
+      });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || 'Erro ao salvar alimento');
-        }
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erro ao salvar alimento');
+      }
 
-        alert('Alimento salvo com sucesso!');
-        resetModal();
-        
+      alert('Alimento salvo com sucesso!');
+      resetModal();
+      
     } catch (error) {
-        console.error('Erro:', error);
-        alert(error.message.includes('Erro') ? error.message : 'Erro ao salvar alimento: ' + error.message);
+      console.error('Erro:', error);
+      alert(error.message.includes('Erro') ? error.message : 'Erro ao salvar alimento: ' + error.message);
     } finally {
-        toggleSaveLoader(false);
+      toggleSaveLoader(false);
     }
   };
-  
-
 
   // Função auxiliar para validar URLs
   function isValidUrl(string) {
@@ -1183,11 +961,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fieldsToClear.forEach(id => {
       const field = document.getElementById(id);
       if (field) field.value = '';
-    });
-
-    // Limpa todos os campos nutricionais do bloco 2
-    document.querySelectorAll('#cadastro-block2 .nutrition-field-cad input').forEach(input => {
-      input.value = '';
     });
 
     const portionInput = document.getElementById('food-portion');
