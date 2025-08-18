@@ -313,13 +313,24 @@ document.addEventListener('DOMContentLoaded', function() {
             gordurasTElement.textContent = '0,00';
           }
 
+          //======PRIMEIRO PASSO BLOCO 2 - DETALHES======
+          //Fibras
+          function formatFibras(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const fibrasElement = document.getElementById('food-detail-fibras');
+          if (foodData.fibras_g) {
+            fibrasElement.textContent = formatFibras(foodData.fibras_g);
+          } else {
+            fibrasElement.textContent = '0,00';
+          }          
+
           //Gorduras Saturadas
-          // Função para formatar número com 2 decimais e vírgula
           function formatGordurasSat(value) {
             const num = parseFloat(value || 0);
             return num.toFixed(2).replace('.', ',');
           }
-          // Atualizar o campo gorduras totais com os dados do banco
           const gordurasSatElement = document.getElementById('food-detail-gSat');
           if (foodData.gorduras_totais_g) {
             gordurasSatElement.textContent = formatGordurasSat(foodData.gorduras_saturadas_g);
@@ -327,14 +338,684 @@ document.addEventListener('DOMContentLoaded', function() {
             gordurasSatElement.textContent = '0,00';
           }
 
+          //Gorduras Monosaturadas
+          function formatMono(value) {
+          const num = parseFloat(value || 0);
+          return num.toFixed(2).replace('.', ',');
+          }
+          const monoElement = document.getElementById('food-detail-mono');
+          if (foodData.gorduras_monoinsaturadas_g) {
+          monoElement.textContent = formatMono(foodData.gorduras_monoinsaturadas_g);
+          } else {
+          monoElement.textContent = '0,00';
+          }
 
+          //Gorduras Poliinsaturadas
+          function formatPoly(value) {
+          const num = parseFloat(value || 0);
+          return num.toFixed(2).replace('.', ',');
+          }
+          const polyElement = document.getElementById('food-detail-poly');
+          if (foodData.gorduras_poliinsaturadas_g) {
+          polyElement.textContent = formatPoly(foodData.gorduras_poliinsaturadas_g);
+          } else {
+          polyElement.textContent = '0,00';
+          }
+
+          //Gorduras Trans
+          function formatTrans(value) {
+          const num = parseFloat(value || 0);
+          return num.toFixed(2).replace('.', ',');
+          }
+          const transElement = document.getElementById('food-detail-trans');
+          if (foodData.gorduras_trans_g) {
+          transElement.textContent = formatTrans(foodData.gorduras_trans_g);
+          } else {
+          transElement.textContent = '0,00';
+          }
+
+          //OmegaT
+          function formatOmegaT(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const omegaTElement = document.getElementById('food-detail-omegaT');
+          if (foodData.omega_3_g) {
+            omegaTElement.textContent = formatOmegaT(foodData.omega_3_g);
+          } else {
+            omegaTElement.textContent = '0,00';
+          }
+
+          //AcucarT
+          function formatAcucarT(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const acucarTElement = document.getElementById('food-detail-acucarT');
+          if (foodData.acucares_totais_g) {
+            acucarTElement.textContent = formatAcucarT(foodData.acucares_totais_g);
+          } else {
+            acucarTElement.textContent = '0,00';
+          }
+
+          //AcucarN
+          function formatAcucarN(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const acucarNElement = document.getElementById('food-detail-acucarN');
+          if (foodData.acucares_naturais_g) {
+            acucarNElement.textContent = formatAcucarN(foodData.acucares_naturais_g);
+          } else {
+            acucarNElement.textContent = '0,00';
+          }
+
+          //AcucarAdd
+          function formatAcucarAdd(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const acucarAddElement = document.getElementById('food-detail-acucarAdd');
+          if (foodData.acucares_adicionados_g) {
+            acucarAddElement.textContent = formatAcucarAdd(foodData.acucares_adicionados_g);
+          } else {
+            acucarAddElement.textContent = '0,00';
+          }
+
+          //IndiceG
+          function formatIndiceG(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const indiceGElement = document.getElementById('food-detail-indiceG');
+          if (foodData.indice_glicemico) {
+            indiceGElement.textContent = formatIndiceG(foodData.indice_glicemico);
+          } else {
+            indiceGElement.textContent = '0,00';
+          }
+
+          //CargaG
+          function formatCargaG(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const cargaGElement = document.getElementById('food-detail-cargaG');
+          if (foodData.carga_glicemica_g) {
+            cargaGElement.textContent = formatCargaG(foodData.carga_glicemica_g);
+          } else {
+            cargaGElement.textContent = '0,00';
+          }
+
+          //Sodio
+          function formatSodio(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const sodioElement = document.getElementById('food-detail-sodio');
+          if (foodData.sodio_mg) {
+            sodioElement.textContent = formatSodio(foodData.sodio_mg);
+          } else {
+            sodioElement.textContent = '0,00';
+          }
+
+          //Potassio
+          function formatPotassio(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const potassioElement = document.getElementById('food-detail-potassio');
+          if (foodData.potassio_mg) {
+            potassioElement.textContent = formatPotassio(foodData.potassio_mg);
+          } else {
+            potassioElement.textContent = '0,00';
+          }
+
+          //Colesterol
+          function formatColesterol(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const colesterolElement = document.getElementById('food-detail-colesterol');
+          if (foodData.colesterol_mg) {
+            colesterolElement.textContent = formatColesterol(foodData.colesterol_mg);
+          } else {
+            colesterolElement.textContent = '0,00';
+          }
+
+          //Calcio
+          function formatCalcio(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const calcioElement = document.getElementById('food-detail-calcio');
+          if (foodData.calcio_mg) {
+            calcioElement.textContent = formatCalcio(foodData.calcio_mg);
+          } else {
+            calcioElement.textContent = '0,00';
+          }
+
+          //FerroT
+          function formatFerroT(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const ferroTElement = document.getElementById('food-detail-ferroT');
+          if (foodData.ferro_total_mg) {
+            ferroTElement.textContent = formatFerroT(foodData.ferro_total_mg);
+          } else {
+            ferroTElement.textContent = '0,00';
+          }
+
+          //FerroH
+          function formatFerroH(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const ferroHElement = document.getElementById('food-detail-ferroH');
+          if (foodData.ferro_heme_mg) {
+            ferroHElement.textContent = formatFerroH(foodData.ferro_heme_mg);
+          } else {
+            ferroHElement.textContent = '0,00';
+          }
+
+          //FerroN
+          function formatFerroN(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const ferroNElement = document.getElementById('food-detail-ferroN');
+          if (foodData.ferro_n_heme_mg) {
+            ferroNElement.textContent = formatFerroN(foodData.ferro_n_heme_mg);
+          } else {
+            ferroNElement.textContent = '0,00';
+          }
+
+          //VitaminaA
+          function formatVitaminaA(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaAElement = document.getElementById('food-detail-vitaminaA');
+          if (foodData.vitamina_a_mcg) {
+            vitaminaAElement.textContent = formatVitaminaA(foodData.vitamina_a_mcg);
+          } else {
+            vitaminaAElement.textContent = '0,00';
+          }
+
+          //VitaminaC
+          function formatVitaminaC(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaCElement = document.getElementById('food-detail-vitaminaC');
+          if (foodData.vitamina_c_mg) {
+            vitaminaCElement.textContent = formatVitaminaC(foodData.vitamina_c_mg);
+          } else {
+            vitaminaCElement.textContent = '0,00';
+          }
+
+          //VitaminaD
+          function formatVitaminaD(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaDElement = document.getElementById('food-detail-vitaminaD');
+          if (foodData.vitamina_d_mcg) {
+            vitaminaDElement.textContent = formatVitaminaD(foodData.vitamina_d_mcg);
+          } else {
+            vitaminaDElement.textContent = '0,00';
+          }
+
+          //VitaminaB12
+          function formatVitaminaB12(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB12Element = document.getElementById('food-detail-vitaminaB12');
+          if (foodData.vitamina_b12_mcg) {
+            vitaminaB12Element.textContent = formatVitaminaB12(foodData.vitamina_b12_mcg);
+          } else {
+            vitaminaB12Element.textContent = '0,00';
+          }
+
+          //VitaminaE
+          function formatVitaminaE(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaEElement = document.getElementById('food-detail-vitaminaE');
+          if (foodData.vitamina_e_mg) {
+            vitaminaEElement.textContent = formatVitaminaE(foodData.vitamina_e_mg);
+          } else {
+            vitaminaEElement.textContent = '0,00';
+          }
+
+          //VitaminaB1
+          function formatVitaminaB1(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB1Element = document.getElementById('food-detail-vitaminaB1');
+          if (foodData.vitamina_b1_mg) {
+            vitaminaB1Element.textContent = formatVitaminaB1(foodData.vitamina_b1_mg);
+          } else {
+            vitaminaB1Element.textContent = '0,00';
+          }
+
+          //VitaminaB2
+          function formatVitaminaB2(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB2Element = document.getElementById('food-detail-vitaminaB2');
+          if (foodData.vitamina_b2_mg) {
+            vitaminaB2Element.textContent = formatVitaminaB2(foodData.vitamina_b2_mg);
+          } else {
+            vitaminaB2Element.textContent = '0,00';
+          }
+
+          //VitaminaB3
+          function formatVitaminaB3(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB3Element = document.getElementById('food-detail-vitaminaB3');
+          if (foodData.vitamina_b3_mg) {
+            vitaminaB3Element.textContent = formatVitaminaB3(foodData.vitamina_b3_mg);
+          } else {
+            vitaminaB3Element.textContent = '0,00';
+          }
+
+          //VitaminaB5
+          function formatVitaminaB5(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB5Element = document.getElementById('food-detail-vitaminaB5');
+          if (foodData.vitamina_b5_mg) {
+            vitaminaB5Element.textContent = formatVitaminaB5(foodData.vitamina_b5_mg);
+          } else {
+            vitaminaB5Element.textContent = '0,00';
+          }
+
+          //VitaminaB6
+          function formatVitaminaB6(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB6Element = document.getElementById('food-detail-vitaminaB6');
+          if (foodData.vitamina_b6_mg) {
+            vitaminaB6Element.textContent = formatVitaminaB6(foodData.vitamina_b6_mg);
+          } else {
+            vitaminaB6Element.textContent = '0,00';
+          }
+
+          //VitaminaB7
+          function formatVitaminaB7(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaB7Element = document.getElementById('food-detail-vitaminaB7');
+          if (foodData.vitamina_b7_mcg) {
+            vitaminaB7Element.textContent = formatVitaminaB7(foodData.vitamina_b7_mcg);
+          } else {
+            vitaminaB7Element.textContent = '0,00';
+          }
+
+          //VitaminaK
+          function formatVitaminaK(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const vitaminaKElement = document.getElementById('food-detail-vitaminaK');
+          if (foodData.vitamina_k_mcg) {
+            vitaminaKElement.textContent = formatVitaminaK(foodData.vitamina_k_mcg);
+          } else {
+            vitaminaKElement.textContent = '0,00';
+          }
+
+          //Cloro
+          function formatCloro(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const cloroElement = document.getElementById('food-detail-cloro');
+          if (foodData.cloro_mg) {
+            cloroElement.textContent = formatCloro(foodData.cloro_mg);
+          } else {
+            cloroElement.textContent = '0,00';
+          }
+
+          //Magnesio
+          function formatMagnesio(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const magnesioElement = document.getElementById('food-detail-magnesio');
+          if (foodData.magnesio_mg) {
+            magnesioElement.textContent = formatMagnesio(foodData.magnesio_mg);
+          } else {
+            magnesioElement.textContent = '0,00';
+          }
+
+          //Zinco
+          function formatZinco(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const zincoElement = document.getElementById('food-detail-zinco');
+          if (foodData.zinco_mg) {
+            zincoElement.textContent = formatZinco(foodData.zinco_mg);
+          } else {
+            zincoElement.textContent = '0,00';
+          }
+
+          //Cobre
+          function formatCobre(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const cobreElement = document.getElementById('food-detail-cobre');
+          if (foodData.cobre_mg) {
+            cobreElement.textContent = formatCobre(foodData.cobre_mg);
+          } else {
+            cobreElement.textContent = '0,00';
+          }
+
+          //Manganes
+          function formatManganes(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const manganesElement = document.getElementById('food-detail-manganes');
+          if (foodData.manganes_mg) {
+            manganesElement.textContent = formatManganes(foodData.manganes_mg);
+          } else {
+            manganesElement.textContent = '0,00';
+          }
+
+          //Selenio
+          function formatSelenio(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const selenioElement = document.getElementById('food-detail-selenio');
+          if (foodData.selenio_mcg) {
+            selenioElement.textContent = formatSelenio(foodData.selenio_mcg);
+          } else {
+            selenioElement.textContent = '0,00';
+          }
+
+          //Iodo
+          function formatIodo(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const iodoElement = document.getElementById('food-detail-iodo');
+          if (foodData.iodo_mcg) {
+            iodoElement.textContent = formatIodo(foodData.iodo_mcg);
+          } else {
+            iodoElement.textContent = '0,00';
+          }
+
+          //Betacaroteno
+          function formatBetacaroteno(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const betacarotenoElement = document.getElementById('food-detail-betacaroteno');
+          if (foodData.betacaroteno_mcg) {
+            betacarotenoElement.textContent = formatBetacaroteno(foodData.betacaroteno_mcg);
+          } else {
+            betacarotenoElement.textContent = '0,00';
+          }
+
+          //Licopeno
+          function formatLicopeno(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const licopenoElement = document.getElementById('food-detail-licopeno');
+          if (foodData.licopeno_mcg) {
+            licopenoElement.textContent = formatLicopeno(foodData.licopeno_mcg);
+          } else {
+            licopenoElement.textContent = '0,00';
+          }
+
+          //Luteina
+          function formatLuteina(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const luteinaElement = document.getElementById('food-detail-luteina');
+          if (foodData.luteina_zeaxantina_mcg) {
+            luteinaElement.textContent = formatLuteina(foodData.luteina_zeaxantina_mcg);
+          } else {
+            luteinaElement.textContent = '0,00';
+          }
+
+          //OmegaS
+          function formatOmegaS(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const omegaSElement = document.getElementById('food-detail-omegaS');
+          if (foodData.omega_6_g) {
+            omegaSElement.textContent = formatOmegaS(foodData.omega_6_g);
+          } else {
+            omegaSElement.textContent = '0,00';
+          }
+
+          //OmegaX
+          function formatOmegaX(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const omegaXElement = document.getElementById('food-detail-omegaX');
+          if (foodData.om6_x_om3) {
+            omegaXElement.textContent = formatOmegaX(foodData.om6_x_om3);
+          } else {
+            omegaXElement.textContent = '0,00';
+          }
+
+          //Fitosterol
+          function formatFitosterol(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const fitosterolElement = document.getElementById('food-detail-fitosterol');
+          if (foodData.fitosterol_mg) {
+            fitosterolElement.textContent = formatFitosterol(foodData.fitosterol_mg);
+          } else {
+            fitosterolElement.textContent = '0,00';
+          }
+
+          //CarboidratosL
+          function formatCarboidratosL(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const carboidratosLElement = document.getElementById('food-detail-carboidratosL');
+          if (foodData.carboidratos_liquidos_g) {
+            carboidratosLElement.textContent = formatCarboidratosL(foodData.carboidratos_liquidos_g);
+          } else {
+            carboidratosLElement.textContent = '0,00';
+          }
+
+          //Poliois
+          function formatPoliois(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const polioisElement = document.getElementById('food-detail-poliois');
+          if (foodData.poliois_g) {
+            polioisElement.textContent = formatPoliois(foodData.poliois_g);
+          } else {
+            polioisElement.textContent = '0,00';
+          }
+
+          //Aminoacidos
+          function formatAminoacidos(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const aminoacidosElement = document.getElementById('food-detail-aminoacidos');
+          if (foodData.perfil_aminoacidos_ess_mg) {
+            aminoacidosElement.textContent = formatAminoacidos(foodData.perfil_aminoacidos_ess_mg);
+          } else {
+            aminoacidosElement.textContent = '0,00';
+          }
+
+          //IndicePDCAAS
+          function formatIndicePDCAAS(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const indicePDCAASElement = document.getElementById('food-detail-indicePDCAAS');
+          if (foodData.indice_quality_proteinas_pdcaas) {
+            indicePDCAASElement.textContent = formatIndicePDCAAS(foodData.indice_quality_proteinas_pdcaas);
+          } else {
+            indicePDCAASElement.textContent = '0,00';
+          }
+
+          //Prals
+          function formatPral(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const pralElement = document.getElementById('food-detail-pral');
+          if (foodData.pral_meq) {
+            pralElement.textContent = formatPral(foodData.pral_meq);
+          } else {
+            pralElement.textContent = '0,00';
+          }
+
+          //AcidoF
+          function formatAcidoF(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const acidoFElement = document.getElementById('food-detail-acidoF');
+          if (foodData.acido_folico_mcg) {
+            acidoFElement.textContent = formatAcidoF(foodData.acido_folico_mcg);
+          } else {
+            acidoFElement.textContent = '0,00';
+          }
+
+          //Polifenol
+          function formatPolifenol(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const polifenolElement = document.getElementById('food-detail-polifenol');
+          if (foodData.polifenol_total_mg) {
+            polifenolElement.textContent = formatPolifenol(foodData.polifenol_total_mg);
+          } else {
+            polifenolElement.textContent = '0,00';
+          }
+
+          //CargaAn
+          function formatCargaAn(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const cargaAnElement = document.getElementById('food-detail-cargaAn');
+          if (foodData.carga_antioxidante_orac) {
+            cargaAnElement.textContent = formatCargaAn(foodData.carga_antioxidante_orac);
+          } else {
+            cargaAnElement.textContent = '0,00';
+          }
+
+          //TeorAl
+          function formatTeorAl(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const teorAlElement = document.getElementById('food-detail-teorAl');
+          if (foodData.teor_alcool_prcent) {
+            teorAlElement.textContent = formatTeorAl(foodData.teor_alcool_prcent);
+          } else {
+            teorAlElement.textContent = '0,00';
+          }
+
+          //TeorAgua
+          function formatTeorAgua(value) {
+            const num = parseFloat(value || 0);
+            return num.toFixed(2).replace('.', ',');
+          }
+          const teorAguaElement = document.getElementById('food-detail-teorAgua');
+          if (foodData.teor_agua_g) {
+            teorAguaElement.textContent = formatTeorAgua(foodData.teor_agua_g);
+          } else {
+            teorAguaElement.textContent = '0,00';
+          }
+
+          
+          //======FIM PRIMEIRO PASSO BLOCO 2 - DETALHES======
+
+          //======SEGUNDO PASSO BLOCO 2 - DETALHES======
           //Recalculo Calorias
           const baseCalories = parseFloat(foodData.caloria_kcal) || 0;
           const baseProteinas = parseFloat(foodData.proteinas_g) || 0;
           const baseCarboidratos = parseFloat(foodData.carboidratos_g) || 0;
           const baseGordurasT = parseFloat(foodData.gorduras_totais_g) || 0;
+          const baseFibras = parseFloat(foodData.fibras_g) || 0;
           const baseGordurasSat = parseFloat(foodData.gorduras_saturadas_g) || 0;
+          const baseMono = parseFloat(foodData.gorduras_monoinsaturadas_g) || 0;
+          const basePoly = parseFloat(foodData.gorduras_poliinsaturadas_g) || 0;
+          const baseTrans = parseFloat(foodData.gorduras_trans_g) || 0;
+          const baseOmegaT = parseFloat(foodData.omega_3_g) || 0;
+          const baseAcucarT = parseFloat(foodData.acucares_totais_g) || 0;
+          const baseAcucarN = parseFloat(foodData.acucares_naturais_g) || 0;
+          const baseAcucarAdd = parseFloat(foodData.acucares_adicionados_g) || 0;
+          const baseIndiceG = parseFloat(foodData.indice_glicemico) || 0;
+          const baseCargaG = parseFloat(foodData.carga_glicemica_g) || 0;
+          const baseSodio = parseFloat(foodData.sodio_mg) || 0;
+          const basePotassio = parseFloat(foodData.potassio_mg) || 0;
+          const baseColesterol = parseFloat(foodData.colesterol_mg) || 0;
+          const baseCalcio = parseFloat(foodData.calcio_mg) || 0;
+          const baseFerroT = parseFloat(foodData.ferro_total_mg) || 0;
+          const baseFerroH = parseFloat(foodData.ferro_heme_mg) || 0;
+          const baseFerroN = parseFloat(foodData.ferro_n_heme_mg) || 0;
+          const baseVitaminaA = parseFloat(foodData.vitamina_a_mcg) || 0;
+          const baseVitaminaC = parseFloat(foodData.vitamina_c_mg) || 0;
+          const baseVitaminaD = parseFloat(foodData.vitamina_d_mcg) || 0;
+          const baseVitaminaB12 = parseFloat(foodData.vitamina_b12_mcg) || 0;
+          const baseVitaminaE = parseFloat(foodData.vitamina_e_mg) || 0;
+          const baseVitaminaB1 = parseFloat(foodData.vitamina_b1_mg) || 0;
+          const baseVitaminaB2 = parseFloat(foodData.vitamina_b2_mg) || 0;
+          const baseVitaminaB3 = parseFloat(foodData.vitamina_b3_mg) || 0;
+          const baseVitaminaB5 = parseFloat(foodData.vitamina_b5_mg) || 0;
+          const baseVitaminaB6 = parseFloat(foodData.vitamina_b6_mg) || 0;
+          const baseVitaminaB7 = parseFloat(foodData.vitamina_b7_mcg) || 0;
+          const baseVitaminaK = parseFloat(foodData.vitamina_k_mcg) || 0;
+          const baseCloro = parseFloat(foodData.cloro_mg) || 0;
+          const baseMagnesio = parseFloat(foodData.magnesio_mg) || 0;
+          const baseZinco = parseFloat(foodData.zinco_mg) || 0;
+          const baseCobre = parseFloat(foodData.cobre_mg) || 0;
+          const baseManganes = parseFloat(foodData.manganes_mg) || 0;
+          const baseSelenio = parseFloat(foodData.selenio_mcg) || 0;
+          const baseIodo = parseFloat(foodData.iodo_mcg) || 0;
+          const baseBetacaroteno = parseFloat(foodData.betacaroteno_mcg) || 0;
+          const baseLicopeno = parseFloat(foodData.licopeno_mcg) || 0;
+          const baseLuteina = parseFloat(foodData.luteina_zeaxantina_mcg) || 0;
+          const baseOmegaS = parseFloat(foodData.omega_6_g) || 0;
+          const baseOmegaX = parseFloat(foodData.om6_x_om3) || 0;
+          const baseFitosterol = parseFloat(foodData.fitosterol_mg) || 0;
+          const baseCarboidratosL = parseFloat(foodData.carboidratos_liquidos_g) || 0;
+          const basePoliois = parseFloat(foodData.poliois_g) || 0;
+          const baseAminoacidos = parseFloat(foodData.perfil_aminoacidos_ess_mg) || 0;
+          const baseIndicePDCAAS = parseFloat(foodData.indice_quality_proteinas_pdcaas) || 0;
+          const basePral = parseFloat(foodData.pral_meq) || 0;
+          const baseAcidoF = parseFloat(foodData.acido_folico_mcg) || 0;
+          const basePolifenol = parseFloat(foodData.polifenol_total_mg) || 0;
+          const baseCargaAn = parseFloat(foodData.carga_antioxidante_orac) || 0;
+          const baseTeorAl = parseFloat(foodData.teor_alcool_prcent) || 0;
+          const baseTeorAgua = parseFloat(foodData.teor_agua_g) || 0;
 
+          //======FIM SEGUNDO PASSO BLOCO 2 - DETALHES======
+
+          //======TERCEIRO PASSO BLOCO 2 - DETALHES======
           // Função para recalcular TUDO quando a porção mudar
           function updateNutritionValues() {
             const portion = parseFloat(document.getElementById('food-detail-portion').value.replace(',', '.')) || 100;
@@ -343,8 +1024,61 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('food-detail-proteinas').textContent = formatProteinas(baseProteinas * factor);
             document.getElementById('food-detail-carboidratos').textContent = formatCarboidratos(baseCarboidratos * factor);
             document.getElementById('food-detail-gordurasT').textContent = formatGordurasT(baseGordurasT * factor);
+            document.getElementById('food-detail-fibras').textContent = formatFibras(baseFibras * factor);
             document.getElementById('food-detail-gSat').textContent = formatGordurasT(baseGordurasSat * factor);
+            document.getElementById('food-detail-mono').textContent = formatMono(baseMono * factor);
+            document.getElementById('food-detail-poly').textContent = formatPoly(basePoly * factor);
+            document.getElementById('food-detail-trans').textContent = formatTrans(baseTrans * factor);
+            document.getElementById('food-detail-omegaT').textContent = formatOmegaT(baseOmegaT * factor);
+            document.getElementById('food-detail-acucarT').textContent = formatAcucarT(baseAcucarT * factor);
+            document.getElementById('food-detail-acucarN').textContent = formatAcucarN(baseAcucarN * factor);
+            document.getElementById('food-detail-acucarAdd').textContent = formatAcucarAdd(baseAcucarAdd * factor);
+            document.getElementById('food-detail-indiceG').textContent = formatIndiceG(baseIndiceG * factor);
+            document.getElementById('food-detail-cargaG').textContent = formatCargaG(baseCargaG * factor);
+            document.getElementById('food-detail-sodio').textContent = formatSodio(baseSodio * factor);
+            document.getElementById('food-detail-potassio').textContent = formatPotassio(basePotassio * factor);
+            document.getElementById('food-detail-colesterol').textContent = formatColesterol(baseColesterol * factor);
+            document.getElementById('food-detail-calcio').textContent = formatCalcio(baseCalcio * factor);
+            document.getElementById('food-detail-ferroT').textContent = formatFerroT(baseFerroT * factor);
+            document.getElementById('food-detail-ferroH').textContent = formatFerroH(baseFerroH * factor);
+            document.getElementById('food-detail-ferroN').textContent = formatFerroN(baseFerroN * factor);
+            document.getElementById('food-detail-vitaminaA').textContent = formatVitaminaA(baseVitaminaA * factor);
+            document.getElementById('food-detail-vitaminaC').textContent = formatVitaminaC(baseVitaminaC * factor);
+            document.getElementById('food-detail-vitaminaD').textContent = formatVitaminaD(baseVitaminaD * factor);
+            document.getElementById('food-detail-vitaminaB12').textContent = formatVitaminaB12(baseVitaminaB12 * factor);
+            document.getElementById('food-detail-vitaminaE').textContent = formatVitaminaE(baseVitaminaE * factor);
+            document.getElementById('food-detail-vitaminaB1').textContent = formatVitaminaB1(baseVitaminaB1 * factor);
+            document.getElementById('food-detail-vitaminaB2').textContent = formatVitaminaB2(baseVitaminaB2 * factor);
+            document.getElementById('food-detail-vitaminaB3').textContent = formatVitaminaB3(baseVitaminaB3 * factor);
+            document.getElementById('food-detail-vitaminaB5').textContent = formatVitaminaB5(baseVitaminaB5 * factor);
+            document.getElementById('food-detail-vitaminaB6').textContent = formatVitaminaB6(baseVitaminaB6 * factor);
+            document.getElementById('food-detail-vitaminaB7').textContent = formatVitaminaB7(baseVitaminaB7 * factor);
+            document.getElementById('food-detail-vitaminaK').textContent = formatVitaminaK(baseVitaminaK * factor);
+            document.getElementById('food-detail-cloro').textContent = formatCloro(baseCloro * factor);
+            document.getElementById('food-detail-magnesio').textContent = formatMagnesio(baseMagnesio * factor);
+            document.getElementById('food-detail-zinco').textContent = formatZinco(baseZinco * factor);
+            document.getElementById('food-detail-cobre').textContent = formatCobre(baseCobre * factor);
+            document.getElementById('food-detail-manganes').textContent = formatManganes(baseManganes * factor);
+            document.getElementById('food-detail-selenio').textContent = formatSelenio(baseSelenio * factor);
+            document.getElementById('food-detail-iodo').textContent = formatIodo(baseIodo * factor);
+            document.getElementById('food-detail-betacaroteno').textContent = formatBetacaroteno(baseBetacaroteno * factor);
+            document.getElementById('food-detail-licopeno').textContent = formatLicopeno(baseLicopeno * factor);
+            document.getElementById('food-detail-luteina').textContent = formatLuteina(baseLuteina * factor);
+            document.getElementById('food-detail-omegaS').textContent = formatOmegaS(baseOmegaS * factor);
+            document.getElementById('food-detail-omegaX').textContent = formatOmegaX(baseOmegaX * factor);
+            document.getElementById('food-detail-fitosterol').textContent = formatFitosterol(baseFitosterol * factor);
+            document.getElementById('food-detail-carboidratosL').textContent = formatCarboidratosL(baseCarboidratosL * factor);
+            document.getElementById('food-detail-poliois').textContent = formatPoliois(basePoliois * factor);
+            document.getElementById('food-detail-aminoacidos').textContent = formatAminoacidos(baseAminoacidos * factor);
+            document.getElementById('food-detail-indicePDCAAS').textContent = formatIndicePDCAAS(baseIndicePDCAAS * factor);
+            document.getElementById('food-detail-pral').textContent = formatPral(basePral * factor);
+            document.getElementById('food-detail-acidoF').textContent = formatAcidoF(baseAcidoF * factor);
+            document.getElementById('food-detail-polifenol').textContent = formatPolifenol(basePolifenol * factor);
+            document.getElementById('food-detail-cargaAn').textContent = formatCargaAn(baseCargaAn * factor);
+            document.getElementById('food-detail-teorAl').textContent = formatTeorAl(baseTeorAl * factor);
+            document.getElementById('food-detail-teorAgua').textContent = formatTeorAgua(baseTeorAgua * factor);
           }
+          //======FIM TERCEIRO PASSO BLOCO 2 - DETALHES======
           // Configura os eventos no campo de porção
           portionInput.addEventListener('input', function() {
             // Permite apenas números e no máximo uma vírgula
@@ -855,6 +1589,30 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('food-trans-fat').addEventListener('input', function() {
       this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
     });
+
+    //PASSO 4 CADASTRO
+    const camposParaValidar = [
+      'food-fibras', 'food-sodio', 
+      'food-acucarT', 'food-acucarN', 'food-acucarAdd',
+      'food-indiceG', 'food-cargaG', 'food-teorAgua',
+      'food-colesterol', 'food-ferrtoT', 'food-ferroH', 'food-ferroN',
+      'food-omegaT', 'food-calcio', 'food-magnesio', 'food-zinco', 'food-potassio',
+      'food-vitaminaA', 'food-vitaminaB12', 'food-vitaminaC', 'food-vitaminaD',
+      'food-vitaminaE', 'food-vitaminaK', 'food-vitaminaB1', 'food-vitaminaB2',
+      'food-vitaminaB3', 'food-vitaminaB5', 'food-vitaminaB6', 'food-vitaminaB7',
+      'food-omegaS', 'food-fitosterol', 'food-cloro', 'food-pral', 'food-poliois',
+      'food-carboidratosL', 'food-indicePDCAAS', 'food-aminoacidos', 'food-cobre', 'food-manganes',
+      'food-selenio', 'food-iodo', 'food-betacaroteno', 'food-licopeno', 'food-luteina',
+      'food-acidoF', 'food-polifenol', 'food-cargaAn', 'food-teorAl'
+    ];
+
+    camposParaValidar.forEach(id => {
+      document.getElementById(id)?.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9,]/g, '').replace(/(,.*?),/g, '$1');
+      });
+    });
+    //FIM PASSO 4 CADASTRO
+
   }
   //Fim Criação Campos Bloco 2
 
@@ -920,6 +1678,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return isNaN(value) ? null : value;
     };
 
+    //======PRIMEIRO PASSO BLOCO 2======
     const nutritionValues = {
       calories: getNutritionValue('food-calories'),
       protein: getNutritionValue('food-protein'),
@@ -929,8 +1688,57 @@ document.addEventListener('DOMContentLoaded', function() {
       monoFat: getNutritionValue('food-mono-fat') || 0,  // Se não preenchido, assume 0
       polyFat: getNutritionValue('food-poly-fat') || 0,   // Se não preenchido, assume 0
       satFat: getNutritionValue('food-sat-fat') || 0,  // Se não preenchido, assume 0
-      transFat: getNutritionValue('food-trans-fat') || 0   // Se não preenchido, assume 0
+      transFat: getNutritionValue('food-trans-fat') || 0,   // Se não preenchido, assume 0
+      fibras: getNutritionValue('food-fibras') || 0,   // Se não preenchido, assume 0
+      sodio: getNutritionValue('food-sodio') || 0,   // Se não preenchido, assume 0
+      acucarT: getNutritionValue('food-acucarT') || 0,
+      acucarN: getNutritionValue('food-acucarN') || 0,
+      acucarAdd: getNutritionValue('food-acucarAdd') || 0,
+      indiceG: getNutritionValue('food-indiceG') || 0,
+      cargaG: getNutritionValue('food-cargaG') || 0,
+      teorAgua: getNutritionValue('food-teorAgua') || 0,
+      colesterol: getNutritionValue('food-colesterol') || 0,
+      ferrtoT: getNutritionValue('food-ferrtoT') || 0,
+      ferroH: getNutritionValue('food-ferroH') || 0,
+      ferroN: getNutritionValue('food-ferroN') || 0,
+      omegaT: getNutritionValue('food-omegaT') || 0,
+      calcio: getNutritionValue('food-calcio') || 0,
+      magnesio: getNutritionValue('food-magnesio') || 0,
+      zinco: getNutritionValue('food-zinco') || 0,
+      potassio: getNutritionValue('food-potassio') || 0,
+      vitaminaA: getNutritionValue('food-vitaminaA') || 0,
+      vitaminaB12: getNutritionValue('food-vitaminaB12') || 0,
+      vitaminaC: getNutritionValue('food-vitaminaC') || 0,
+      vitaminaD: getNutritionValue('food-vitaminaD') || 0,
+      vitaminaE: getNutritionValue('food-vitaminaE') || 0,
+      vitaminaK: getNutritionValue('food-vitaminaK') || 0,
+      vitaminaB1: getNutritionValue('food-vitaminaB1') || 0,
+      vitaminaB2: getNutritionValue('food-vitaminaB2') || 0,
+      vitaminaB3: getNutritionValue('food-vitaminaB3') || 0,
+      vitaminaB5: getNutritionValue('food-vitaminaB5') || 0,
+      vitaminaB6: getNutritionValue('food-vitaminaB6') || 0,
+      vitaminaB7: getNutritionValue('food-vitaminaB7') || 0,
+      omegaS: getNutritionValue('food-omegaS') || 0,
+      fitosterol: getNutritionValue('food-fitosterol') || 0,
+      cloro: getNutritionValue('food-cloro') || 0,
+      pral: getNutritionValue('food-pral') || 0,
+      poliois: getNutritionValue('food-poliois') || 0,
+      carboidratosL: getNutritionValue('food-carboidratosL') || 0,
+      indicePDCAAS: getNutritionValue('food-indicePDCAAS') || 0,
+      aminoacidos: getNutritionValue('food-aminoacidos') || 0,
+      cobre: getNutritionValue('food-cobre') || 0,
+      manganes: getNutritionValue('food-manganes') || 0,
+      selenio: getNutritionValue('food-selenio') || 0,
+      iodo: getNutritionValue('food-iodo') || 0,
+      betacaroteno: getNutritionValue('food-betacaroteno') || 0,
+      licopeno: getNutritionValue('food-licopeno') || 0,
+      luteina: getNutritionValue('food-luteina') || 0,
+      acidoF: getNutritionValue('food-acidoF') || 0,
+      polifenol: getNutritionValue('food-polifenol') || 0,
+      cargaAn: getNutritionValue('food-cargaAn') || 0,
+      teorAl: getNutritionValue('food-teorAl') || 0
     };
+    //======FIM PRIMEIRO PASSO BLOCO 2======
 
     // Verifica campos vazios
     const requiredNutritionFields = [
@@ -1018,11 +1826,62 @@ document.addEventListener('DOMContentLoaded', function() {
         carbs: (nutritionValues.carbs * proportionFactor).toFixed(2),
         fat: (nutritionValues.fat * proportionFactor).toFixed(2),
         // NOVOS CAMPOS (mesmo fator de proporção)
+        //======SEGUNDO PASSO BLOCO 2======
         monoFat: (nutritionValues.monoFat * proportionFactor).toFixed(2),
         polyFat: (nutritionValues.polyFat * proportionFactor).toFixed(2),
         satFat: (nutritionValues.satFat * proportionFactor).toFixed(2),
-        transFat: (nutritionValues.transFat * proportionFactor).toFixed(2)
+        transFat: (nutritionValues.transFat * proportionFactor).toFixed(2),
+        fibras: (nutritionValues.fibras * proportionFactor).toFixed(2),
+        sodio: (nutritionValues.sodio * proportionFactor).toFixed(2),
+        fibras: (nutritionValues.fibras * proportionFactor).toFixed(2),
+        acucarT: (nutritionValues.acucarT * proportionFactor).toFixed(2),
+        acucarN: (nutritionValues.acucarN * proportionFactor).toFixed(2),
+        acucarAdd: (nutritionValues.acucarAdd * proportionFactor).toFixed(2),
+        indiceG: (nutritionValues.indiceG * proportionFactor).toFixed(2),
+        cargaG: (nutritionValues.cargaG * proportionFactor).toFixed(2),
+        teorAgua: (nutritionValues.teorAgua * proportionFactor).toFixed(2),
+        colesterol: (nutritionValues.colesterol * proportionFactor).toFixed(2),
+        ferrtoT: (nutritionValues.ferrtoT * proportionFactor).toFixed(2),
+        ferroH: (nutritionValues.ferroH * proportionFactor).toFixed(2),
+        ferroN: (nutritionValues.ferroN * proportionFactor).toFixed(2),
+        omegaT: (nutritionValues.omegaT * proportionFactor).toFixed(2),
+        calcio: (nutritionValues.calcio * proportionFactor).toFixed(2),
+        magnesio: (nutritionValues.magnesio * proportionFactor).toFixed(2),
+        zinco: (nutritionValues.zinco * proportionFactor).toFixed(2),
+        potassio: (nutritionValues.potassio * proportionFactor).toFixed(2),
+        vitaminaA: (nutritionValues.vitaminaA * proportionFactor).toFixed(2),
+        vitaminaB12: (nutritionValues.vitaminaB12 * proportionFactor).toFixed(2),
+        vitaminaC: (nutritionValues.vitaminaC * proportionFactor).toFixed(2),
+        vitaminaD: (nutritionValues.vitaminaD * proportionFactor).toFixed(2),
+        vitaminaE: (nutritionValues.vitaminaE * proportionFactor).toFixed(2),
+        vitaminaK: (nutritionValues.vitaminaK * proportionFactor).toFixed(2),
+        vitaminaB1: (nutritionValues.vitaminaB1 * proportionFactor).toFixed(2),
+        vitaminaB2: (nutritionValues.vitaminaB2 * proportionFactor).toFixed(2),
+        vitaminaB3: (nutritionValues.vitaminaB3 * proportionFactor).toFixed(2),
+        vitaminaB5: (nutritionValues.vitaminaB5 * proportionFactor).toFixed(2),
+        vitaminaB6: (nutritionValues.vitaminaB6 * proportionFactor).toFixed(2),
+        vitaminaB7: (nutritionValues.vitaminaB7 * proportionFactor).toFixed(2),
+        omegaS: (nutritionValues.omegaS * proportionFactor).toFixed(2),
+        fitosterol: (nutritionValues.fitosterol * proportionFactor).toFixed(2),
+        cloro: (nutritionValues.cloro * proportionFactor).toFixed(2),
+        pral: (nutritionValues.pral * proportionFactor).toFixed(2),
+        poliois: (nutritionValues.poliois * proportionFactor).toFixed(2),
+        carboidratosL: (nutritionValues.carboidratosL * proportionFactor).toFixed(2),
+        indicePDCAAS: (nutritionValues.indicePDCAAS * proportionFactor).toFixed(2),
+        aminoacidos: (nutritionValues.aminoacidos * proportionFactor).toFixed(2),
+        cobre: (nutritionValues.cobre * proportionFactor).toFixed(2),
+        manganes: (nutritionValues.manganes * proportionFactor).toFixed(2),
+        selenio: (nutritionValues.selenio * proportionFactor).toFixed(2),
+        iodo: (nutritionValues.iodo * proportionFactor).toFixed(2),
+        betacaroteno: (nutritionValues.betacaroteno * proportionFactor).toFixed(2),
+        licopeno: (nutritionValues.licopeno * proportionFactor).toFixed(2),
+        luteina: (nutritionValues.luteina * proportionFactor).toFixed(2),
+        acidoF: (nutritionValues.acidoF * proportionFactor).toFixed(2),
+        polifenol: (nutritionValues.polifenol * proportionFactor).toFixed(2),
+        cargaAn: (nutritionValues.cargaAn * proportionFactor).toFixed(2),
+        teorAl: (nutritionValues.teorAl * proportionFactor).toFixed(2)
       };
+      //======FIM SEGUNDO PASSO BLOCO 2======
 
       // 7. Preparação dos dados para envio
       const formData = new FormData();
@@ -1036,10 +1895,61 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('carboidratos_g', calculatedValues.carbs);
       formData.append('gorduras_totais_g', calculatedValues.fat);
       // Junto com os outros campos nutricionais (linha ~600)
+      //======TERCEIRO PASSO BLOCO 2======
       formData.append('gorduras_monoinsaturadas_g', calculatedValues.monoFat);
       formData.append('gorduras_poliinsaturadas_g', calculatedValues.polyFat);
       formData.append('gorduras_saturadas_g', calculatedValues.satFat);
       formData.append('gorduras_trans_g', calculatedValues.transFat);
+      formData.append('fibras_g', calculatedValues.fibras);
+      formData.append('sodio_mg', calculatedValues.sodio);
+      formData.append('fibras_g', calculatedValues.fibras);
+      formData.append('acucares_totais_g', calculatedValues.acucarT);
+      formData.append('acucares_naturais_g', calculatedValues.acucarN);
+      formData.append('acucares_adicionados_g', calculatedValues.acucarAdd);
+      formData.append('indice_glicemico', calculatedValues.indiceG);
+      formData.append('carga_glicemica_g', calculatedValues.cargaG);
+      formData.append('teor_agua_g', calculatedValues.teorAgua);
+      formData.append('colesterol_mg', calculatedValues.colesterol);
+      formData.append('ferro_total_mg', calculatedValues.ferrtoT);
+      formData.append('ferro_heme_mg', calculatedValues.ferroH);
+      formData.append('ferro_n_heme_mg', calculatedValues.ferroN);
+      formData.append('omega_3_g', calculatedValues.omegaT);
+      formData.append('calcio_mg', calculatedValues.calcio);
+      formData.append('magnesio_mg', calculatedValues.magnesio);
+      formData.append('zinco_mg', calculatedValues.zinco);
+      formData.append('potassio_mg', calculatedValues.potassio);
+      formData.append('vitamina_a_mcg', calculatedValues.vitaminaA);
+      formData.append('vitamina_b12_mcg', calculatedValues.vitaminaB12);
+      formData.append('vitamina_c_mg', calculatedValues.vitaminaC);
+      formData.append('vitamina_d_mcg', calculatedValues.vitaminaD);
+      formData.append('vitamina_e_mg', calculatedValues.vitaminaE);
+      formData.append('vitamina_k_mcg', calculatedValues.vitaminaK);
+      formData.append('vitamina_b1_mg', calculatedValues.vitaminaB1);
+      formData.append('vitamina_b2_mg', calculatedValues.vitaminaB2);
+      formData.append('vitamina_b3_mg', calculatedValues.vitaminaB3);
+      formData.append('vitamina_b5_mg', calculatedValues.vitaminaB5);
+      formData.append('vitamina_b6_mg', calculatedValues.vitaminaB6);
+      formData.append('vitamina_b7_mcg', calculatedValues.vitaminaB7);
+      formData.append('omega_6_g', calculatedValues.omegaS);
+      formData.append('fitosterol_mg', calculatedValues.fitosterol);
+      formData.append('cloro_mg', calculatedValues.cloro);
+      formData.append('pral_meq', calculatedValues.pral);
+      formData.append('poliois_g', calculatedValues.poliois);
+      formData.append('carboidratos_liquidos_g', calculatedValues.carboidratosL);
+      formData.append('indice_quality_proteinas_pdcaas', calculatedValues.indicePDCAAS);
+      formData.append('perfil_aminoacidos_ess_mg', calculatedValues.aminoacidos);
+      formData.append('cobre_mg', calculatedValues.cobre);
+      formData.append('manganes_mg', calculatedValues.manganes);
+      formData.append('selenio_mcg', calculatedValues.selenio);
+      formData.append('iodo_mcg', calculatedValues.iodo);
+      formData.append('betacaroteno_mcg', calculatedValues.betacaroteno);
+      formData.append('licopeno_mcg', calculatedValues.licopeno);
+      formData.append('luteina_zeaxantina_mcg', calculatedValues.luteina);
+      formData.append('acido_folico_mcg', calculatedValues.acidoF);
+      formData.append('polifenol_total_mg', calculatedValues.polifenol);
+      formData.append('carga_antioxidante_orac', calculatedValues.cargaAn);
+      formData.append('teor_alcool_prcent', calculatedValues.teorAl);
+      //======FIM TERCEIRO PASSO BLOCO 2======
 
       // Adiciona dados da imagem se existir
       if (imageData.img_registro_tipo) {

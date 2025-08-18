@@ -56,13 +56,13 @@ app.get('/api/foods/search', async (req, res) => {
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
-      WHERE f.item_name ILIKE ANY($1::text[])
-      OR b.nome ILIKE ANY($1::text[])
+      WHERE unaccent(f.key_words) ILIKE unaccent($1)
+      OR (b.nome IS NOT NULL AND unaccent(b.nome) ILIKE unaccent($1))
       ORDER BY f.item_name ASC
       LIMIT 100`;
     
-    const searchPatterns = searchTerms.map(term => `%${term}%`);
-    const result = await pool.query(query, [searchPatterns]);
+    const searchPattern = `%${term}%`;
+    const result = await pool.query(query, [searchPattern]);
     
     const foods = result.rows.map(row => ({
       id: row.id,
@@ -220,6 +220,7 @@ app.post('/api/foods', async (req, res) => {
       imgBuffer = req.files.img_registro_dp.data;
     }
 
+    //======PRIMEIRO PASSO BLOCO 2======
     // Query SQL atualizada
     const query = `
       INSERT INTO tbl_foods (
@@ -236,13 +237,66 @@ app.post('/api/foods', async (req, res) => {
         gorduras_poliinsaturadas_g,
         gorduras_saturadas_g,
         gorduras_trans_g,
+        fibras_g,
+        sodio_mg,
+        acucares_totais_g,
+        acucares_naturais_g,
+        acucares_adicionados_g,
+        indice_glicemico,
+        carga_glicemica_g,
+        teor_agua_g,
+        colesterol_mg,
+        ferro_total_mg,
+        ferro_heme_mg,
+        ferro_n_heme_mg,
+        omega_3_g,
+        calcio_mg,
+        magnesio_mg,
+        zinco_mg,
+        potassio_mg,
+        vitamina_a_mcg,
+        vitamina_b12_mcg,
+        vitamina_c_mg,
+        vitamina_d_mcg,
+        vitamina_e_mg,
+        vitamina_k_mcg,
+        vitamina_b1_mg,
+        vitamina_b2_mg,
+        vitamina_b3_mg,
+        vitamina_b5_mg,
+        vitamina_b6_mg,
+        vitamina_b7_mcg,
+        omega_6_g,
+        fitosterol_mg,
+        cloro_mg,
+        pral_meq,
+        poliois_g,
+        carboidratos_liquidos_g,
+        indice_quality_proteinas_pdcaas,
+        perfil_aminoacidos_ess_mg,
+        cobre_mg,
+        manganes_mg,
+        selenio_mcg,
+        iodo_mcg,
+        betacaroteno_mcg,
+        licopeno_mcg,
+        luteina_zeaxantina_mcg,
+        acido_folico_mcg,
+        polifenol_total_mg,
+        carga_antioxidante_orac,
+        teor_alcool_prcent,
         img_registro_tipo,
         img_registro_web,
         img_registro_dp,
         porcao_base
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, 100)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15,$16, 
+      $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31,
+      $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45,
+      $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57,
+      $58, $59, $60, $61, $62, $63, $64, 100)
       RETURNING id`;
 
+    //======SEGUNDO PASSO BLOCO 2======
     const result = await pool.query(query, [
       item_name,
       id_item_brand || null,
@@ -257,6 +311,54 @@ app.post('/api/foods', async (req, res) => {
       parseFloat(req.body.gorduras_poliinsaturadas_g),  // NOVO CAMPO (default 0)
       parseFloat(req.body.gorduras_saturadas_g),  // NOVO CAMPO (default 0)
       parseFloat(req.body.gorduras_trans_g),  // NOVO CAMPO (default 0)
+      parseFloat(req.body.fibras_g),  // NOVO CAMPO (default 0)
+      parseFloat(req.body.sodio_mg),  // NOVO CAMPO (default 0)
+      parseFloat(req.body.acucares_totais_g),
+      parseFloat(req.body.acucares_naturais_g),
+      parseFloat(req.body.acucares_adicionados_g),
+      parseFloat(req.body.indice_glicemico),
+      parseFloat(req.body.carga_glicemica_g),
+      parseFloat(req.body.teor_agua_g),
+      parseFloat(req.body.colesterol_mg),
+      parseFloat(req.body.ferro_total_mg),
+      parseFloat(req.body.ferro_heme_mg),
+      parseFloat(req.body.ferro_n_heme_mg),
+      parseFloat(req.body.omega_3_g),
+      parseFloat(req.body.calcio_mg),
+      parseFloat(req.body.magnesio_mg),
+      parseFloat(req.body.zinco_mg),
+      parseFloat(req.body.potassio_mg),
+      parseFloat(req.body.vitamina_a_mcg),
+      parseFloat(req.body.vitamina_b12_mcg),
+      parseFloat(req.body.vitamina_c_mg),
+      parseFloat(req.body.vitamina_d_mcg),
+      parseFloat(req.body.vitamina_e_mg),
+      parseFloat(req.body.vitamina_k_mcg),
+      parseFloat(req.body.vitamina_b1_mg),
+      parseFloat(req.body.vitamina_b2_mg),
+      parseFloat(req.body.vitamina_b3_mg),
+      parseFloat(req.body.vitamina_b5_mg),
+      parseFloat(req.body.vitamina_b6_mg),
+      parseFloat(req.body.vitamina_b7_mcg),
+      parseFloat(req.body.omega_6_g),
+      parseFloat(req.body.fitosterol_mg),
+      parseFloat(req.body.cloro_mg),
+      parseFloat(req.body.pral_meq),
+      parseFloat(req.body.poliois_g),
+      parseFloat(req.body.carboidratos_liquidos_g),
+      parseFloat(req.body.indice_quality_proteinas_pdcaas),
+      parseFloat(req.body.perfil_aminoacidos_ess_mg),
+      parseFloat(req.body.cobre_mg),
+      parseFloat(req.body.manganes_mg),
+      parseFloat(req.body.selenio_mcg),
+      parseFloat(req.body.iodo_mcg),
+      parseFloat(req.body.betacaroteno_mcg),
+      parseFloat(req.body.licopeno_mcg),
+      parseFloat(req.body.luteina_zeaxantina_mcg),
+      parseFloat(req.body.acido_folico_mcg),
+      parseFloat(req.body.polifenol_total_mg),
+      parseFloat(req.body.carga_antioxidante_orac),
+      parseFloat(req.body.teor_alcool_prcent),
       img_registro_tipo || null,
       img_registro_web || null,
       imgBuffer
@@ -291,7 +393,59 @@ app.get('/api/foods/:id', async (req, res) => {
         f.proteinas_g,
         f.carboidratos_g,
         f.gorduras_totais_g,
-        f.gorduras_saturadas_g
+        f.fibras_g,
+        f.gorduras_saturadas_g,
+        f.gorduras_monoinsaturadas_g,
+        f.gorduras_poliinsaturadas_g,
+        f.gorduras_trans_g,
+        f.omega_3_g,
+        f.acucares_totais_g,
+        f.acucares_naturais_g,
+        f.acucares_adicionados_g,
+        f.indice_glicemico,
+        f.carga_glicemica_g,
+        f.sodio_mg,
+        f.potassio_mg,
+        f.colesterol_mg,
+        f.calcio_mg,
+        f.ferro_total_mg,
+        f.ferro_heme_mg,
+        f.ferro_n_heme_mg,
+        f.vitamina_a_mcg,
+        f.vitamina_c_mg,
+        f.vitamina_d_mcg,
+        f.vitamina_b12_mcg,
+        f.vitamina_e_mg,
+        f.vitamina_b1_mg,
+        f.vitamina_b2_mg,
+        f.vitamina_b3_mg,
+        f.vitamina_b5_mg,
+        f.vitamina_b6_mg,
+        f.vitamina_b7_mcg,
+        f.vitamina_k_mcg,
+        f.cloro_mg,
+        f.magnesio_mg,
+        f.zinco_mg,
+        f.cobre_mg,
+        f.manganes_mg,
+        f.selenio_mcg,
+        f.iodo_mcg,
+        f.betacaroteno_mcg,
+        f.licopeno_mcg,
+        f.luteina_zeaxantina_mcg,
+        f.omega_6_g,
+        f.om6_x_om3,
+        f.fitosterol_mg,
+        f.carboidratos_liquidos_g,
+        f.poliois_g,
+        f.perfil_aminoacidos_ess_mg,
+        f.indice_quality_proteinas_pdcaas,
+        f.pral_meq,
+        f.acido_folico_mcg,
+        f.polifenol_total_mg,
+        f.carga_antioxidante_orac,
+        f.teor_alcool_prcent,
+        f.teor_agua_g
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
