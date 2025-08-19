@@ -7,8 +7,8 @@
 - Já criamos a tela principal e as páginas dos módulos
 - As páginas dos módulos contam apenas com o header e o footer
 - Tudo que vamos desenvolver nas páginas será no corpo
-- Vamos iniciar o desenvolvimento do modulo de alimentos
-- O modulo de alimentos será na página mod_food.html
+- Estamos no meio do desenvolvimento do modulo de alimentos
+- O modulo de alimentos é na página mod_food.html
 - Para essa página, quero um arquivo CSS separado
 - Para essa página, quero um arquivo js separado (as partes que forem exclusivas)
 - A estrutura atual do site é: 
@@ -27,9 +27,11 @@ C:\USERS\SLIMA\DESKTOP\VIS_FIT_V1\
 │   ├── css\
 │   │   ├── base.css
 │   │   └── modules.css
+│   │   └── food.css
 │   │
 │   ├── js\
 │   │   └── main.js
+│   │   └── food.js
 │   │
 │   └── pages\
 │       ├── mod_atividades.html
@@ -49,5 +51,7 @@ C:\USERS\SLIMA\DESKTOP\VIS_FIT_V1\
 └── Projeto (arquivo/pasta)
 
 COMANDOS:
-- Vou te enviar os arquivos base.css, modules.css, index.html, mod_food.html, server.js e main.js e você deve revisar para ter uma noção de como está a estrutura, ok?
+- Vou te enviar os arquivos food.css, mod_food.html, food.js e server.js  e você deve revisar e identificar o que está gerando os problemas abaixo:
+1 - Ao clicar no botão de cadastro de novo alimento, não está abrindo o Modal de Cadastro. Não aparece nenhum erro no console do navegador. Nada acontece
+2 - Ao pesquisar um alimento na barra de pesquisa, nada acontece. Não aparece nenhum erro no console do navegador. Nada acontece. 
 - Vou enviar um arquivo por vez. Você diz se entendeu e não faça nada. Aguarde orientações para prosseguir. 

@@ -1,9 +1,32 @@
-VIS - Tela Principal
+Considere:
+- O projeto está sendo criado no VSCode
+- A estrutura atual do projeto fica na raiz: "C:\Users\slima\Desktop\vis_fit_v1" sendo:
+vis_fit_v1/  
+│  
+├── frontend/  
+│   ├── assets/          (imagens, ícones)  
+│   ├── css/             (estilos)  
+│   ├── js/              (scripts)  
+│   ├── pages/           (páginas dos módulos)  
+│   └── index.html       (página principal)  
+│  
+├── backend/  
+│   ├── routes/          (rotas da API)  
+│   ├── controllers/     (lógica de cada módulo)  
+│   └── models/          (conexão com o banco de dados)  
+│
+├── server.js
+├── package.json
+└── README.md            (documentação do projeto) 
+
+==============================================
+
+VIS - Tela Principal (index.html)
 
 Funcionalidades Principais:
 1 - Cards de acesso aos módulos
 
-Elementos:
+0 - Cabeçalho
 1 - Card "Meus Projetos"
 2 - Card "Alimentos"
 3 - Card "Receitas"
@@ -32,46 +55,46 @@ Elementos:
 Card: Meus Projeto
 Label: Projetos
 Ícone: Algo relacionado a projeto, gráfico
-Página: mod_projetos
+Página: mod_projetos.html
 
 Card: Alimentos
 Label: Alimentos
 Ícone: Maça
-Página: mod_food
+Página: mod_food.html
 
 Card: Receitas
 Label: Receitas
 Ícone: receita comida, algo relacionado
-Página: mod_receita
+Página: mod_receita.html
 
 Card: Refeições
 Label: Refeições
 Ícone: Prato, talheres
-Página: mod_meals
+Página: mod_meals.html
 
 Card: Suplementação
 Label: Suplementos
 Ícone: pílulas, vitaminas, algo relacionado
-Página: mod_sup
+Página: mod_sup.html
 
 Card: Dietas
 Label: Dietas
 Ícone: Balança, dieta, emagrecimentos, algo relacionado
-Página: mod_diet
+Página: mod_diet.html
 
 Card: Atividades Fisicas
 Label: Atividades Físicas
 Ícone: Bicicleta, atividade, esporte, algo relacionado
-Página: mod_atividades
+Página: mod_atividades.html
 
 Card: Treinos
 Label: Treinos
 Ícone: Academia, peso, algo relacionado
-Página: mod_treinos
+Página: mod_treinos.html
 
 Card: Saúde
 Label: Saúde Complementar
 Ícone: Coração, saúde, algo relacionado
-Página: mod_health
+Página: mod_health.html
 
 

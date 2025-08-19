@@ -190,7 +190,17 @@ app.get('/api/foodgroup-options', async (req, res) => {
   }
 });
 
-// Rota para opções de Grupo Alimentar
+// Rota para obter lista de alérgenos
+app.get('/api/alergenos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_alergenos ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar alérgenos:', error);
+    res.status(500).json({ error: 'Erro ao carregar alérgenos' });
+  }
+});
+
 app.post('/api/foods', async (req, res) => {
   try {
     // Extrai os campos do FormData
@@ -285,6 +295,7 @@ app.post('/api/foods', async (req, res) => {
         polifenol_total_mg,
         carga_antioxidante_orac,
         teor_alcool_prcent,
+        id_alergenos,
         img_registro_tipo,
         img_registro_web,
         img_registro_dp,
@@ -293,7 +304,7 @@ app.post('/api/foods', async (req, res) => {
       $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31,
       $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45,
       $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57,
-      $58, $59, $60, $61, $62, $63, $64, 100)
+      $58, $59, $60, $61, $62, $63, $64, $65, 100)
       RETURNING id`;
 
     //======SEGUNDO PASSO BLOCO 2======
@@ -359,6 +370,7 @@ app.post('/api/foods', async (req, res) => {
       parseFloat(req.body.polifenol_total_mg),
       parseFloat(req.body.carga_antioxidante_orac),
       parseFloat(req.body.teor_alcool_prcent),
+      req.body.id_alergenos || null,
       img_registro_tipo || null,
       img_registro_web || null,
       imgBuffer
