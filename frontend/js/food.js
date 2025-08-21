@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentPage = 1;
   const itemsPerPage = 20;
   let searchResults = [];
-  let selectedAlergenos = [];
+ 
 
   // Elementos DOM - com verificações
   const getElement = (id) => {
@@ -67,36 +67,19 @@ document.addEventListener('DOMContentLoaded', function() {
       createNutritionFields();
       createImageField();
       createFatFields();
-      setupAlergenosField();
+      //CAMPOS BLOCO 3
+      loadAllergenOptions();
+      setupAllergensSelect();
+      //FIM CAMPOS BLOCO 3
       const cadastroModal = document.getElementById('food-cadastro-modal');
       if (cadastroModal) {
         cadastroModal.style.display = 'block';
         setTimeout(resetModalScroll, 10);
-        
-        // Garantir que o dropdown seja posicionado corretamente (NOVO)
-        setTimeout(() => {
-          const trigger = document.querySelector('.alergenos-trigger');
-          if (trigger) {
-            trigger.addEventListener('click', function() {
-              setTimeout(positionDropdown, 10);
-            });
-          }
-        }, 100);
       } else {
         console.error('Modal de cadastro não encontrado');
       }
     });
   }
-
-  //CAMPO ALERGENOS
-  // Função para obter alérgenos selecionados no formato "1;3;5"
-  function getSelectedAlergenos() {
-    const selectedOptions = document.querySelectorAll('.alergenos-option.selected');
-    return Array.from(selectedOptions)
-      .map(opt => opt.dataset.id)
-      .join(';');
-  }
-  //FIM CAMPO ALERGENOS
 
   // Verificar se elementos essenciais existem
   if (!searchBar || !searchBtn || !newFoodBtn) {
@@ -203,6 +186,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // Atualizar controles de paginação
     updatePaginationControls();
   }
+
+  //DETALHES ALERGENOS
+  // Função para carregar e exibir alérgenos no modal de detalhes
+  const loadAndDisplayAllergens = async (allergensIds) => {
+    try {
+      const allergensElement = document.getElementById('food-detail-allergens');
+      
+      if (!allergensIds || allergensIds.trim() === '') {
+        allergensElement.textContent = 'Nenhum alérgeno identificado';
+        return;
+      }
+
+      // Converter string de IDs separados por ; em array
+      const idsArray = allergensIds.split(';').filter(id => id.trim() !== '');
+      
+      if (idsArray.length === 0) {
+        allergensElement.textContent = 'Nenhum alérgeno identificado';
+        return;
+      }
+
+      // Fazer requisição para obter os nomes dos alérgenos
+      const response = await fetch(`/api/allergens-by-ids?ids=${encodeURIComponent(idsArray.join(','))}`);
+      
+      if (!response.ok) {
+        throw new Error('Erro ao carregar alérgenos');
+      }
+      
+      const allergens = await response.json();
+      
+      // Exibir os nomes separados por vírgula
+      if (allergens.length > 0) {
+        const allergenNames = allergens.map(a => a.nome);
+        allergensElement.textContent = allergenNames.join(', ');
+      } else {
+        allergensElement.textContent = 'Nenhum alérgeno identificado';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar alérgenos:', error);
+      document.getElementById('food-detail-allergens').textContent = 'Erro ao carregar informações';
+    }
+  };
+  //FIM DETALHES ALERGENOS  
 
   // Conectar linhas da tabela ao modal de detalhes
   //Abrir modal de detalhes ao clicar no registro
@@ -1101,6 +1126,15 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('food-detail-teorAgua').textContent = formatTeorAgua(baseTeorAgua * factor);
           }
           //======FIM TERCEIRO PASSO BLOCO 2 - DETALHES======
+
+          //DETALHES CAMPO ALERGENOS
+          if (foodData.id_alergenos) {
+            await loadAndDisplayAllergens(foodData.id_alergenos);
+          } else {
+            document.getElementById('food-detail-allergens').textContent = 'Nenhum alérgeno identificado';
+          }
+          //FIM DETALHES CAMPO ALERGENOS
+
           // Configura os eventos no campo de porção
           portionInput.addEventListener('input', function() {
             // Permite apenas números e no máximo uma vírgula
@@ -1638,121 +1672,95 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   //Fim Criação Campos Bloco 2
 
-  // Função para criar e gerenciar o campo de alérgenos
-  function setupAlergenosField() {
-    const trigger = document.querySelector('.alergenos-trigger');
-    const dropdown = document.querySelector('.alergenos-dropdown');
-    const tagsContainer = document.querySelector('.alergenos-tags');
-
-    if (!trigger || !dropdown) {
-      console.error('Elementos do campo alérgenos não encontrados');
-      return;
-    }
-
-    // Fecha dropdown ao clicar fora (EVENTO MODIFICADO)
-    const closeDropdownOnClickOutside = (e) => {
-      if (!e.target.closest('.alergenos-select')) {
-        dropdown.classList.remove('visible');
-      }
-    };
-
-    // Remove event listener anterior se existir
-    document.removeEventListener('click', closeDropdownOnClickOutside);
-    
-    // Configura eventos (FUNÇÃO REVISADA)
-    function setupEvents() {
-      // Abre/fecha dropdown
-      trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        positionDropdown();
-        dropdown.classList.toggle('visible');
-      });
-
-      // Seleção de opção
-      dropdown.addEventListener('click', (e) => {
-        const option = e.target.closest('.alergenos-option');
-        if (!option) return;
-
-        const id = option.dataset.id;
-        const name = option.textContent;
-
-        if (selectedAlergenos.length >= 5 && !option.classList.contains('selected')) {
-          alert('Máximo de 5 alérgenos selecionados');
-          return;
-        }
-
-        option.classList.toggle('selected');
-        
-        if (option.classList.contains('selected')) {
-          selectedAlergenos.push({ id, name });
-        } else {
-          selectedAlergenos = selectedAlergenos.filter(a => a.id !== id);
-        }
-
-        updateTags();
-      });
-
-      // Adiciona novo event listener para fechar ao clicar fora
-      document.addEventListener('click', closeDropdownOnClickOutside);
-    }
-
-    // Atualiza tags visíveis (MESMA FUNÇÃO)
-    function updateTags() {
-      tagsContainer.innerHTML = selectedAlergenos.map(alergeno => `
-        <div class="alergeno-tag" data-id="${alergeno.id}">
-          ${alergeno.name}
-          <span class="alergeno-tag-remove">&times;</span>
-        </div>
-      `).join('');
-
-      // Adiciona eventos de remoção
-      document.querySelectorAll('.alergeno-tag-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const tag = e.target.closest('.alergeno-tag');
-          const id = tag.dataset.id;
-          
-          selectedAlergenos = selectedAlergenos.filter(a => a.id !== id);
-          updateTags();
-          
-          const option = dropdown.querySelector(`[data-id="${id}"]`);
-          if (option) option.classList.remove('selected');
-        });
-      });
-    }
-
-    // Posiciona o dropdown corretamente (MESMA FUNÇÃO)
-    function positionDropdown() {
-      const rect = trigger.getBoundingClientRect();
-      dropdown.style.left = `${rect.left}px`;
-      dropdown.style.top = `${rect.bottom}px`;
-      dropdown.style.width = `${rect.width}px`;
-    }
-
-    // Inicializa (AGORA COM TRY-CATCH)
+  //CRIAÇÃO CAMPOS BLOCO 3
+  // Função para carregar opções de alérgenos
+  const loadAllergenOptions = async () => {
     try {
-      loadOptions();
-    } catch (error) {
-      console.error('Erro ao inicializar campo alérgenos:', error);
-    }
-
-    // Função para carregar opções (MESMA FUNÇÃO)
-    async function loadOptions() {
-      try {
-        const response = await fetch('/api/alergenos');
-        const data = await response.json();
-        
-        dropdown.innerHTML = data.map(item => `
-          <div class="alergenos-option" data-id="${item.id}">
-            ${item.nome}
-          </div>
-        `).join('');
-        
-        setupEvents();
-      } catch (error) {
-        console.error('Erro ao carregar alérgenos:', error);
+      const response = await fetch('/api/allergen-options');
+      const options = await response.json();
+      
+      const select = document.getElementById('food-allergens');
+      if (select) {
+        select.innerHTML = '<option value="">Selecione os alérgenos...</option>' +
+          options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('');
       }
+    } catch (error) {
+      console.error('Erro ao carregar opções de alérgenos:', error);
     }
-  }
+  };
+
+  // Variável para armazenar alérgenos selecionados
+  let selectedAllergens = [];
+
+  // Função para atualizar as tags de alérgenos
+  const updateAllergenTags = () => {
+    const tagsContainer = document.getElementById('allergens-tags-container');
+    if (!tagsContainer) return;
+    
+    tagsContainer.innerHTML = '';
+    
+    selectedAllergens.forEach(allergen => {
+      const tag = document.createElement('div');
+      tag.className = 'allergen-tag';
+      tag.innerHTML = `
+        ${allergen.name}
+        <span class="allergen-tag-remove" data-id="${allergen.id}">×</span>
+      `;
+      tagsContainer.appendChild(tag);
+    });
+    
+    // Adicionar evento de remoção
+    document.querySelectorAll('.allergen-tag-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.target.getAttribute('data-id');
+        removeAllergen(id);
+      });
+    });
+  };
+
+  // Função para adicionar alérgeno
+  const addAllergen = (id, name) => {
+    if (!selectedAllergens.some(a => a.id === id)) {
+      selectedAllergens.push({ id, name });
+      updateAllergenTags();
+    }
+  };
+
+  // Função para remover alérgeno
+  const removeAllergen = (id) => {
+    selectedAllergens = selectedAllergens.filter(a => a.id !== id);
+    
+    // Desselecionar no select múltiplo
+    const select = document.getElementById('food-allergens');
+    if (select) {
+      Array.from(select.options).forEach(option => {
+        if (option.value === id) {
+          option.selected = false;
+        }
+      });
+    }
+    
+    updateAllergenTags();
+  };
+
+  // Configurar evento para o select de alérgenos
+  const setupAllergensSelect = () => {
+    const select = document.getElementById('food-allergens');
+    if (select) {
+      select.addEventListener('change', (e) => {
+        const selectedOptions = Array.from(e.target.selectedOptions);
+        selectedOptions.forEach(option => {
+          if (option.value) {
+            addAllergen(option.value, option.text);
+          }
+        });
+        
+        // Limpar seleção
+        e.target.selectedIndex = -1;
+      });
+    }
+  };
+  //FIM CRIAÇÃO CAMPOS BLOCO 3
 
   //FUNÇÕES DO SALVAMENTO DO ALIMENTO NO BANCO
   // Função para mostrar/ocultar o loader
@@ -1786,13 +1794,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const preparationSelect = document.getElementById('food-preparation');
     const groupSelect = document.getElementById('food-group');
     const portionInput = document.getElementById('food-portion')?.value.replace(',', '.');
-
-    //CAMPO ALERGENOS
-    const id_alergenos = Array.from(document.querySelectorAll('.alergenos-option.selected'))
-      .map(opt => opt.dataset.id)
-      .join(';');
-    //FIM CAMPO ALERGENOS
-
 
     // Validações básicas
     if (!foodName) {
@@ -2028,6 +2029,10 @@ document.addEventListener('DOMContentLoaded', function() {
       };
       //======FIM SEGUNDO PASSO BLOCO 2======
 
+      //CAMPOS BLOCO 3
+      const allergensValue = selectedAllergens.map(a => a.id).join(';');
+      //FIM CAMPOS BLOCO 3
+
       // 7. Preparação dos dados para envio
       const formData = new FormData();
       formData.append('item_name', foodName);
@@ -2096,9 +2101,9 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('teor_alcool_prcent', calculatedValues.teorAl);
       //======FIM TERCEIRO PASSO BLOCO 2======
 
-      //CAMPO ALERGENO
-      formData.append('id_alergenos', id_alergenos);
-      //FIM CAMPO ALERGENO
+      //CAMPOS BLOCO 3
+      formData.append('id_alergenos', allergensValue);
+      //FIM CAMPOS BLOCO 3
 
       // Adiciona dados da imagem se existir
       if (imageData.img_registro_tipo) {
@@ -2196,6 +2201,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // 2. Esconde sugestões de marca
     document.querySelector('.brand-suggestions').classList.remove('visible');
     
+    //RESETA ALERGENOS
+    selectedAllergens = [];
+    const tagsContainer = document.getElementById('allergens-tags-container');
+    if (tagsContainer) tagsContainer.innerHTML = '';
+
+    const allergensSelect = document.getElementById('food-allergens');
+    if (allergensSelect) allergensSelect.selectedIndex = -1;
+    //FIM ALERGENOS
+
     // 3. Reseta scroll para o topo (AGORA MAIS EFETIVO)
     resetModalScroll();
 
@@ -2211,20 +2225,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 6. Remove qualquer loader ativo
     toggleSaveLoader(false);
-
-    // 7. Reseta campo de alérgenos (NOVO)
-    const alergenosOptions = document.querySelectorAll('.alergenos-option.selected');
-    alergenosOptions.forEach(option => option.classList.remove('selected'));
-
-    const alergenosTags = document.querySelector('.alergenos-tags');
-    if (alergenosTags) alergenosTags.innerHTML = '';
-
-    selectedAlergenos = []; 
-    
-    // 8. Reconfigura campo alérgenos (NOVO)
-    setTimeout(() => {
-      setupAlergenosField();
-    }, 50);
 
   };
 
@@ -2270,4 +2270,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 //Fim do arquivo food.js
-//Comando: Não faça nada, somente diga se recebeu e aguarde o envio do próximo arquivo para prosseguir.
+//COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR.

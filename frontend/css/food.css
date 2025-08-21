@@ -385,168 +385,45 @@
   }
 }
 
-/* ESTILO ESPECÍFICO PARA ALÉRGENOS - CORRIGIDO */
-.alergenos-field {
-  position: relative;
-}
-
-.alergenos-select {
-  position: relative;
-}
-
-.alergenos-trigger {
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
+/* Estilos para as tags de alérgenos */
+.allergen-tag {
+  display: inline-flex;
   align-items: center;
-  background: white;
-  min-height: 42px;
+  background-color: #e9ecef;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  margin: 2px;
 }
 
-.alergenos-dropdown {
-  position: fixed;
-  width: auto;
-  min-width: 280px;
-  max-width: calc(100vw - 60px);
-  max-height: 40vh; /* Reduzido para 40vh */
-  overflow-y: auto;
-  background: white;
-  border: 1px solid var(--primary-color);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 1100;
-  display: none;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  /* NOVO: Garantir posicionamento dentro da viewport */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) translateY(8px);
-}
-
-.alergenos-dropdown.visible {
-  display: block;
-  opacity: 1;
-  transform: translate(-50%, -50%) translateY(0);
-}
-
-.alergenos-option {
-  padding: 10px 14px;
+.allergen-tag-remove {
+  margin-left: 5px;
   cursor: pointer;
-  border-bottom: 1px solid #f5f5f5;
-  min-height: 40px;
-  display: flex;
-  align-items: center;
-  font-size: 0.92rem;
-  line-height: 1.3;
-}
-
-.alergenos-option:hover {
-  background-color: var(--primary-light);
-}
-
-.alergenos-option.selected {
-  background-color: var(--primary-light);
-  color: var(--primary-dark);
-  font-weight: 500;
-}
-
-.alergenos-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.alergeno-tag {
-  background-color: var(--primary-light);
-  color: var(--primary-dark);
-  padding: 4px 8px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-.alergeno-tag-remove {
-  margin-left: 4px;
-  cursor: pointer;
-  color: #8e0000;
-  font-size: 0.9rem;
+  color: #6c757d;
   font-weight: bold;
 }
 
-/* SCROLLBAR MAIS DISCRETA */
-.alergenos-dropdown::-webkit-scrollbar {
-  width: 5px;
+.allergen-tag-remove:hover {
+  color: #dc3545;
 }
 
-.alergenos-dropdown::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color);
-  border-radius: 2px;
-  opacity: 0.6;
+/* Estilo para o select múltiplo */
+select[multiple].form-field-input {
+  height: auto;
+  min-height: 100px;
 }
 
-.alergenos-dropdown::-webkit-scrollbar-track {
-  background: #f8f8f8;
-  border-radius: 2px;
-}
-
-/* RESPONSIVIDADE OTIMIZADA */
+/* Responsividade */
 @media (max-width: 768px) {
-  .alergenos-dropdown {
-    max-height: 35vh; /* Reduzido para 35vh */
-    max-width: calc(100vw - 30px);
-    min-width: 260px;
-    /* REMOVIDO: left: 50% !important; */
-    /* REMOVIDO: transform: translateX(-50%) translateY(8px); */
+  .allergen-tag {
+    font-size: 0.8rem;
+    padding: 4px 8px;
   }
   
-  .alergenos-dropdown.visible {
-    /* REMOVIDO: transform: translateX(-50%) translateY(0); */
+  select[multiple].form-field-input {
+    min-height: 80px;
   }
-  
-  .alergenos-option {
-    padding: 8px 12px;
-    min-height: 38px;
-    font-size: 0.88rem;
-  }
-  
-  .alergenos-trigger {
-    padding: 8px 12px;
-    min-height: 38px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .alergenos-dropdown {
-    max-height: 30vh; /* Reduzido para 30vh */
-    max-width: calc(100vw - 20px);
-    min-width: 240px;
-  }
-  
-  .alergenos-option {
-    padding: 7px 10px;
-    min-height: 36px;
-    font-size: 0.85rem;
-  }
-  
-  .alergeno-tag {
-    padding: 3px 6px;
-    font-size: 0.78rem;
-  }
-}
-
-/* GARANTIR QUE O DROPDOWN NUNCA VAZE DA TELA */
-.alergenos-dropdown {
-  max-height: min(40vh, 400px) !important; /* Limite máximo de 400px */
 }
 
 /* Fim do Arquivo: food.css */
-/* Comando: Somente diga se recebeu e aguarde o envio do próximo arquivo para prosseguir. */
+/*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/

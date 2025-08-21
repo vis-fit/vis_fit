@@ -190,13 +190,46 @@ app.get('/api/foodgroup-options', async (req, res) => {
   }
 });
 
-// Rota para obter lista de alérgenos
-app.get('/api/alergenos', async (req, res) => {
+// Rota para opções de Alérgenos
+app.get('/api/allergen-options', async (req, res) => {
   try {
     const result = await pool.query('SELECT id, nome FROM tbl_aux_alergenos ORDER BY nome');
     res.json(result.rows);
   } catch (error) {
     console.error('Erro ao buscar alérgenos:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para obter alérgenos por IDs
+app.get('/api/allergens-by-ids', async (req, res) => {
+  try {
+    const { ids } = req.query;
+    
+    if (!ids) {
+      return res.json([]);
+    }
+    
+    // Converter string de IDs em array e criar placeholders para a query
+    const idArray = ids.split(',').filter(id => id.trim() !== '');
+    
+    if (idArray.length === 0) {
+      return res.json([]);
+    }
+    
+    // Criar placeholders para a query ($1, $2, $3, ...)
+    const placeholders = idArray.map((_, index) => `$${index + 1}`).join(',');
+    
+    const query = `
+      SELECT id, nome 
+      FROM tbl_aux_alergenos 
+      WHERE id IN (${placeholders})
+      ORDER BY nome`;
+    
+    const result = await pool.query(query, idArray);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar alérgenos por IDs:', error);
     res.status(500).json({ error: 'Erro ao carregar alérgenos' });
   }
 });
@@ -229,6 +262,8 @@ app.post('/api/foods', async (req, res) => {
     if (req.files && req.files.img_registro_dp) {
       imgBuffer = req.files.img_registro_dp.data;
     }
+
+    const { id_alergenos } = req.body;
 
     //======PRIMEIRO PASSO BLOCO 2======
     // Query SQL atualizada
@@ -370,7 +405,7 @@ app.post('/api/foods', async (req, res) => {
       parseFloat(req.body.polifenol_total_mg),
       parseFloat(req.body.carga_antioxidante_orac),
       parseFloat(req.body.teor_alcool_prcent),
-      req.body.id_alergenos || null,
+      id_alergenos || null,
       img_registro_tipo || null,
       img_registro_web || null,
       imgBuffer
@@ -457,7 +492,8 @@ app.get('/api/foods/:id', async (req, res) => {
         f.polifenol_total_mg,
         f.carga_antioxidante_orac,
         f.teor_alcool_prcent,
-        f.teor_agua_g
+        f.teor_agua_g,
+        f.id_alergenos
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id
@@ -503,4 +539,4 @@ server.on('error', (err) => {
   }
 });
 //Fim do arquivo: server.js
-//Comando: Não faça nada. Somente diga se recebeu e aguarde instruções para prosseguir.
+//COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO OU INSTRUÇÕES PARA PROSSEGUIR.

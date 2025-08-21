@@ -1,0 +1,43 @@
+1 - Vou te enviar 5 arquivos de um site que estou desenvolvendo.
+2 - Vou enviar um arquivo de cada vez
+3 - Ao receber o arquivo você não deve fazer nada, apenas dizer se recebeu e aguardar o próximo arquivo ou instruções para prosseguir.
+4 - Após envio dos arquivos irei te enviar um resumo do que estamos fazendo e onde paramos
+5 - Após o envio do resumo te enviarei algumas informações adicionais 
+
+Comando: Diga se me entendeu e aguarde o envio do primeiro arquivo.
+
+======================================================
+- Tenho um site que estou desenvolvendo com ajuda de IA
+- O nome do site é VIS e do projeto é vis_fit
+- Estamos construindo um site para controle de dieta, saúde e vida fitness
+- Atualmente, estamos desenvolvendo o modulo de alimentos.
+- O modulo de alimentos possui as funcionalidades de pesquisa e cadastro de alimentos e suas informações nutricionais
+- Existem dois modais que são abertos nesse modulo
+- O modal de detalhes e o modal de cadastro
+- A funcionalidade de pesquisa está funcionando. Isto é, ao pesquisar um alimento, se existe na base de dados, aparece na tabela de consulta
+- Ao clicar nesse alimento, abre o modal de detalhes (já criamos o modal, ainda sem os campos e funcionalidades)
+- Existe um botão na tela chamado "Novo Alimento". Ao clicar nesse botão abre o modal de cadastro para registrar um novo alimento na base de dados (já criamos esse modal e já criamos alguns campos e funcionalidades).
+- O estilo da página está perfeito. Não quero mudar nada.
+- O estilo dos modais também já está muito bom
+- O site usa html, css, java script e node.js
+- O front está no GitHub
+- O back está no Render
+- O banco de dados está no Neon.tech
+
+- Temos então duas ações que estamos desenvolvendo
+1 - Criar os campos e funcionalidades do Modal de Cadastro
+2 - Criar os campos e funcionalidades do Modal de Detalhes
+
+- Informações:
+- No HTML o id do botão "Novo Alimento" é = new-food-btn
+- No HTML o id do Modal de Cadastro é = food-cadastro-modal
+- No HTML o id do Modal de Detalhes é = food-detalhes-modal
+- Todo o modulo de alimentos está desenvolvido nos arquivos mod_food.html, food.css, modules.css, food.js e server.js
+
+- Estamos criando alguns campos e funcionalidades no modal de cadastro e no modal de detalhes
+- Então, eu irei sempre te guiar no que vamos fazer "agora" e você deve sempre seguir meus passos. 
+
+Comando: Diga se me entendeu e aguarde instruções para prosseguir. 
+
+=============================================
+
