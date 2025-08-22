@@ -201,6 +201,50 @@ app.get('/api/allergen-options', async (req, res) => {
   }
 });
 
+// Rota para opções de Intolerâncias
+app.get('/api/intolerancias-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_intolerancias ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar intolerâncias:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para opções de Categoria
+app.get('/api/categoria-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_categoria_alimentar ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar categorias alimentares:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para opções de Origem Alimentar
+app.get('/api/origem-alimentar-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_origem_alimentar ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar origens alimentares:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
+// Rota para opções de Nível de Processamento
+app.get('/api/processamento-options', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome FROM tbl_aux_nvl_processamento ORDER BY nome');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar níveis de processamento:', error);
+    res.status(500).json({ error: 'Erro ao carregar opções' });
+  }
+});
+
 // Rota para obter alérgenos por IDs
 app.get('/api/allergens-by-ids', async (req, res) => {
   try {
@@ -234,6 +278,110 @@ app.get('/api/allergens-by-ids', async (req, res) => {
   }
 });
 
+// Rota para obter intolerâncias por IDs
+app.get('/api/intolerancias-by-ids', async (req, res) => {
+  try {
+    const { ids } = req.query;
+    
+    if (!ids) {
+      return res.json([]);
+    }
+    
+    // Converter string de IDs em array e criar placeholders para a query
+    const idArray = ids.split(',').filter(id => id.trim() !== '');
+    
+    if (idArray.length === 0) {
+      return res.json([]);
+    }
+    
+    // Criar placeholders para a query ($1, $2, $3, ...)
+    const placeholders = idArray.map((_, index) => `$${index + 1}`).join(',');
+    
+    const query = `
+      SELECT id, nome 
+      FROM tbl_aux_intolerancias 
+      WHERE id IN (${placeholders})
+      ORDER BY nome`;
+    
+    const result = await pool.query(query, idArray);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar intolerâncias por IDs:', error);
+    res.status(500).json({ error: 'Erro ao carregar intolerâncias' });
+  }
+});
+
+// Rota para obter categorias por IDs
+app.get('/api/categoria-by-ids', async (req, res) => {
+  try {
+    const { ids } = req.query;
+    
+    if (!ids) {
+      return res.json([]);
+    }
+    
+    // Converter string de IDs em array e criar placeholders para a query
+    const idArray = ids.split(',').filter(id => id.trim() !== '');
+    
+    if (idArray.length === 0) {
+      return res.json([]);
+    }
+    
+    // Criar placeholders para a query ($1, $2, $3, ...)
+    const placeholders = idArray.map((_, index) => `$${index + 1}`).join(',');
+    
+    const query = `
+      SELECT id, nome 
+      FROM tbl_aux_categoria_alimentar 
+      WHERE id IN (${placeholders})
+      ORDER BY nome`;
+    
+    const result = await pool.query(query, idArray);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar categorias por IDs:', error);
+    res.status(500).json({ error: 'Erro ao carregar categorias' });
+  }
+});
+
+// Rota para obter origem alimentar por ID
+app.get('/api/origem-alimentar/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const query = 'SELECT id, nome FROM tbl_aux_origem_alimentar WHERE id = $1';
+    const result = await pool.query(query, [id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Origem alimentar não encontrada' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Erro ao buscar origem alimentar:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+});
+
+// Rota para obter nível de processamento por ID
+app.get('/api/processamento/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const query = 'SELECT id, nome FROM tbl_aux_nvl_processamento WHERE id = $1';
+    const result = await pool.query(query, [id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Nível de processamento não encontrado' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Erro ao buscar nível de processamento:', error);
+    res.status(500).json({ error: 'Erro interno no servidor' });
+  }
+});
+
 app.post('/api/foods', async (req, res) => {
   try {
     // Extrai os campos do FormData
@@ -264,6 +412,15 @@ app.post('/api/foods', async (req, res) => {
     }
 
     const { id_alergenos } = req.body;
+    const { id_intolerancias } = req.body;
+    const { id_categoria } = req.body;
+
+    const {
+      gluten_sim,
+      id_origem,
+      id_processamento,
+      obs_alimento
+    } = req.body;
 
     //======PRIMEIRO PASSO BLOCO 2======
     // Query SQL atualizada
@@ -331,6 +488,13 @@ app.post('/api/foods', async (req, res) => {
         carga_antioxidante_orac,
         teor_alcool_prcent,
         id_alergenos,
+        id_intolerancias,
+        id_categoria,
+        gluten_sim,
+        id_origem,
+        id_processamento,
+        obs_alimento,
+>>>>>>> backup-temporario
         img_registro_tipo,
         img_registro_web,
         img_registro_dp,
@@ -339,7 +503,8 @@ app.post('/api/foods', async (req, res) => {
       $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31,
       $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45,
       $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57,
-      $58, $59, $60, $61, $62, $63, $64, $65, 100)
+      $58, $59, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69, $70, $71, 100)
+>>>>>>> backup-temporario
       RETURNING id`;
 
     //======SEGUNDO PASSO BLOCO 2======
@@ -406,6 +571,12 @@ app.post('/api/foods', async (req, res) => {
       parseFloat(req.body.carga_antioxidante_orac),
       parseFloat(req.body.teor_alcool_prcent),
       id_alergenos || null,
+      id_intolerancias || null,
+      id_categoria || null,
+      gluten_sim || null,
+      id_origem || null, 
+      id_processamento || null,
+      obs_alimento || null,
       img_registro_tipo || null,
       img_registro_web || null,
       imgBuffer
@@ -493,7 +664,13 @@ app.get('/api/foods/:id', async (req, res) => {
         f.carga_antioxidante_orac,
         f.teor_alcool_prcent,
         f.teor_agua_g,
-        f.id_alergenos
+        f.id_alergenos,
+        f.id_intolerancias,
+        f.id_categoria,
+        f.gluten_sim,
+        f.id_origem,
+        f.id_processamento,
+        f.obs_alimento
       FROM tbl_foods f
       LEFT JOIN tbl_brands b ON f.id_item_brand = b.id
       LEFT JOIN tbl_aux_prep p ON f.id_preparo = p.id

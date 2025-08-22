@@ -239,7 +239,7 @@
 }
 
 .detail-label {
-  flex: 0 1 140px;
+  flex: 0 1 200px;
   min-width: max-content;
   font-weight: 600;
   color: #4a5568;
@@ -386,7 +386,7 @@
 }
 
 /* Estilos para as tags de alérgenos */
-.allergen-tag {
+.allergen-tag .intolerancias-tag .categoria-tag {
   display: inline-flex;
   align-items: center;
   background-color: #e9ecef;
@@ -396,7 +396,7 @@
   margin: 2px;
 }
 
-.allergen-tag-remove {
+.allergen-tag-remove .intolerancias-tag-remove .categoria-tag-remove {
   margin-left: 5px;
   cursor: pointer;
   color: #6c757d;
@@ -404,6 +404,14 @@
 }
 
 .allergen-tag-remove:hover {
+  color: #dc3545;
+}
+
+.intolerancias-tag-remove:hover {
+  color: #dc3545;
+}
+
+.categoria-tag-remove:hover {
   color: #dc3545;
 }
 
@@ -415,7 +423,7 @@ select[multiple].form-field-input {
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .allergen-tag {
+  .allergen-tag .intolerancias-tag .categoria-tag {
     font-size: 0.8rem;
     padding: 4px 8px;
   }
@@ -425,5 +433,30 @@ select[multiple].form-field-input {
   }
 }
 
-/* Fim do Arquivo: food.css */
+/* Estilos para os novos campos */
+textarea.form-field-input {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  textarea.form-field-input {
+    min-height: 60px;
+  }
+  
+  /* Estilo para radio buttons em mobile */
+  .form-field-container label {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  textarea.form-field-input {
+    min-height: 50px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Fim do Arquivo: food.csss */
 /*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/

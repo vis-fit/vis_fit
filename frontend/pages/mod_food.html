@@ -759,16 +759,76 @@
                 <i class="fas fa-chevron-down block-toggle"></i>
               </div>
               <div class="block-content">
+                <!-- Campo Glúten -->
+                <div class="form-field-container">
+                  <label class="form-field-label">Contém Glúten?</label>
+                  <div style="display: flex; gap: 15px;">
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                      <input type="radio" name="food-gluten" value="true"> Sim
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                      <input type="radio" name="food-gluten" value="false"> Não
+                    </label>
+                  </div>
+                </div>
+                <!-- Campo Origem Alimentar -->
+                <div class="form-field-container">
+                  <label for="food-origem" class="form-field-label">Origem Alimentar</label>
+                  <select id="food-origem" class="form-field-input">
+                    <option value="">Selecione...</option>
+                    <!-- Opções serão carregadas via JavaScript -->
+                  </select>
+                </div>
+                <!-- Campo Nível de Processamento -->
+                <div class="form-field-container">
+                  <label for="food-processamento" class="form-field-label">Nível de Processamento</label>
+                  <select id="food-processamento" class="form-field-input">
+                    <option value="">Selecione...</option>
+                    <!-- Opções serão carregadas via JavaScript -->
+                  </select>
+                </div>
+                <!--Campo Alergenos Comuns-->
                 <div class="form-field-container">
                   <label for="food-allergens" class="form-field-label">
                     Alérgenos Comuns
                   </label>
                   <select id="food-allergens" multiple class="form-field-input" style="height: auto;">
                     <option value="">Selecione os alérgenos...</option>
-                    <!-- As opções serão preenchidas via JavaScript -->
                   </select>
                   <div id="allergens-tags-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
                 </div>
+                <!--Campo Intolerancias Comuns-->
+                <div class="form-field-container">
+                  <label for="food-intolerancias" class="form-field-label">
+                    Intolerânicas Comuns
+                  </label>
+                  <select id="food-intolerancias" multiple class="form-field-input" style="height: auto;">
+                    <option value="">Selecione as intolerancias...</option>
+                  </select>
+                  <div id="intolerancias-tags-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
+                <!--Campo Categoria Alimentar-->
+                <div class="form-field-container">
+                  <label for="food-categoria" class="form-field-label">
+                    Categoria Alimentar
+                  </label>
+                  <select id="food-categoria" multiple class="form-field-input" style="height: auto;">
+                    <option value="">Selecione a categoria...</option>
+                  </select>
+                  <div id="categoria-tags-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
+                <!-- Campo Observações -->
+                <div class="form-field-container">
+                  <label for="food-observacoes" class="form-field-label">Observações</label>
+                  <textarea 
+                    id="food-observacoes" 
+                    class="form-field-input" 
+                    placeholder="Digite observações sobre o alimento"
+                    rows="3"
+                    style="resize: vertical;"
+                  ></textarea>
+                </div>
+>>>>>>> backup-temporario
               </div>
             </div>
           </div>
@@ -1177,9 +1237,40 @@
                 <i class="fas fa-chevron-down block-toggle"></i>
               </div>
               <div class="block-content">
+                <!-- Campo Glúten -->
                 <div class="detail-field">
-                  <span class="detail-label">Alérgenos Comuns:</span>
+                  <span class="detail-label">Contém Glúten?</span>
+                  <span id="food-detail-gluten" class="detail-value">Carregando...</span>
+                </div>
+                <!--Alergenos-->
+                <div class="detail-field">
+                  <span class="detail-label">Alérgenos Comuns</span>
                   <span id="food-detail-allergens" class="detail-value">Carregando...</span>
+                </div>
+                <!--Intolerâncias-->
+                <div class="detail-field">
+                  <span class="detail-label">Intolerâncias Comuns</span>
+                  <span id="food-detail-intolerancias" class="detail-value">Carregando...</span>
+                </div>
+                <!--Categoria Alimentar-->
+                <div class="detail-field">
+                  <span class="detail-label">Categoria Alimentar</span>
+                  <span id="food-detail-categoria" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Campo Origem Alimentar -->
+                <div class="detail-field">
+                  <span class="detail-label">Origem Alimentar</span>
+                  <span id="food-detail-origem" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Campo Nível de Processamento -->
+                <div class="detail-field">
+                  <span class="detail-label">Nível de Processamento</span>
+                  <span id="food-detail-processamento" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Campo Observações -->
+                <div class="detail-field">
+                  <span class="detail-label">Observações</span>
+                  <span id="food-detail-observacoes" class="detail-value">Carregando...</span>
                 </div>
               </div>
             </div>

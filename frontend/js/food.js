@@ -70,6 +70,12 @@ document.addEventListener('DOMContentLoaded', function() {
       //CAMPOS BLOCO 3
       loadAllergenOptions();
       setupAllergensSelect();
+      loadIntoleranciasOptions();
+      setupIntoleranciasSelect();
+      loadCategoriaOptions();
+      setupCategoriaSelect();
+      loadOrigemAlimentarOptions();
+      loadProcessamentoOptions();
       //FIM CAMPOS BLOCO 3
       const cadastroModal = document.getElementById('food-cadastro-modal');
       if (cadastroModal) {
@@ -228,6 +234,148 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
   //FIM DETALHES ALERGENOS  
+
+  //DETALHES INTOLERANCIAS
+  // Função para carregar e exibir intolerancias no modal de detalhes
+  const loadAndDisplayIntolerancias = async (intoleranciasIds) => {
+    try {
+      const intoleranciasElement = document.getElementById('food-detail-intolerancias');
+      
+      if (!intoleranciasIds || intoleranciasIds.trim() === '') {
+        intoleranciasElement.textContent = 'Não Informado';
+        return;
+      }
+
+      // Converter string de IDs separados por ; em array
+      const idsArray = intoleranciasIds.split(';').filter(id => id.trim() !== '');
+      
+      if (idsArray.length === 0) {
+        intoleranciasElement.textContent = 'Não Informado';
+        return;
+      }
+
+      // Fazer requisição para obter os nomes dos alérgenos
+      const response = await fetch(`/api/intolerancias-by-ids?ids=${encodeURIComponent(idsArray.join(','))}`);
+      
+      if (!response.ok) {
+        throw new Error('Erro ao carregar alérgenos');
+      }
+      
+      const intolerancias = await response.json();
+      
+      // Exibir os nomes separados por vírgula
+      if (intolerancias.length > 0) {
+        const intoleranciasNames = intolerancias.map(a => a.nome);
+        intoleranciasElement.textContent = intoleranciasNames.join(', ');
+      } else {
+        intoleranciasElement.textContent = 'Não informado';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar alérgenos:', error);
+      document.getElementById('food-detail-intolerancias').textContent = 'Erro ao carregar informações';
+    }
+  };
+  //FIM DETALHES INTOLERANCIAS
+
+  //DETALHES CATEGORIA
+  // Função para carregar e exibir categoria no modal de detalhes
+  const loadAndDisplayCategoria = async (categoriaIds) => {
+    try {
+      const categoriaElement = document.getElementById('food-detail-categoria');
+      
+      if (!categoriaIds || categoriaIds.trim() === '') {
+        categoriaElement.textContent = 'Nenhum alérgeno identificado';
+        return;
+      }
+
+      // Converter string de IDs separados por ; em array
+      const idsArray = categoriaIds.split(';').filter(id => id.trim() !== '');
+      
+      if (idsArray.length === 0) {
+        categoriaElement.textContent = 'Não Informado';
+        return;
+      }
+
+      // Fazer requisição para obter os nomes dos alérgenos
+      const response = await fetch(`/api/categoria-by-ids?ids=${encodeURIComponent(idsArray.join(','))}`);
+      
+      if (!response.ok) {
+        throw new Error('Erro ao carregar categorias');
+      }
+      
+      const categoria = await response.json();
+      
+      // Exibir os nomes separados por vírgula
+      if (categoria.length > 0) {
+        const categoriaNames = categoria.map(a => a.nome);
+        categoriaElement.textContent = categoriaNames.join(', ');
+      } else {
+        categoriaElement.textContent = 'Não informado';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar categorias:', error);
+      document.getElementById('food-detail-categoria').textContent = 'Erro ao carregar informações';
+    }
+  };
+  //FIM DETALHES CATEGORIA
+
+  // Função para carregar e exibir origem alimentar
+  const loadAndDisplayOrigem = async (origemId) => {
+    try {
+      const origemElement = document.getElementById('food-detail-origem');
+      
+      if (!origemId) {
+        origemElement.textContent = 'Não Informado';
+        return;
+      }
+
+      const response = await fetch(`/api/origem-alimentar/${origemId}`);
+      
+      if (!response.ok) {
+        throw new Error('Erro ao carregar origem alimentar');
+      }
+      
+      const origemData = await response.json();
+      
+      if (origemData && origemData.nome) {
+        origemElement.textContent = origemData.nome;
+      } else {
+        origemElement.textContent = 'Não Informado';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar origem alimentar:', error);
+      document.getElementById('food-detail-origem').textContent = 'Erro ao carregar';
+    }
+  };
+
+  // Função para carregar e exibir nível de processamento
+  const loadAndDisplayProcessamento = async (processamentoId) => {
+    try {
+      const processamentoElement = document.getElementById('food-detail-processamento');
+      
+      if (!processamentoId) {
+        processamentoElement.textContent = 'Não Informado';
+        return;
+      }
+
+      const response = await fetch(`/api/processamento/${processamentoId}`);
+      
+      if (!response.ok) {
+        throw new Error('Erro ao carregar nível de processamento');
+      }
+      
+      const processamentoData = await response.json();
+      
+      if (processamentoData && processamentoData.nome) {
+        processamentoElement.textContent = processamentoData.nome;
+      } else {
+        processamentoElement.textContent = 'Não Informado';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar nível de processamento:', error);
+      document.getElementById('food-detail-processamento').textContent = 'Erro ao carregar';
+    }
+  };
 
   // Conectar linhas da tabela ao modal de detalhes
   //Abrir modal de detalhes ao clicar no registro
@@ -1062,6 +1210,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
           //======FIM SEGUNDO PASSO BLOCO 2 - DETALHES======
 
+          // Exibir Glúten
+          const glutenElement = document.getElementById('food-detail-gluten');
+          if (foodData.gluten_sim !== null && foodData.gluten_sim !== undefined) {
+            glutenElement.textContent = foodData.gluten_sim ? 'Sim' : 'Não';
+          } else {
+            glutenElement.textContent = 'Não informado';
+          }
+
+          // Exibir Observações
+          const observacoesElement = document.getElementById('food-detail-observacoes');
+          if (foodData.obs_alimento) {
+            observacoesElement.textContent = foodData.obs_alimento;
+          } else {
+            observacoesElement.textContent = '';
+          }
+
+          // Carregar e exibir Origem Alimentar
+          if (foodData.id_origem) {
+            await loadAndDisplayOrigem(foodData.id_origem);
+          } else {
+            document.getElementById('food-detail-origem').textContent = 'Não Informado';
+          }
+
+          // Carregar e exibir Nível de Processamento
+          if (foodData.id_processamento) {
+            await loadAndDisplayProcessamento(foodData.id_processamento);
+          } else {
+            document.getElementById('food-detail-processamento').textContent = 'Não Informado';
+          }
+
           //======TERCEIRO PASSO BLOCO 2 - DETALHES======
           // Função para recalcular TUDO quando a porção mudar
           function updateNutritionValues() {
@@ -1131,9 +1309,25 @@ document.addEventListener('DOMContentLoaded', function() {
           if (foodData.id_alergenos) {
             await loadAndDisplayAllergens(foodData.id_alergenos);
           } else {
-            document.getElementById('food-detail-allergens').textContent = 'Nenhum alérgeno identificado';
+            document.getElementById('food-detail-allergens').textContent = 'Não Informado';
           }
           //FIM DETALHES CAMPO ALERGENOS
+
+          //DETALHES CAMPO INTOLERANCIAS
+          if (foodData.id_intolerancias) {
+            await loadAndDisplayIntolerancias(foodData.id_intolerancias);
+          } else {
+            document.getElementById('food-detail-intolerancias').textContent = 'Não Informado';
+          }
+          //FIM DETALHES CAMPO INTOLERANCIAS
+
+          //DETALHES CAMPO CATEGORIA
+          if (foodData.id_categoria) {
+            await loadAndDisplayCategoria(foodData.id_categoria);
+          } else {
+            document.getElementById('food-detail-categoria').textContent = 'Não Informado';
+          }
+          //FIM DETALHES CAMPO CATEGORIA
 
           // Configura os eventos no campo de porção
           portionInput.addEventListener('input', function() {
@@ -1681,7 +1875,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const select = document.getElementById('food-allergens');
       if (select) {
-        select.innerHTML = '<option value="">Selecione os alérgenos...</option>' +
+        select.innerHTML =
           options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('');
       }
     } catch (error) {
@@ -1689,8 +1883,78 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
+    // Função para carregar opções de intolerancias
+    const loadIntoleranciasOptions = async () => {
+      try {
+        const response = await fetch('/api/intolerancias-options');
+        const options = await response.json();
+        
+        const select = document.getElementById('food-intolerancias');
+        if (select) {
+          select.innerHTML =
+            options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar opções de intolerâncias:', error);
+      }
+    };
+
+    // Função para carregar opções de categoria
+    const loadCategoriaOptions = async () => {
+      try {
+        const response = await fetch('/api/categoria-options');
+        const options = await response.json();
+        
+        const select = document.getElementById('food-categoria');
+        if (select) {
+          select.innerHTML =
+            options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar opções de categoria alimentar:', error);
+      }
+    };
+
+    // Função para carregar opções de origem alimentar
+    const loadOrigemAlimentarOptions = async () => {
+      try {
+        const response = await fetch('/api/origem-alimentar-options');
+        const options = await response.json();
+        
+        const select = document.getElementById('food-origem');
+        if (select) {
+          select.innerHTML = '<option value="">Selecione...</option>' +
+            options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar opções de origem alimentar:', error);
+      }
+    };
+
+    // Função para carregar opções de nível de processamento
+    const loadProcessamentoOptions = async () => {
+      try {
+        const response = await fetch('/api/processamento-options');
+        const options = await response.json();
+        
+        const select = document.getElementById('food-processamento');
+        if (select) {
+          select.innerHTML = '<option value="">Selecione...</option>' +
+            options.map(opt => `<option value="${opt.id}">${opt.nome}</option>`).join('');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar opções de processamento:', error);
+      }
+    };
+
   // Variável para armazenar alérgenos selecionados
   let selectedAllergens = [];
+
+  // Variável para armazenar intolerâncias selecionados
+  let selectedIntolerancias = [];
+
+  // Variável para armazenar categorias selecionados
+  let selectedCategoria = [];
 
   // Função para atualizar as tags de alérgenos
   const updateAllergenTags = () => {
@@ -1718,6 +1982,59 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
 
+    // Função para atualizar as tags de intolerâncias
+    const updateIntoleranciasTags = () => {
+      const tagsContainer = document.getElementById('intolerancias-tags-container');
+      if (!tagsContainer) return;
+      
+      tagsContainer.innerHTML = '';
+      
+      selectedIntolerancias.forEach(intolerancias => {
+        const tag = document.createElement('div');
+        tag.className = 'intolerancias-tag';
+        tag.innerHTML = `
+          ${intolerancias.name}
+          <span class="intolerancias-tag-remove" data-id="${intolerancias.id}">×</span>
+        `;
+        tagsContainer.appendChild(tag);
+      });
+      
+      // Adicionar evento de remoção
+      document.querySelectorAll('.intolerancias-tag-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          removeIntolerancias(id);
+        });
+      });
+    };
+
+    // Função para atualizar as tags de categorias
+    const updateCategoriaTags = () => {
+      const tagsContainer = document.getElementById('categoria-tags-container');
+      if (!tagsContainer) return;
+      
+      tagsContainer.innerHTML = '';
+      
+      selectedCategoria.forEach(categoria => {
+        const tag = document.createElement('div');
+        tag.className = 'categoria-tag';
+        tag.innerHTML = `
+          ${categoria.name}
+          <span class="categoria-tag-remove" data-id="${categoria.id}">×</span>
+        `;
+        tagsContainer.appendChild(tag);
+      });
+      
+      // Adicionar evento de remoção
+      document.querySelectorAll('.categoria-tag-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          removeCategoria(id);
+        });
+      });
+    };
+
+
   // Função para adicionar alérgeno
   const addAllergen = (id, name) => {
     if (!selectedAllergens.some(a => a.id === id)) {
@@ -1725,6 +2042,24 @@ document.addEventListener('DOMContentLoaded', function() {
       updateAllergenTags();
     }
   };
+
+
+  // Função para adicionar intolerancias
+  const addIntolerancias = (id, name) => {
+    if (!selectedIntolerancias.some(a => a.id === id)) {
+      selectedIntolerancias.push({ id, name });
+      updateIntoleranciasTags();
+    }
+  };
+
+  // Função para adicionar categoria
+  const addCategoria = (id, name) => {
+    if (!selectedCategoria.some(a => a.id === id)) {
+      selectedCategoria.push({ id, name });
+      updateCategoriaTags();
+    }
+  };
+
 
   // Função para remover alérgeno
   const removeAllergen = (id) => {
@@ -1741,6 +2076,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     updateAllergenTags();
+  };
+
+  // Função para remover intolerancias
+  const removeIntolerancias = (id) => {
+    selectedIntolerancias = selectedIntolerancias.filter(a => a.id !== id);
+    
+    // Desselecionar no select múltiplo
+    const select = document.getElementById('food-intolerancias');
+    if (select) {
+      Array.from(select.options).forEach(option => {
+        if (option.value === id) {
+          option.selected = false;
+        }
+      });
+    }
+    
+    updateIntoleranciasTags();
+  };
+
+    // Função para remover categoria
+  const removeCategoria = (id) => {
+    selectedCategoria = selectedCategoria.filter(a => a.id !== id);
+    
+    // Desselecionar no select múltiplo
+    const select = document.getElementById('food-categoria');
+    if (select) {
+      Array.from(select.options).forEach(option => {
+        if (option.value === id) {
+          option.selected = false;
+        }
+      });
+    }
+    
+    updateCategoriaTags();
   };
 
   // Configurar evento para o select de alérgenos
@@ -1760,6 +2129,44 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   };
+
+
+    // Configurar evento para o select de intolerancias
+    const setupIntoleranciasSelect = () => {
+      const select = document.getElementById('food-intolerancias');
+      if (select) {
+        select.addEventListener('change', (e) => {
+          const selectedOptions = Array.from(e.target.selectedOptions);
+          selectedOptions.forEach(option => {
+            if (option.value) {
+              addIntolerancias(option.value, option.text);
+            }
+          });
+          
+          // Limpar seleção
+          e.target.selectedIndex = -1;
+        });
+      }
+    };
+
+    // Configurar evento para o select de categoria
+    const setupCategoriaSelect = () => {
+      const select = document.getElementById('food-categoria');
+      if (select) {
+        select.addEventListener('change', (e) => {
+          const selectedOptions = Array.from(e.target.selectedOptions);
+          selectedOptions.forEach(option => {
+            if (option.value) {
+              addCategoria(option.value, option.text);
+            }
+          });
+          
+          // Limpar seleção
+          e.target.selectedIndex = -1;
+        });
+      }
+    };
+
   //FIM CRIAÇÃO CAMPOS BLOCO 3
 
   //FUNÇÕES DO SALVAMENTO DO ALIMENTO NO BANCO
@@ -2031,6 +2438,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
       //CAMPOS BLOCO 3
       const allergensValue = selectedAllergens.map(a => a.id).join(';');
+
+      const intoleranciasValue = selectedIntolerancias.map(a => a.id).join(';');
+      const categoriaValue = selectedCategoria.map(a => a.id).join(';');
+      const glutenValue = document.querySelector('input[name="food-gluten"]:checked')?.value;
+      const origemValue = document.getElementById('food-origem')?.value;
+      const processamentoValue = document.getElementById('food-processamento')?.value;
+      const observacoesValue = document.getElementById('food-observacoes')?.value.trim().toUpperCase() || null;
+
       //FIM CAMPOS BLOCO 3
 
       // 7. Preparação dos dados para envio
@@ -2103,6 +2518,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
       //CAMPOS BLOCO 3
       formData.append('id_alergenos', allergensValue);
+
+      formData.append('id_intolerancias', intoleranciasValue);
+      formData.append('id_categoria', categoriaValue);
+      if (glutenValue !== undefined) {
+        formData.append('gluten_sim', glutenValue);
+      }
+      if (origemValue) {
+        formData.append('id_origem', origemValue);
+      }
+      if (processamentoValue) {
+        formData.append('id_processamento', processamentoValue);
+      }
+      if (observacoesValue) {
+        formData.append('obs_alimento', observacoesValue);
+      }
+
       //FIM CAMPOS BLOCO 3
 
       // Adiciona dados da imagem se existir
@@ -2177,13 +2608,19 @@ document.addEventListener('DOMContentLoaded', function() {
       'food-vitaminaB5', 'food-vitaminaB6', 'food-vitaminaB7', 'food-omegaS', 'food-fitosterol', 'food-cloro', 
       'food-pral', 'food-poliois', 'food-carboidratosL', 'food-indicePDCAAS', 'food-aminoacidos', 'food-cobre', 
       'food-manganes', 'food-selenio', 'food-iodo', 'food-betacaroteno', 'food-licopeno', 'food-luteina', 
-      'food-acidoF', 'food-polifenol', 'food-cargaAn', 'food-teorAl', 'food-aler1', 'food-aler2', 
-      'food-aler3', 'food-aler4', 'food-aler5', 'food-aler6',
+
+
+      'food-acidoF', 'food-polifenol', 'food-cargaAn', 'food-teorAl', 'food-origem', 'food-processamento', 'food-observacoes'
+
     ];
 
     fieldsToClear.forEach(id => {
       const field = document.getElementById(id);
       if (field) field.value = '';
+    });
+
+    document.querySelectorAll('input[name="food-gluten"]').forEach(radio => {
+      radio.checked = false;
     });
 
     const portionInput = document.getElementById('food-portion');
@@ -2209,6 +2646,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const allergensSelect = document.getElementById('food-allergens');
     if (allergensSelect) allergensSelect.selectedIndex = -1;
     //FIM ALERGENOS
+
+    //RESETA INTOLERANCIAS
+    selectedIntolerancias = [];
+    const intoleranciasTagsContainer = document.getElementById('intolerancias-tags-container');
+    if (intoleranciasTagsContainer) intoleranciasTagsContainer.innerHTML = '';
+
+    const intoleranciasSelect = document.getElementById('food-intolerancias');
+    if (intoleranciasSelect) intoleranciasSelect.selectedIndex = -1;
+    //FIM INTOLERANCIAS
+
+    //RESETA CATEGORIA
+    selectedCategoria = [];
+    const categoriaTagsContainer = document.getElementById('categoria-tags-container');
+    if (categoriaTagsContainer) categoriaTagsContainer.innerHTML = '';
+
+    const categoriaSelect = document.getElementById('food-categoria');
+    if (categoriaSelect) categoriaSelect.selectedIndex = -1;
+    //FIM CATEGORIA
 
     // 3. Reseta scroll para o topo (AGORA MAIS EFETIVO)
     resetModalScroll();
