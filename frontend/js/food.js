@@ -2034,7 +2034,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     };
 
-
   // Função para adicionar alérgeno
   const addAllergen = (id, name) => {
     if (!selectedAllergens.some(a => a.id === id)) {
@@ -2042,7 +2041,6 @@ document.addEventListener('DOMContentLoaded', function() {
       updateAllergenTags();
     }
   };
-
 
   // Função para adicionar intolerancias
   const addIntolerancias = (id, name) => {
@@ -2059,7 +2057,6 @@ document.addEventListener('DOMContentLoaded', function() {
       updateCategoriaTags();
     }
   };
-
 
   // Função para remover alérgeno
   const removeAllergen = (id) => {
@@ -2130,7 +2127,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-
     // Configurar evento para o select de intolerancias
     const setupIntoleranciasSelect = () => {
       const select = document.getElementById('food-intolerancias');
@@ -2166,7 +2162,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     };
-
   //FIM CRIAÇÃO CAMPOS BLOCO 3
 
   //FUNÇÕES DO SALVAMENTO DO ALIMENTO NO BANCO
@@ -2438,14 +2433,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
       //CAMPOS BLOCO 3
       const allergensValue = selectedAllergens.map(a => a.id).join(';');
-
       const intoleranciasValue = selectedIntolerancias.map(a => a.id).join(';');
       const categoriaValue = selectedCategoria.map(a => a.id).join(';');
       const glutenValue = document.querySelector('input[name="food-gluten"]:checked')?.value;
       const origemValue = document.getElementById('food-origem')?.value;
       const processamentoValue = document.getElementById('food-processamento')?.value;
       const observacoesValue = document.getElementById('food-observacoes')?.value.trim().toUpperCase() || null;
-
       //FIM CAMPOS BLOCO 3
 
       // 7. Preparação dos dados para envio
@@ -2518,7 +2511,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       //CAMPOS BLOCO 3
       formData.append('id_alergenos', allergensValue);
-
       formData.append('id_intolerancias', intoleranciasValue);
       formData.append('id_categoria', categoriaValue);
       if (glutenValue !== undefined) {
@@ -2533,7 +2525,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (observacoesValue) {
         formData.append('obs_alimento', observacoesValue);
       }
-
       //FIM CAMPOS BLOCO 3
 
       // Adiciona dados da imagem se existir
@@ -2608,10 +2599,7 @@ document.addEventListener('DOMContentLoaded', function() {
       'food-vitaminaB5', 'food-vitaminaB6', 'food-vitaminaB7', 'food-omegaS', 'food-fitosterol', 'food-cloro', 
       'food-pral', 'food-poliois', 'food-carboidratosL', 'food-indicePDCAAS', 'food-aminoacidos', 'food-cobre', 
       'food-manganes', 'food-selenio', 'food-iodo', 'food-betacaroteno', 'food-licopeno', 'food-luteina', 
-
-
       'food-acidoF', 'food-polifenol', 'food-cargaAn', 'food-teorAl', 'food-origem', 'food-processamento', 'food-observacoes'
-
     ];
 
     fieldsToClear.forEach(id => {

@@ -494,7 +494,6 @@ app.post('/api/foods', async (req, res) => {
         id_origem,
         id_processamento,
         obs_alimento,
->>>>>>> backup-temporario
         img_registro_tipo,
         img_registro_web,
         img_registro_dp,
@@ -504,7 +503,6 @@ app.post('/api/foods', async (req, res) => {
       $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45,
       $46, $47, $48, $49, $50, $51, $52, $53, $54, $55, $56, $57,
       $58, $59, $60, $61, $62, $63, $64, $65, $66, $67, $68, $69, $70, $71, 100)
->>>>>>> backup-temporario
       RETURNING id`;
 
     //======SEGUNDO PASSO BLOCO 2======
