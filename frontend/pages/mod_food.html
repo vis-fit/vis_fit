@@ -1,0 +1,1292 @@
+<!--INICIO DO ARQUIVO: mod_food.html-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIS Fit - Alimentos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/modules.css">
+  <link rel="stylesheet" href="../css/food.css"> <!-- Novo CSS específico -->
+</head>
+<body>
+  <header class="page-header">
+    <a href="../index.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+    <h1>Alimentos</h1>
+    <img src="../assets/images/logo_vis.png" alt="VIS Fit" class="logo">
+  </header>
+
+  <main class="page-main">
+    <!-- Barra de pesquisa e botão -->
+    <div class="food-search-container">
+      <input type="text" id="food-search-bar" placeholder="Digite o nome do alimento desejado:">
+      <button id="food-search-btn"><i class="fas fa-search"></i></button>
+      <div id="search-loader" class="loader hidden"></div>
+    </div>
+
+    <!-- Tabela de resultados -->
+    <div class="food-table-container">
+      <table id="food-results-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Marca</th>
+            <th>Modo de Preparo</th>
+            <th>Porção Base</th>
+            <th>Kcal.</th>
+          </tr>
+        </thead>
+        <tbody id="food-results-body">
+          <!-- Resultados serão inseridos aqui via JS -->
+        </tbody>
+      </table>
+      <div class="pagination-controls">
+        <button id="prev-page" disabled>Anterior</button>
+        <span id="page-info">Página 1</span>
+        <button id="next-page" disabled>Próxima</button>
+      </div>
+    </div>
+
+    <!-- Botão Novo Alimento -->
+    <button id="new-food-btn" class="btn btn-primary">
+      <i class="fas fa-plus"></i> Novo Alimento
+    </button>
+
+    <!-- Modal de Cadastro -->
+    <div id="food-cadastro-modal" class="modal">
+      <div class="modal-content">
+        <header class="modal-header">
+          <h2>Cadastrar Novo Alimento</h2>
+          <div class="modal-buttons">
+            <button class="modal-btn save-btn" id="food-save-btn">
+              <i class="fas fa-save"></i> Salvar
+            </button>
+            <button class="modal-btn cancel-btn" id="food-cancel-btn">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+          </div>
+        </header>
+        <form id="food-cadastro-form">
+          <div class="blocks-container">
+            <!-- Bloco 1 -->
+            <div class="form-block" id="cadastro-block1" data-block="1">
+              <div class="block-header">
+                <h3>Informações Básicas</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content"></div>
+            </div>
+
+            <!-- Bloco 2 -->
+            <div class="form-block" id="cadastro-block2" data-block="2">
+              <div class="block-header">
+                <h3>Detalhes Nutricionais</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content">
+                <div class="form-field-row">
+                  <!-- Campo Gorduras Monoaturadas -->
+                  <div class="form-field-container" style="flex: 1; margin-right: 10px;">
+                      <label for="food-mono-fat" class="form-field-label">
+                          Gorduras Monoinsaturadas (g)
+                      </label>
+                      <input type="text" 
+                            id="food-mono-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                  <!-- Campo Gorduras Poliinsaturadas -->
+                  <div class="form-field-container" style="flex: 1;">
+                      <label for="food-poly-fat" class="form-field-label">
+                          Gorduras Poli-insaturadas (g)
+                      </label>
+                      <input type="text" 
+                            id="food-poly-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Campo Gorduras Saturadas -->
+                  <div class="form-field-container" style="flex: 1; margin-right: 10px;">
+                      <label for="food-sat-fat" class="form-field-label">
+                          Gorduras Saturadas (g)
+                      </label>
+                      <input type="text" 
+                            id="food-sat-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                  <!-- Campo Gorduras Trans -->
+                  <div class="form-field-container" style="flex: 1;">
+                      <label for="food-trans-fat" class="form-field-label">
+                          Gorduras Trans (g)
+                      </label>
+                      <input type="text" 
+                            id="food-trans-fat" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Fibras -->
+                  <div class="form-field-container" style="flex: 1;">
+                      <label for="food-fibras" class="form-field-label">
+                          Fibras (g)
+                      </label>
+                      <input type="text" 
+                            id="food-fibras" 
+                            class="form-field-input" 
+                            placeholder="0,00">
+                      <div class="form-field-error"></div>
+                  </div>
+                  <!-- Sódio -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-sodio" class="form-field-label">
+                        Sódio (mg)
+                    </label>
+                    <input type="text" 
+                          id="food-sodio" 
+                          class="form-field-input" 
+                          placeholder="0,00">
+                    <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Açúcar Total (g) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-acucarT" class="form-field-label">
+                      Açúcar Total (g)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-acucarT" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+
+                  <!-- Açúcar Natural (g) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-acucarN" class="form-field-label">
+                      Açúcar Natural (g)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-acucarN" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Açúcar Adicionado (g) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-acucarAdd" class="form-field-label">
+                      Açúcar Adicionado (g)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-acucarAdd" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+
+                  <!-- Índice Glicêmico -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-indiceG" class="form-field-label">
+                      Índice Glicêmico
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-indiceG" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Carga Glicêmica (g) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-cargaG" class="form-field-label">
+                      Carga Glicêmica (g)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-cargaG" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                  <!-- Teor de Água (g) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-teorAgua" class="form-field-label">
+                      Teor de Água (g)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-teorAgua" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Colesterol (mg) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-colesterol" class="form-field-label">
+                      Colesterol (mg)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-colesterol" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                  <!-- Ferro Total (mg) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-ferrtoT" class="form-field-label">
+                      Ferro Total (mg)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-ferrtoT" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                  <!-- Ferro Tipo Heme (mg) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-ferroH" class="form-field-label">
+                      Ferro Tipo Heme (mg)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-ferroH" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                  <!-- Ferro Tipo Não Heme (mg) -->
+                  <div class="form-field-container" style="flex: 1;">
+                    <label for="food-ferroN" class="form-field-label">
+                      Ferro Tipo Não Heme (mg)
+                    </label>
+                    <input 
+                      type="text" 
+                      id="food-ferroN" 
+                      class="form-field-input" 
+                      placeholder="0,00"
+                    >
+                    <div class="form-field-error"></div>
+                  </div>
+                </div>
+                <div class="form-field-row">
+                <!-- Omega 3 (g) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-omegaT" class="form-field-label">
+                    Omega 3 (g)
+                  </label>
+                  <input type="text" 
+                    id="food-omegaT" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Calcio (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-calcio" class="form-field-label">
+                    Calcio (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-calcio" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Magnesio (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-magnesio" class="form-field-label">
+                    Magnesio (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-magnesio" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Zinco (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-zinco" class="form-field-label">
+                    Zinco (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-zinco" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Potassio (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-potassio" class="form-field-label">
+                    Potassio (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-potassio" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Vitamina A (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaA" class="form-field-label">
+                    Vitamina A (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaA" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Vitamina B12 (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB12" class="form-field-label">
+                    Vitamina B12 (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB12" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Vitamina C (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaC" class="form-field-label">
+                    Vitamina C (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaC" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Vitamina D (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaD" class="form-field-label">
+                    Vitamina D (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaD" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Vitamina E (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaE" class="form-field-label">
+                    Vitamina E (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaE" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Vitamina K (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaK" class="form-field-label">
+                    Vitamina K (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaK" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Vitamina B1 (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB1" class="form-field-label">
+                    Vitamina B1 (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB1" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Vitamina B2 (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB2" class="form-field-label">
+                    Vitamina B2 (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB2" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Vitamina B3 (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB3" class="form-field-label">
+                    Vitamina B3 (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB3" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Vitamina B5 (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB5" class="form-field-label">
+                    Vitamina B5 (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB5" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Vitamina B6 (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB6" class="form-field-label">
+                    Vitamina B6 (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB6" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Vitamina B7 (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-vitaminaB7" class="form-field-label">
+                    Vitamina B7 (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-vitaminaB7" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Omega 6 (g) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-omegaS" class="form-field-label">
+                    Omega 6 (g)
+                  </label>
+                  <input type="text" 
+                    id="food-omegaS" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Fitosterol (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-fitosterol" class="form-field-label">
+                    Fitosterol (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-fitosterol" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Cloro (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-cloro" class="form-field-label">
+                    Cloro (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-cloro" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- PRAL (mEq) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-pral" class="form-field-label">
+                    PRAL (mEq)
+                  </label>
+                  <input type="text" 
+                    id="food-pral" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Poliois (g) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-poliois" class="form-field-label">
+                    Poliois (g)
+                  </label>
+                  <input type="text" 
+                    id="food-poliois" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Carboidratos Liquidos (g) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-carboidratosL" class="form-field-label">
+                    Carboidratos Liquidos (g)
+                  </label>
+                  <input type="text" 
+                    id="food-carboidratosL" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Indice PDCAAS -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-indicePDCAAS" class="form-field-label">
+                    Indice PDCAAS
+                  </label>
+                  <input type="text" 
+                    id="food-indicePDCAAS" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Aminoacidos Essenciais (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-aminoacidos" class="form-field-label">
+                    Aminoacidos Essenciais (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-aminoacidos" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Cobre (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-cobre" class="form-field-label">
+                    Cobre (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-cobre" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Manganes (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-manganes" class="form-field-label">
+                    Manganes (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-manganes" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Selenio (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-selenio" class="form-field-label">
+                    Selenio (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-selenio" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Iodo (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-iodo" class="form-field-label">
+                    Iodo (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-iodo" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Betacaroteno (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-betacaroteno" class="form-field-label">
+                    Betacaroteno (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-betacaroteno" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Licopeno (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-licopeno" class="form-field-label">
+                    Licopeno (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-licopeno" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Luteina Zeaxantina (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-luteina" class="form-field-label">
+                    Luteina Zeaxantina (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-luteina" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Acido Folico (mcg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-acidoF" class="form-field-label">
+                    Acido Folico (mcg)
+                  </label>
+                  <input type="text" 
+                    id="food-acidoF" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Polifenol Total (mg) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-polifenol" class="form-field-label">
+                    Polifenol Total (mg)
+                  </label>
+                  <input type="text" 
+                    id="food-polifenol" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              <div class="form-field-row">
+                <!-- Carga Antioxidantes (ORAC) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-cargaAn" class="form-field-label">
+                    Carga Antioxidantes (ORAC)
+                  </label>
+                  <input type="text" 
+                    id="food-cargaAn" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+                <!-- Teor Alcoolico (%) -->
+                <div class="form-field-container" style="flex: 1;">
+                  <label for="food-teorAl" class="form-field-label">
+                    Teor Alcoolico (%)
+                  </label>
+                  <input type="text" 
+                    id="food-teorAl" 
+                    class="form-field-input" 
+                    placeholder="0,00">
+                  <div class="form-field-error"></div>
+                </div>
+              </div>
+
+              </div>
+            </div>
+
+            <!-- Bloco 3 -->
+            <div class="form-block" id="cadastro-block3" data-block="3">
+              <div class="block-header">
+                <h3>Demais Informações</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content">
+                <!-- Campo Glúten -->
+                <div class="form-field-container">
+                  <label class="form-field-label">Contém Glúten?</label>
+                  <div style="display: flex; gap: 15px;">
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                      <input type="radio" name="food-gluten" value="true"> Sim
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px;">
+                      <input type="radio" name="food-gluten" value="false"> Não
+                    </label>
+                  </div>
+                </div>
+                <!-- Campo Origem Alimentar -->
+                <div class="form-field-container">
+                  <label for="food-origem" class="form-field-label">Origem Alimentar</label>
+                  <select id="food-origem" class="form-field-input">
+                    <option value="">Selecione...</option>
+                    <!-- Opções serão carregadas via JavaScript -->
+                  </select>
+                </div>
+                <!-- Campo Nível de Processamento -->
+                <div class="form-field-container">
+                  <label for="food-processamento" class="form-field-label">Nível de Processamento</label>
+                  <select id="food-processamento" class="form-field-input">
+                    <option value="">Selecione...</option>
+                    <!-- Opções serão carregadas via JavaScript -->
+                  </select>
+                </div>
+                <!--Campo Alergenos Comuns-->
+                <div class="form-field-container">
+                  <label for="food-allergens" class="form-field-label">
+                    Alérgenos Comuns
+                  </label>
+                  <select id="food-allergens" multiple class="form-field-input" style="height: auto;">
+                    <option value="">Selecione os alérgenos...</option>
+                  </select>
+                  <div id="allergens-tags-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
+                <!--Campo Intolerancias Comuns-->
+                <div class="form-field-container">
+                  <label for="food-intolerancias" class="form-field-label">
+                    Intolerânicas Comuns
+                  </label>
+                  <select id="food-intolerancias" multiple class="form-field-input" style="height: auto;">
+                    <option value="">Selecione as intolerancias...</option>
+                  </select>
+                  <div id="intolerancias-tags-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
+                <!--Campo Categoria Alimentar-->
+                <div class="form-field-container">
+                  <label for="food-categoria" class="form-field-label">
+                    Categoria Alimentar
+                  </label>
+                  <select id="food-categoria" multiple class="form-field-input" style="height: auto;">
+                    <option value="">Selecione a categoria...</option>
+                  </select>
+                  <div id="categoria-tags-container" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                </div>
+                <!-- Campo Observações -->
+                <div class="form-field-container">
+                  <label for="food-observacoes" class="form-field-label">Observações</label>
+                  <textarea 
+                    id="food-observacoes" 
+                    class="form-field-input" 
+                    placeholder="Digite observações sobre o alimento"
+                    rows="3"
+                    style="resize: vertical;"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal de Detalhes -->
+    <div id="food-detalhes-modal" class="modal">
+      <div class="modal-content">
+        <header class="modal-header">
+          <h2>Detalhes do Alimento</h2>
+          <div class="modal-buttons">
+            <button class="modal-btn cancel-btn" id="food-close-btn">
+              <i class="fas fa-times"></i> Fechar
+            </button>
+          </div>
+        </header>
+        <div id="food-detalhes-content">
+          <div class="blocks-container">
+            <!-- Bloco 1 -->
+            <div class="form-block" id="detalhes-block1" data-block="1">
+              <div class="block-header">
+                <h3>Informações Principais</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content">
+                <!-- CAMPO DE IMAGEM (NOVO) -->
+                <div id="food-details-image-container" class="details-image-container"></div>
+                <!-- Nome do Item (NOVO) -->
+                <div id="food-item-name" class="food-item-name"></div>
+                <!-- Marca -->
+                <div class="detail-field">
+                  <span class="detail-label">Marca:</span>
+                  <span id="food-detail-brand" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Modo Preparo -->
+                <div class="detail-field">
+                  <span class="detail-label">Modo de Preparo:</span>
+                  <span id="food-detail-preparation" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Grupo Alimentar -->
+                <div class="detail-field">
+                  <span class="detail-label">Grupo Alimentar:</span>
+                  <span id="food-detail-group" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Porção Base -->
+                <div class="detail-field">
+                  <span class="detail-label" id="detalhes-portion-label">Porção Base (g)</span>
+                  <input type="text" 
+                    id="food-detail-portion" 
+                    class="detail-value" 
+                    value="100"
+                    style="border: 1px solid #ddd; padding: 4px; border-radius: 4px;"
+                    onchange="formatDecimal(this)">
+                </div>
+                <!-- Calorias -->
+                <div class="detail-field">
+                  <span class="detail-label">Calorias (Kcal)</span>
+                  <span id="food-detail-calories" class="detail-value">0,00</span>
+                </div>
+                <!-- Proteinas -->
+                <div class="detail-field">
+                  <span class="detail-label">Proteinas (g)</span>
+                  <span id="food-detail-proteinas" class="detail-value">0,00</span>
+                </div>
+                <!-- Carboidratos -->
+                <div class="detail-field">
+                  <span class="detail-label">Carboidratos (g)</span>
+                  <span id="food-detail-carboidratos" class="detail-value">0,00</span>
+                </div>
+                <!-- Gorduras Totais -->
+                <div class="detail-field">
+                  <span class="detail-label">Gorduras Totais (g)</span>
+                  <span id="food-detail-gordurasT" class="detail-value">0,00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloco 2 -->
+            <div class="form-block" id="detalhes-block2" data-block="2">
+              <div class="block-header">
+                <h3>Detalhes Nutricionais</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content">
+                <!-- Fibras -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Fibras (g)</span>
+                  <span id="food-detail-fibras" class="detail-value">0,00</span>
+                </div>
+                <!-- Gorduras Saturadas -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Gorduras Saturadas (g)</span>
+                  <span id="food-detail-gSat" class="detail-value">0,00</span>
+                </div>
+                <!-- Gorduras Monoinsaturadas -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Gorduras Monoinsaturadas (g)</span>
+                  <span id="food-detail-mono" class="detail-value">0,00</span>
+                </div>
+                <!-- Gorduras Poliinsaturadas -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Gorduras Poli-insaturadas (g)</span>
+                  <span id="food-detail-poly" class="detail-value">0,00</span>
+                </div>
+                <!-- Gorduras Trans -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Gorduras Trans (g)</span>
+                  <span id="food-detail-trans" class="detail-value">0,00</span>
+                </div>
+                <!-- Omega 3 (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Omega 3 (g)</span>
+                  <span id="food-detail-omegaT" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Açucares Totais (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Açucares Totais (g)</span>
+                  <span id="food-detail-acucarT" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Açucares Naturais (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Açucares Naturais (g)</span>
+                  <span id="food-detail-acucarN" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Açucares Adicionados (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Açucares Adicionados (g)</span>
+                  <span id="food-detail-acucarAdd" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Indice Glicemico -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Indice Glicemico</span>
+                  <span id="food-detail-indiceG" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Carga Glicemica (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Carga Glicemica (g)</span>
+                  <span id="food-detail-cargaG" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Sódio (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Sódio (mg)</span>
+                  <span id="food-detail-sodio" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Potassio (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Potassio (mg)</span>
+                  <span id="food-detail-potassio" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Colesterol (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Colesterol (mg)</span>
+                  <span id="food-detail-colesterol" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Calcio (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Calcio (mg)</span>
+                  <span id="food-detail-calcio" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Ferro Total (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Ferro Total (mg)</span>
+                  <span id="food-detail-ferroT" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Ferro Tipo Heme (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Ferro Tipo Heme (mg)</span>
+                  <span id="food-detail-ferroH" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Ferro Não Heme (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Ferro Não Heme (mg)</span>
+                  <span id="food-detail-ferroN" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina A (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina A (mcg)</span>
+                  <span id="food-detail-vitaminaA" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina C (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina C (mg)</span>
+                  <span id="food-detail-vitaminaC" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina D (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina D (mcg)</span>
+                  <span id="food-detail-vitaminaD" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B12 (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B12 (mcg)</span>
+                  <span id="food-detail-vitaminaB12" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina E (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina E (mg)</span>
+                  <span id="food-detail-vitaminaE" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B1 (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B1 (mg)</span>
+                  <span id="food-detail-vitaminaB1" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B2 (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B2 (mg)</span>
+                  <span id="food-detail-vitaminaB2" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B3 (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B3 (mg)</span>
+                  <span id="food-detail-vitaminaB3" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B5 (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B5 (mg)</span>
+                  <span id="food-detail-vitaminaB5" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B6 (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B6 (mg)</span>
+                  <span id="food-detail-vitaminaB6" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina B7 (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina B7 (mcg)</span>
+                  <span id="food-detail-vitaminaB7" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Vitamina K (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Vitamina K (mcg)</span>
+                  <span id="food-detail-vitaminaK" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Cloro (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Cloro (mg)</span>
+                  <span id="food-detail-cloro" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Magnesio (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Magnesio (mg)</span>
+                  <span id="food-detail-magnesio" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Zinco (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Zinco (mg)</span>
+                  <span id="food-detail-zinco" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Cobre (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Cobre (mg)</span>
+                  <span id="food-detail-cobre" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Manganes (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Manganes (mg)</span>
+                  <span id="food-detail-manganes" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Selenio (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Selenio (mcg)</span>
+                  <span id="food-detail-selenio" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Iodo (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Iodo (mcg)</span>
+                  <span id="food-detail-iodo" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Betacaroteno (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Betacaroteno (mcg)</span>
+                  <span id="food-detail-betacaroteno" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Licopeno (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Licopeno (mcg)</span>
+                  <span id="food-detail-licopeno" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Luteina Zeaxantina (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Luteina Zeaxantina (mcg)</span>
+                  <span id="food-detail-luteina" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Omega 6 (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Omega 6 (g)</span>
+                  <span id="food-detail-omegaS" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Omega 6 x Omega 3 -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Omega 6 x Omega 3</span>
+                  <span id="food-detail-omegaX" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Fitosterol (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Fitosterol (mg)</span>
+                  <span id="food-detail-fitosterol" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Carboidratos Liquidos (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Carboidratos Liquidos (g)</span>
+                  <span id="food-detail-carboidratosL" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Poliois (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Poliois (g)</span>
+                  <span id="food-detail-poliois" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Aminoacidos Essenciais (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Aminoacidos Essenciais (mg)</span>
+                  <span id="food-detail-aminoacidos" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Indice PDCAAS -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Indice PDCAAS</span>
+                  <span id="food-detail-indicePDCAAS" class="detail-value">0,00</span>
+                </div>
+
+                <!-- PRAL (mEq) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">PRAL (mEq)</span>
+                  <span id="food-detail-pral" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Acido Folico (mcg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Acido Folico (mcg)</span>
+                  <span id="food-detail-acidoF" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Polifenol Total (mg) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Polifenol Total (mg)</span>
+                  <span id="food-detail-polifenol" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Carga Antioxidantes (ORAC) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Carga Antioxidantes (ORAC)</span>
+                  <span id="food-detail-cargaAn" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Teor Alcoolico (%) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Teor Alcoolico (%)</span>
+                  <span id="food-detail-teorAl" class="detail-value">0,00</span>
+                </div>
+
+                <!-- Teor de Água (g) -->
+                <div class="detail-field">
+                  <span class="detail-labelB2">Teor de Água (g)</span>
+                  <span id="food-detail-teorAgua" class="detail-value">0,00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloco 3 -->
+            <div class="form-block" id="detalhes-block3" data-block="3">
+              <div class="block-header">
+                <h3>Demais Informações</h3>
+                <i class="fas fa-chevron-down block-toggle"></i>
+              </div>
+              <div class="block-content">
+                <!-- Campo Glúten -->
+                <div class="detail-field">
+                  <span class="detail-label">Contém Glúten?</span>
+                  <span id="food-detail-gluten" class="detail-value">Carregando...</span>
+                </div>
+                <!--Alergenos-->
+                <div class="detail-field">
+                  <span class="detail-label">Alérgenos Comuns</span>
+                  <span id="food-detail-allergens" class="detail-value">Carregando...</span>
+                </div>
+                <!--Intolerâncias-->
+                <div class="detail-field">
+                  <span class="detail-label">Intolerâncias Comuns</span>
+                  <span id="food-detail-intolerancias" class="detail-value">Carregando...</span>
+                </div>
+                <!--Categoria Alimentar-->
+                <div class="detail-field">
+                  <span class="detail-label">Categoria Alimentar</span>
+                  <span id="food-detail-categoria" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Campo Origem Alimentar -->
+                <div class="detail-field">
+                  <span class="detail-label">Origem Alimentar</span>
+                  <span id="food-detail-origem" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Campo Nível de Processamento -->
+                <div class="detail-field">
+                  <span class="detail-label">Nível de Processamento</span>
+                  <span id="food-detail-processamento" class="detail-value">Carregando...</span>
+                </div>
+                <!-- Campo Observações -->
+                <div class="detail-field">
+                  <span class="detail-label">Observações</span>
+                  <span id="food-detail-observacoes" class="detail-value">Carregando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="page-footer">
+    <span>VIS Fit © 2023</span>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/food.js"></script> <!-- Novo JS específico -->
+</body>
+</html>
+<!--FIM DO ARQUIVO: mod_food.html-->
+<!--COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR-->

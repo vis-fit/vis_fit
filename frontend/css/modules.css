@@ -1,0 +1,790 @@
+/*INICIO DO ARQUIVO: modules.css*/
+/* Cards da página principal */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.card {
+  aspect-ratio: 1/1;
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  background-color: var(--primary-dark);
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.card-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Ícone específico para refeições */
+.card[href*="meals"] .card-icon {
+  /* Novo ícone: prato com talheres */
+  content: "\f2e7"; /* Código do ícone */
+}
+
+/* Blocos expansíveis */
+.collapsible {
+  margin-bottom: 10px;
+}
+
+.collapsible-header {
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.collapsible-content {
+  padding: 10px;
+  display: none;
+}
+
+.collapsible.active .collapsible-content {
+  display: block;
+}
+
+.collapsible-arrow {
+  transition: transform 0.2s;
+}
+
+.collapsible.active .collapsible-arrow {
+  transform: rotate(180deg);
+}
+
+/*ESTILOS DOS MODAIS*/
+/* Estilos base para todos os modais */
+/* ESTILOS DOS MODAIS - VERSÃO REVISADA */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* CABEÇALHO DO MODAL - VERSÃO FINAL */
+.modal-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 16px;
+  gap: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+  margin: 0 0 20px 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: 1.3rem;
+  font-weight: 600;
+  flex-grow: 1;
+  min-width: min-content;
+}
+
+/* BOTÕES - VERSÃO FINAL */
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.save-btn {
+  background-color: #4285f4;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #3367d6;
+}
+
+.cancel-btn {
+  background-color: #8e0000;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #6a0000;
+}
+
+/* CONTEÚDO ROLÁVEL */
+.modal-scrollable {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding: 0 5px;
+  scroll-behavior: auto !important;
+}
+
+/* RESPONSIVIDADE - VERSÃO FINAL TESTADA */
+@media (min-width: 768px) {
+  .modal-content {
+    width: 70%;
+    margin: 5% auto;
+    padding: 30px 25px 25px;
+  }
+  
+  .modal-header {
+    padding: 20px 16px;
+    top: 25px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal-scrollable {
+    max-height: 60vh;
+    -webkit-overflow-scrolling: touch; /* Scroll suave em iOS */
+  }
+
+}
+
+@media (max-width: 767px) {
+  .modal-header {
+    flex-wrap: nowrap; /* Impede quebra para nova linha */
+    padding: 16px 12px;
+    gap: 8px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1; /* Permite redução proporcional */
+    min-width: 40%; /* Mínimo para legibilidade */
+  }
+  
+  .modal-buttons {
+    flex-shrink: 0; /* Botões mantêm seu tamanho */
+    display: flex;
+  }
+  
+  .modal-btn {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+  }
+  
+  .modal-btn i {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    margin: 15% auto;
+    padding: 18px 12px 12px;
+  }
+  
+  .modal-header {
+    top: 15px;
+    padding: 14px 10px;
+  }
+  
+  .modal-header h2 {
+    font-size: 1rem;
+    min-width: 30%;
+  }
+  
+  .modal-btn {
+    padding: 4px 6px;
+    font-size: 0.65rem;
+  }
+  
+  .modal-scrollable {
+    max-height: 60vh;
+  }
+}
+
+/* CONTAINER PRINCIPAL - BLOCOS */
+.blocks-container {
+  max-height: 55vh;
+  overflow-y: auto;
+  scroll-behavior: auto !important;
+  -webkit-overflow-scrolling: auto !important;
+  padding: 8px 5px;
+  margin: 10px -5px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) #f1f1f1;
+  overflow-anchor: none;
+}
+
+/* ESTILO BASE DOS BLOCOS */
+.form-block {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+/* CABEÇALHO DO BLOCO */
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.block-header:hover {
+  background-color: #f1f3f5;
+}
+
+.block-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--primary-dark);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.block-toggle {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--primary-color);
+  font-size: 0.9rem;
+}
+
+/* CONTEÚDO DO BLOCO */
+.block-content {
+  padding: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: white;
+}
+
+/* ESTADO COLAPSADO */
+.form-block.collapsed .block-toggle {
+  transform: rotate(-90deg);
+}
+
+.form-block.collapsed .block-content {
+  display: none;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .blocks-container {
+    max-height: 50vh;
+    padding: 6px 3px;
+  }
+  
+  .block-header {
+    padding: 12px 14px;
+  }
+  
+  .block-header h3 {
+    font-size: 0.9rem;
+  }
+  
+  .block-content {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blocks-container {
+    max-height: 45vh;
+    margin: 8px -3px 0;
+  }
+  
+  .block-header {
+    padding: 10px 12px;
+  }
+  
+  .block-header h3 {
+    font-size: 0.85rem;
+  }
+  
+  .block-toggle {
+    font-size: 0.8rem;
+  }
+  
+  .block-content {
+    padding: 12px;
+  }
+}
+
+/* SCROLLBAR PERSONALIZADA (OPCIONAL) */
+.blocks-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.blocks-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.blocks-container::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+/*CAMPOS DO MODAL DE CADASTRO*/
+/* FORM FIELD STYLES - NOVOS ESTILOS (ADICIONAR NO FINAL DO ARQUIVO) */
+.form-field-container {
+  margin-bottom: 18px;
+}
+
+.form-field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-field-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.form-field-error {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+.required-asterisk {
+  color: #d32f2f;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .form-field-container {
+    margin-bottom: 15px;
+  }
+  
+  .form-field-input {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-field-label {
+    font-size: 0.85rem;
+  }
+  
+  .form-field-input {
+    font-size: 0.9rem;
+  }
+}
+
+/* ESTILO DO CAMPO MARCA */
+.brand-input-wrapper {
+  position: static;
+}
+
+.brand-suggestions {
+  position: fixed; /* Mudado para fixed */
+  width: auto;
+  min-width: 300px;
+  max-width: calc(100% - 40px);
+  max-height: 50vh;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  z-index: 1100; /* Valor altíssimo */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 5px;
+}
+
+.brand-suggestions.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.brand-option {
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.brand-option:last-child {
+  border-bottom: none;
+}
+
+.brand-option:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* SCROLLBAR */
+.brand-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.brand-suggestions::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 3px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  .brand-suggestions {
+    max-height: 200px;
+  }
+  
+  .brand-option {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-suggestions {
+    max-height: 150px;
+  }
+  
+  .brand-option {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ESTILOS PARA CAMPOS DE SELEÇÃO - RESPONSIVO */
+select.form-field-input {
+  width: 100%;
+  padding: 10px 35px 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #333;
+  background-color: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+select.form-field-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+select.form-field-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  select.form-field-input {
+    padding: 8px 30px 8px 10px;
+    font-size: 0.9rem;
+    background-size: 12px;
+    background-position: right 10px center;
+  }
+}
+
+@media (max-width: 480px) {
+  select.form-field-input {
+    padding: 7px 28px 7px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .form-field-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* ESTADO DE ERRO (PARA CAMPOS OBRIGATÓRIOS NÃO PREENCHIDOS) */
+select.form-field-input:invalid {
+  border-color: #e53935;
+}
+
+select.form-field-input:invalid:focus {
+  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.2);
+}
+
+/*LOADER DO BOTÃO SALVAR MODAL DE CADASTRO*/
+/* LOADER STYLES - ADICIONAR NO FINAL DO ARQUIVO */
+.save-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.save-loader .loader {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+@media (max-width: 480px) {
+  .save-loader {
+    font-size: 0.8rem;
+    gap: 6px;
+  }
+  
+  .save-loader .loader {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* CORREÇÃO DO ESPAÇAMENTO DO BLOCO 1 - ADICIONE ISSO NO FINAL */
+#cadastro-block1 {
+  margin-top: 20px !important; /* Espaço entre cabeçalho e primeiro bloco */
+}
+
+@media (max-width: 768px) {
+  #cadastro-block1 {
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #cadastro-block1 {
+    margin-top: 12px;
+  }
+}
+
+/* FOOD IMAGE FIELD STYLES - SCOPED */
+#food-cadastro-modal .form-field-container.image-field-container {
+  margin-top: 15px;
+}
+
+#food-cadastro-modal #select-image-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+#food-cadastro-modal #select-image-btn:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+#food-cadastro-modal #image-preview-container {
+  margin-top: 12px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#food-cadastro-modal #image-filename {
+  font-size: 0.8rem;
+  color: #555;
+  word-break: break-all;
+}
+
+#food-cadastro-modal #image-preview {
+  max-width: 120px;
+  max-height: 120px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  object-fit: contain;
+  background: #f9f9f9;
+}
+
+/* MODAL STYLES - SCOPED */
+#image-options-modal,
+#web-url-modal {
+  z-index: 1001; /* Acima do modal principal */
+}
+
+#image-options-modal .image-modal-content,
+#web-url-modal .image-modal-content {
+  padding: 20px;
+  max-width: min(400px, 90vw);
+  margin: 20px auto;
+  background: white;
+  border-radius: 8px;
+}
+
+#image-options-modal .image-modal-btn,
+#web-url-modal .image-modal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#image-options-modal .image-modal-btn:last-child,
+#web-url-modal .image-modal-btn:last-child {
+  margin-bottom: 0;
+}
+
+#image-options-modal .image-modal-btn:hover,
+#web-url-modal .image-modal-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+#web-url-modal .image-modal-btn.cancel-btn {
+  background-color: #8e0000;
+}
+
+#web-url-modal .image-modal-btn.cancel-btn:hover {
+  background-color: #6a0000;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 768px) {
+  #food-cadastro-modal #select-image-btn {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  #image-options-modal .image-modal-btn,
+  #web-url-modal .image-modal-btn {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  #food-cadastro-modal #image-preview {
+    max-width: 100px;
+    max-height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  #food-cadastro-modal .form-field-container.image-field-container {
+    margin-top: 12px;
+  }
+
+  #image-options-modal .image-modal-content,
+  #web-url-modal .image-modal-content {
+    padding: 15px;
+  }
+
+  #food-cadastro-modal #image-preview {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  #food-cadastro-modal #image-filename {
+    font-size: 0.75rem;
+  }
+}
+
+/* Container para campos lado a lado */
+.form-field-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+/* Responsividade: empilha em telas pequenas */
+@media (max-width: 768px) {
+    .form-field-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-field-container {
+        margin-right: 0 !important;
+    }
+}
+
+/*FIM DO ARQUIVO: modules.css*/
+/*COMANDO: NÃO FAÇA NADA. DIGA SE ENTENDEU E AGUARDE O ENVIO DO PRÓXIMO ARQUIVO PARA PROSSEGUIR*/

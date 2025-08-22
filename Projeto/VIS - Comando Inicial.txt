@@ -1,0 +1,67 @@
+- Iniciamos a construção de um site.
+- O nome do site é "VIS" e para referencia o nome do projeto é "vis_fit"
+- Estamos usando o VSCode
+- O backend é em node.js e está hospedado no Render conectado ao front que está no GitHub
+- O banco de dados está no Neon.tech
+- Já conectamos o banco ao site
+- Já criamos a tela principal e as páginas dos módulos
+- As páginas dos módulos contam apenas com o header e o footer
+- Tudo que vamos desenvolver nas páginas será no corpo
+- Estamos no meio do desenvolvimento do modulo de alimentos
+- O modulo de alimentos é na página mod_food.html
+- Para essa página, quero um arquivo CSS separado
+- Para essa página, quero um arquivo js separado (as partes que forem exclusivas)
+- A estrutura atual do site é: 
+C:\USERS\SLIMA\DESKTOP\VIS_FIT_V1\
+│   .env
+│   .gitignore
+│   clean-server.bat
+│   package.json
+│   package-lock.json
+│   render.yaml
+│   server.js
+│
+├───backend
+│   ├───controllers
+│   ├───models
+│   └───routes
+│
+└───frontend
+    │   index.html
+    │
+    ├───assets
+    │   └───images
+    │           default-food.png
+    │           logo_vis.png
+    │
+    ├───css
+    │       base.css
+    │       food.css
+    │       modules.css
+    │
+    ├───js
+    │       food.js
+    │       main.js
+    │
+    └───pages
+            mod_atividades.html
+            mod_diet.html
+            mod_food.html
+            mod_health.html
+            mod_meals.html
+            mod_projetos.html
+            mod_receita.html
+            mod_sup.html
+            mod_treinos.html
+
+COMANDOS:
+- Vou te enviar os arquivos food.css, modules.css, mod_food.html, food.js e server.js  e você deve revisar e identificar o que está gerando os problemas abaixo:
+1 - Dentro do Modal de Cadastro, dentro do bloco 3, existe um campo chamado "Alérgenos Comuns"
+Esse campo é uma caixa de seleção múltipla, o usuário pode selecionar vários itens de uma vez.
+A funcionalidade do campo, tanto da lista quanto do salvamento está funcionando corretamente
+O problema é a visualização. Algo no estilo está gerando um bug, tanto em desktop quanto em smartphones
+Quando clico no campo para exibir a lista de opções, ela está abrindo completamente desalinhada do campo, ficando a esquerda, fora do bloco 3 e até fora do Modal de Cadastro.
+Isso acontece porque antes estávamos com um problema na exibição onde a caixa da lista estava ficando coberta pelos limites do bloco 3 e do modal de cadastro, então pedimos para a lista vazar. 
+Tudo bem a lista vazar, mas ela deve permanecer alinhada ao campo. 
+
+- Vou enviar um arquivo por vez. Você diz se entendeu e não faça nada. Aguarde orientações para prosseguir. 

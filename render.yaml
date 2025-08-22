@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: vis-fit
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vis-fit-db
+          property: connectionString
